@@ -1,11 +1,7 @@
 package edu.aurora.uaf.auroraforecast;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,20 +17,6 @@ public class MainActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		BroadcastReceiver receiver=new BroadcastReceiver()
-		{
-			@Override
-			public void onReceive(Context context, Intent intent)
-			{
-				SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(context);
-
-				if(sharedPreferences.getBoolean("sentTokenToServer",false))
-					Log.d("MainActivity","Token sent to server.");
-				else
-					Log.d("MainActivity","Error sending token to server.");
-			}
-		};
 
 		if (checkPlayServices())
 		{
