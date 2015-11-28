@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #test with below
-#	curl --data "{\"token\":\"dGij2usJjHQ:APA91bEqhaCfQukPF0GvawfQ-ze8EIu9tHGzA0kYZMDnUhfYzJVBJkAbHbpUYQubfMRtlkcjXFT43vy8DLO4jWdIvuLEkHdoYQCUMfvQAJDqIeJW-5CucKBrtJppacOcHHxsN1k7VCfF\",\"kpTrigger\":3}" http://127.0.0.1:4443/?pushNotification
+#	curl --data "{\"token\":\"dGij2usJjHQ:APA91bEqhaCfQukPF0GvawfQ-ze8EIu9tHGzA0kYZMDnUhfYzJVBJkAbHbpUYQubfMRtlkcjXFT43vy8DLO4jWdIvuLEkHdoYQCUMfvQAJDqIeJW-5CucKBrtJppacOcHHxsN1k7VCfF\",\"kpTrigger\":3}" http://aurora.cs.uaf.edu/push_notification
 
 import base64
 import BaseHTTPServer
@@ -59,7 +59,7 @@ class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 if __name__=="__main__":
-	server=BaseHTTPServer.HTTPServer(('localhost',4443),aurora_handler)
+	server=BaseHTTPServer.HTTPServer(('localhost',8081),aurora_handler)
 	#server.socket=ssl.wrap_socket(server.socket,
 	#	certfile='path/to/localhost.pem',server_side=True)
 	try:
