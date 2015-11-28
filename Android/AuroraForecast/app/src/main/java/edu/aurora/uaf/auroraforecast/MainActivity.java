@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
 			startService(intent);
 		}
 
-		Button settings_button=(Button)findViewById(R.id.settings_button);
+		Button settings_button=(Button)findViewById(R.id.apply_button);
 		settings_button.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
