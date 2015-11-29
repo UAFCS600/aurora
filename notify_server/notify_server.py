@@ -7,8 +7,24 @@ import base64
 import BaseHTTPServer
 import datetime
 import json
+import MySQLdb
 import SimpleHTTPServer
 import ssl
+
+def db_insert_client(service,token,kp_trigger):
+	database=MySQLdb.connect(host="localhost",
+		user="notify_user",  #change this to your real user
+		passwd="letmein",    #change this to your real password
+		db="notification_db")#change this to your real database
+
+	cursor=database.cursor()
+	cursor.execute("delete from clients where token='"+str(token)+"';")
+	cursor.execute("insert into clients (service,token,kpTrigger) values ('"+
+		str(service)+"','"+str(token)+"','"+str(kp_trigger)+"');")
+
+	database.commit()
+	cursor.close()
+	database.close()
 
 def validate_service(service):
 	if service=="gcm" or service=="apns":
@@ -45,11 +61,10 @@ class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 			service=validate_service(json_obj["service"])
 			token=base64.b64encode(json_obj["token"])
 			kp_trigger=validate_kp(json_obj["kpTrigger"])
-			salt=base64.b64encode(self.headers.getheader("user-agent"))
 			print("    service:    "+service)
 			print("    token:      "+token)
 			print("    kpTrigger:  "+str(kp_trigger))
-			print("    salt:       "+salt)
+			db_insert_client(service,token,kp_trigger)
 		except Exception as error:
 			print("    Error:      "+str(error))
 			return_code=400
