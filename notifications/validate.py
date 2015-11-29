@@ -1,12 +1,12 @@
 #!/usr/bin/python
 
-def validate_service(service):
+def service(service):
 	if service=="gcm" or service=="apns":
 		return service
 	else:
 		raise Exception("Invalid service\""+service+"\".")
 
-def validate_kp(kp):
+def kp(kp):
 	error=False
 	kp_int=-1
 

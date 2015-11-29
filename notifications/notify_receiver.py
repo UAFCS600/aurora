@@ -1,53 +1,15 @@
 #!/usr/bin/python
 
-#test with below
-#	curl --data "{\"token\":\"dGij2usJjHQ:APA91bEqhaCfQukPF0GvawfQ-ze8EIu9tHGzA0kYZMDnUhfYzJVBJkAbHbpUYQubfMRtlkcjXFT43vy8DLO4jWdIvuLEkHdoYQCUMfvQAJDqIeJW-5CucKBrtJppacOcHHxsN1k7VCfF\",\"kpTrigger\":3}" http://aurora.cs.uaf.edu/push_notification
-
 import base64
 import BaseHTTPServer
+import config_util
 import datetime
+import db_util
 import json
 import MySQLdb
 import SimpleHTTPServer
 import ssl
-
-def db_insert_client(service,token,kp_trigger):
-	database=MySQLdb.connect(host="localhost",
-		user="notify_user",  #change this to your real user
-		passwd="letmein",    #change this to your real password
-		db="notification_db")#change this to your real database
-
-	cursor=database.cursor()
-	cursor.execute("delete from clients where token='"+str(token)+"';")
-	cursor.execute("insert into clients (service,token,kpTrigger) values ('"+
-		str(service)+"','"+str(token)+"','"+str(kp_trigger)+"');")
-
-	database.commit()
-	cursor.close()
-	database.close()
-
-def validate_service(service):
-	if service=="gcm" or service=="apns":
-		return service
-	else:
-		raise Exception("Invalid service\""+service+"\".")
-
-def validate_kp(kp):
-	error=False
-	kp_int=-1
-
-	try:
-		kp_int=int(kp)
-	except:
-		error=True
-
-	if not error and (kp_int<0 or kp_int>9):
-		error=True
-
-	if error:
-		raise Exception("Invalid KP value \""+str(kp)+"\".")
-
-	return kp_int
+import validate
 
 class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 	def do_POST(self):
@@ -58,14 +20,25 @@ class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 			data_size=int(self.headers.getheader("content-length",0))
 			data=self.rfile.read(data_size)
 			print("    Data:       "+data)
+
 			json_obj=json.loads(data)
-			service=validate_service(json_obj["service"])
+			if not json_obj.has_key("service"):
+				raise Exception("JSON object does not contain the key \"service\".")
+			if not json_obj.has_key("token"):
+				raise Exception("JSON object does not contain the key \"token\".")
+			if not json_obj.has_key("kpTrigger"):
+				raise Exception("JSON object does not contain the key \"kpTrigger\".")
+
+			service=validate.service(json_obj["service"])
 			token=str(base64.b64encode(json_obj["token"]))
-			kp_trigger=str(validate_kp(json_obj["kpTrigger"]))
+			kp_trigger=str(validate.kp(json_obj["kpTrigger"]))
 			print("    service:    "+service)
 			print("    token:      "+token)
 			print("    kpTrigger:  "+kp_trigger)
-			db_insert_client(service,token,kp_trigger)
+
+			config=config_util.open("notification.cfg")
+			db_util.insert_client(config,service,token,kp_trigger)
+
 		except Exception as error:
 			print("    Error:      "+str(error))
 			return_code=400
@@ -74,6 +47,7 @@ class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 			print("    Sending:    "+str(return_code))
 			self.end_headers()
 			self.send_response(return_code)
+
 		except Exception as error:
 			print("    Error:      "+str(error))
 
@@ -93,10 +67,15 @@ class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 if __name__=="__main__":
-	server=BaseHTTPServer.HTTPServer(('localhost',8081),aurora_handler)
-	#server.socket=ssl.wrap_socket(server.socket,
-	#	certfile='path/to/localhost.pem',server_side=True)
 	try:
-		server.serve_forever()
-	except KeyboardInterrupt:
-		pass
+		server=BaseHTTPServer.HTTPServer(('0.0.0.0',8081),aurora_handler)
+		#server.socket=ssl.wrap_socket(server.socket,
+		#	certfile='path/to/localhost.pem',server_side=True)
+
+		try:
+			server.serve_forever()
+		except KeyboardInterrupt:
+			pass
+
+	except Exception as error:
+		print("Error:  "+str(error))

@@ -7,11 +7,11 @@ from gcm import GCM
 
 if __name__=="__main__":
 	try:
-		config=config_util.read_config("notification.cfg")
+		config=config_util.open("notification.cfg")
 
 		kp_trigger=9
 
-		clients=db_util.db_get_clients(config,kp_trigger)
+		clients=db_util.get_clients(config,kp_trigger)
 		gcm_clients=[]
 
 		for client in clients:
@@ -32,7 +32,7 @@ if __name__=="__main__":
 			response=gcm.json_request(registration_ids=gcm_clients,data=gcm_data)
 
 			if response.has_key("errors"):
-				db_util.db_remove_clients(config,response["errors"]["InvalidRegistration"])
+				db_util.remove_clients(config,response["errors"]["InvalidRegistration"])
 
 	except Exception as error:
 		print("Error:  "+str(error))

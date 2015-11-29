@@ -2,7 +2,7 @@
 
 import ConfigParser
 
-def read_config(filename):
+def open(filename):
 	config={"gcm_api_key":"","host":"localhost","database":"notification_db",
 		"user":"notify_user","password":""}
 
