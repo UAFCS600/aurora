@@ -31,9 +31,11 @@ public class MyGcmListenerService extends GcmListenerService
 
 			SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(this);
 			SettingsManager manager=new SettingsManager(sharedPreferences);
+			int kpRetrieved=manager.getInt("kpTrigger",7);
 
-			if(kpTrigger>=manager.getInt("kpTrigger",7))
+			if(kpTrigger>=kpRetrieved)
 			{
+				String notification_message="The forecasted Kp is "+kpRetrieved+"!";
 				Intent intent=new Intent(this, MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
@@ -41,11 +43,10 @@ public class MyGcmListenerService extends GcmListenerService
 				NotificationCompat.Builder notificationBuilder=new NotificationCompat.Builder(this)
 						.setSmallIcon(R.mipmap.ic_launcher)
 						.setContentTitle("Aurora Forecast")
-						.setContentText(message)
+						.setContentText(notification_message)
 						.setAutoCancel(true)
 						.setSound(defaultSoundUri)
 						.setContentIntent(pendingIntent);
-
 				NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 				notificationManager.notify(0,notificationBuilder.build());
 			}
