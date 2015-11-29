@@ -5,4 +5,4 @@ then
 	exit 1
 fi
 
-sudo -u "$1" python -u notify_receiver.py >> /var/log/notify_receiver
+sudo -u "$1" python -u notify_receiver.py > /dev/null
