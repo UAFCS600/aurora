@@ -1,62 +1,38 @@
 #!/usr/bin/python
 
 import base64
+import config_util
+import db_util
 from gcm import GCM
-import MySQLdb
-
-def db_remove_clients(clients):
-	database=MySQLdb.connect(host="localhost",
-		user="notify_user",  #change this to your real user
-		passwd="letmein",    #change this to your real password
-		db="notification_db")#change this to your real database
-
-	cursor=database.cursor()
-
-	for bad_client in response["errors"]["InvalidRegistration"]:
-		bad_client=str(base64.b64encode(bad_client))
-		cursor.execute("delete from clients where token='"+str(bad_client)+"';")
-
-	database.commit()
-	cursor.close()
-	database.close()
-
-
-def db_get_clients(kp):
-	database=MySQLdb.connect(host="localhost",
-		user="notify_user",  #change this to your real user
-		passwd="letmein",    #change this to your real password
-		db="notification_db")#change this to your real database
-
-	cursor=database.cursor()
-	cursor.execute("select * from clients where kpTrigger<='"+str(kp)+"';")
-	clients=cursor.fetchall()
-
-	cursor.close()
-	database.close()
-
-	return clients
 
 if __name__=="__main__":
-	kp_trigger=9
-	clients=db_get_clients(kp_trigger)
-	gcm_clients=[]
+	try:
+		config=config_util.read_config("notification.cfg")
 
-	for client in clients:
-		try:
-			service=str(client[1])
-			token=str(base64.b64decode(client[2]))
-			if service=="gcm":
-				gcm_clients.append(token)
-		except:
-			#add a log!!!
-			pass
+		kp_trigger=9
 
-	if len(gcm_clients)>0:
-		gcm_message="{\"kpTrigger\":\""+str(kp_trigger)+"\"}"
-		gcm_data={'message':gcm_message}
+		clients=db_util.db_get_clients(config,kp_trigger)
+		gcm_clients=[]
 
-		API_KEY="ENTER YOUR API KEY HERE"
-		gcm=GCM(API_KEY)
-		response=gcm.json_request(registration_ids=gcm_clients,data=gcm_data)
+		for client in clients:
+			try:
+				service=str(client[1])
+				token=str(base64.b64decode(client[2]))
+				if service=="gcm":
+					gcm_clients.append(token)
+			except:
+				#add a log!!!
+				pass
 
-		db_remove_clients(response["errors"]["InvalidRegistration"])
+		if len(gcm_clients)>0:
+			gcm_message="{\"kpTrigger\":\""+str(kp_trigger)+"\"}"
+			gcm_data={'message':gcm_message}
+
+			gcm=GCM(config["gcm_api_key"])
+			response=gcm.json_request(registration_ids=gcm_clients,data=gcm_data)
+
+			if response.has_key("errors"):
+				db_util.db_remove_clients(config,response["errors"]["InvalidRegistration"])
+
+	except Exception as error:
+		print("Error:  "+str(error))
