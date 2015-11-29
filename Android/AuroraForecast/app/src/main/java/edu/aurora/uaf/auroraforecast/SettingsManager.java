@@ -48,8 +48,8 @@ public class SettingsManager
 
 		NetworkDispatcher dispatcher=new NetworkDispatcher();
 		String[] params=new String[2];
-		params[0]="http://137.229.25.180/?pushNotification";
-		params[1]="{\"token\":\""+token+"\",\"kpTrigger\":\""+kpTrigger+"\"}";
+		params[0]="http://aurora.cs.uaf.edu/push_notification/";
+		params[1]="{\"service\":\"gcm\",\"token\":\""+token+"\",\"kpTrigger\":\""+kpTrigger+"\"}";
 		dispatcher.execute(params);
 	}
 }
