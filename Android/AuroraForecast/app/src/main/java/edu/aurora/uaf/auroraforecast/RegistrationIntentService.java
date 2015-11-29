@@ -27,14 +27,12 @@ public class RegistrationIntentService extends IntentService
 			InstanceID instanceID=InstanceID.getInstance(this);
 			String token=instanceID.getToken(getString(R.string.gcm_defaultSenderId),GoogleCloudMessaging.INSTANCE_ID_SCOPE,null);
 
-			Log.d("ERROR2","");
 			Log.d("RegistrationIntentServi","GCM Registration Token: "+token);
 			manager.setString("token",token);
 			manager.setBool("sentTokenToServer",true);
 		}
 		catch (Exception e)
 		{
-			Log.d("ERROR3","");
 			Log.d("RegistrationIntentServi","Failed to complete token refresh: "+e);
 			manager.setBool("sentTokenToServer",false);
 		}

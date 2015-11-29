@@ -52,6 +52,7 @@ def validate_kp(kp):
 class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 	def do_POST(self):
 		return_code=200
+
 		try:
 			self.log()
 			data_size=int(self.headers.getheader("content-length",0))
@@ -59,15 +60,16 @@ class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 			print("    Data:       "+data)
 			json_obj=json.loads(data)
 			service=validate_service(json_obj["service"])
-			token=base64.b64encode(json_obj["token"])
-			kp_trigger=validate_kp(json_obj["kpTrigger"])
+			token=str(base64.b64encode(json_obj["token"]))
+			kp_trigger=str(validate_kp(json_obj["kpTrigger"]))
 			print("    service:    "+service)
 			print("    token:      "+token)
-			print("    kpTrigger:  "+str(kp_trigger))
+			print("    kpTrigger:  "+kp_trigger)
 			db_insert_client(service,token,kp_trigger)
 		except Exception as error:
 			print("    Error:      "+str(error))
 			return_code=400
+
 		try:
 			print("    Sending:    "+str(return_code))
 			self.end_headers()
@@ -83,6 +85,7 @@ class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 			address=self.headers.getheader("x-forwarded-for")+":"+str(self.client_address[1])
 		else:
 			address=self.client_address[0]+":"+str(self.client_address[1])
+
 		method=self.command
 		time=str(datetime.datetime.now())
 		request=self.path
