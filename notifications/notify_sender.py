@@ -10,13 +10,13 @@ if __name__=="__main__":
 	try:
 		config=config_util.open("notification.cfg")
 
-		kps=get_kps(config)
+		kps=db_util.get_kps(config)
 
-		kps[0][3]=int(math.ceil(kps[0][3]))
-		kps[1][3]=int(math.ceil(kps[1][3]))
+		kp_new=int(math.ceil(kps[0][3]))
+		kp_old=int(math.ceil(kps[1][3]))
 
-		if kps[0][3]!=kps[1][3]:
-			kp_trigger=kps[0][3]
+		if kp_new!=kp_old:
+			kp_trigger=kp_new
 
 			clients=db_util.get_clients(config,kp_trigger)
 			gcm_clients=[]
