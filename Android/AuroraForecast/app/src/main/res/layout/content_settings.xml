@@ -13,7 +13,7 @@
 		android:layout_height="wrap_content" android:layout_alignParentEnd="true"
 		android:layout_alignParentLeft="true" android:layout_alignParentRight="true"
 		android:layout_alignParentStart="true" android:layout_below="@+id/setting_kp_text"
-		android:max="9" />
+		android:max="4" />
 	<TextView android:id="@+id/setting_kp_text" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_alignParentTop="true"
 		android:layout_centerHorizontal="true" android:text="KP (7)" />

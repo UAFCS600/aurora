@@ -27,13 +27,13 @@ public class MyGcmListenerService extends GcmListenerService
 		try
 		{
 			JSONObject jsonObject=new JSONObject(message);
-			int kpTrigger=jsonObject.getInt("kpTrigger");
+			int kpRetrieved=jsonObject.getInt("kpTrigger");
 
 			SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(this);
 			SettingsManager manager=new SettingsManager(sharedPreferences);
-			int kpRetrieved=manager.getInt("kpTrigger",7);
+			int kpTrigger=manager.getInt("kpTrigger",7);
 
-			if(kpTrigger>=kpRetrieved)
+			if(kpTrigger<=kpRetrieved)
 			{
 				String notification_message="The forecasted Kp is "+kpRetrieved+"!";
 				Intent intent=new Intent(this, MainActivity.class);
@@ -51,7 +51,7 @@ public class MyGcmListenerService extends GcmListenerService
 				notificationManager.notify(0,notificationBuilder.build());
 			}
 		}
-		catch(JSONException error)
+		catch(Exception error)
 		{
 			Log.d("Receive Error:  ",error.toString());
 		}
