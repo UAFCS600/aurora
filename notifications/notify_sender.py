@@ -32,14 +32,23 @@ if __name__=="__main__":
 					pass
 
 			if len(gcm_clients)>0:
-				gcm_message="{\"kpTrigger\":\""+str(kp_trigger)+"\"}"
-				gcm_data={'message':gcm_message}
 
-				gcm=GCM(config["gcm_api_key"])
-				response=gcm.json_request(registration_ids=gcm_clients,data=gcm_data)
+				chunk_size=1000
+				counter=0
 
-				if response.has_key("errors"):
-					db_util.remove_clients(config,response["errors"]["InvalidRegistration"])
+				while counter<len(gcm_clients):
+					temp_clients=gcm_clients[counter:counter+chunk_size]
+					gcm_message="{\"kpTrigger\":\""+str(kp_trigger)+"\"}"
+					gcm_data={'message':gcm_message}
+
+					gcm=GCM(config["gcm_api_key"])
+					response=gcm.json_request(registration_ids=temp_clients,data=gcm_data)
+
+					if response.has_key("errors"):
+						db_util.remove_clients(config,response["errors"]["InvalidRegistration"])
+
+					counter+=chunk_size
 
 	except Exception as error:
 		print("Error:  "+str(error))
+
