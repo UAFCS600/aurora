@@ -10,14 +10,28 @@ import json
 import SimpleHTTPServer
 import ssl
 
+def validate_service(service):
+	if service=="gcm" or service=="apns":
+		return service
+	else:
+		raise Exception("Invalid service\""+service+"\".")
+
 def validate_kp(kp):
+	error=False
+	kp_int=-1
+
 	try:
-		kp=int(kp)
+		kp_int=int(kp)
 	except:
-		raise Exception("Not an integer.")
-	if kp<0 or kp>9:
-		raise Exception("Invalid KP value.")
-	return int(kp)
+		error=True
+
+	if not error and (kp_int<0 or kp_int>9):
+		error=True
+
+	if error:
+		raise Exception("Invalid KP value \""+str(kp)+"\".")
+
+	return kp_int
 
 class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 	def do_POST(self):
@@ -28,9 +42,11 @@ class aurora_handler(BaseHTTPServer.BaseHTTPRequestHandler):
 			data=self.rfile.read(data_size)
 			print("    Data:       "+data)
 			json_obj=json.loads(data)
+			service=validate_service(json_obj["service"])
 			token=base64.b64encode(json_obj["token"])
 			kp_trigger=validate_kp(json_obj["kpTrigger"])
 			salt=base64.b64encode(self.headers.getheader("user-agent"))
+			print("    service:    "+service)
 			print("    token:      "+token)
 			print("    kpTrigger:  "+str(kp_trigger))
 			print("    salt:       "+salt)
