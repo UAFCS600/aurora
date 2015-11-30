@@ -5,6 +5,29 @@ import config_util
 import db_util
 from gcm import GCM
 import math
+#from functools import partial
+#from multiprocessing import Pool
+import time
+
+def get_time_ms():
+	return int(round(time.time()*1000))
+
+def big_list_to_chunks(big_list,chunk_size):
+	return [big_list[ii:ii+chunk_size] for ii in xrange(0,len(big_list),chunk_size)]
+
+#max size of clients is 1000...gcm limitation...
+def process_clients(kp_trigger,clients):
+	gcm_message="{\"kpTrigger\":\""+str(kp_trigger)+"\"}"
+	gcm_data={'message':gcm_message}
+
+	gcm=GCM(config["gcm_api_key"])
+	response=gcm.json_request(registration_ids=clients,data=gcm_data)
+
+	if response.has_key("errors"):
+		return response["errors"]["InvalidRegistration"]
+
+	return []
+
 
 if __name__=="__main__":
 	try:
@@ -32,23 +55,24 @@ if __name__=="__main__":
 					pass
 
 			if len(gcm_clients)>0:
-
-				chunk_size=1000
-				counter=0
-
-				while counter<len(gcm_clients):
-					temp_clients=gcm_clients[counter:counter+chunk_size]
-					gcm_message="{\"kpTrigger\":\""+str(kp_trigger)+"\"}"
-					gcm_data={'message':gcm_message}
-
-					gcm=GCM(config["gcm_api_key"])
-					response=gcm.json_request(registration_ids=temp_clients,data=gcm_data)
-
-					if response.has_key("errors"):
-						db_util.remove_clients(config,response["errors"]["InvalidRegistration"])
-
-					counter+=chunk_size
+				client_chunks=big_list_to_chunks(gcm_clients,1000)
+				bad_clients=[]
+				print("Starting")
+				start_time=get_time_ms()
+				for chunk in client_chunks:
+					print("Processing Chunk ("+str(get_time_ms()-start_time)+"ms)")
+					bad_clients+=process_clients(kp_trigger,chunk)
+				#thread_func=partial(process_clients,kp_trigger)
+				#pool=Pool(processes=4)
+				#pool.map(thread_func,chunks)
+				#pool.close()
+				#pool.join()
+				bad_client_chunks=big_list_to_chunks(bad_clients,20)
+				for chunk in bad_client_chunks:
+					print("Processing Bad Client List ("+str(get_time_ms()-start_time)+"ms)")
+					db_util.remove_clients(config,chunk)
+				end_time=get_time_ms()
+				print("Total Process Time:  "+str(end_time-start_time)+"ms")
 
 	except Exception as error:
 		print("Error:  "+str(error))
-
