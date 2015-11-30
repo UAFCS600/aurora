@@ -18,7 +18,6 @@ public class SettingsActivity extends AppCompatActivity
 	private SeekBar kp_bar;
 	private TextView kp_text;
 	Button apply_button;
-	private int kpMin=5;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -37,8 +36,13 @@ public class SettingsActivity extends AppCompatActivity
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-		kp_bar.setProgress(manager.getInt("kpTrigger",7)-kpMin);
-		kp_text.setText("KP ("+manager.getInt("kpTrigger",7)+")");
+		int kpMin=manager.getInt("kpMin",0);
+		int kpMax=manager.getInt("kpMax",0);
+		int kpTrigger=manager.getInt("kpTrigger",kpMin);
+
+		kp_bar.setMax(kpMax-kpMin);
+		kp_bar.setProgress(kpTrigger-kpMin);
+		kp_text.setText("KP ("+kpTrigger+")");
 
 		kp_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 		{
@@ -55,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity
 			@Override
 			public void onProgressChanged(SeekBar seekBar,int progress,boolean fromUser)
 			{
-				kp_text.setText("KP ("+(kpMin+progress)+")");
+				kp_text.setText("KP ("+(manager.getInt("kpMin",0)+progress)+")");
 				apply_button.setEnabled(true);
 			}
 		});
@@ -65,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity
 			@Override
 			public void onClick(View view)
 			{
-				manager.setInt("kpTrigger",kpMin+kp_bar.getProgress());
+				manager.setInt("kpTrigger",manager.getInt("kpMin",0)+kp_bar.getProgress());
 				manager.sync();
 				apply_button.setEnabled(false);
 			}

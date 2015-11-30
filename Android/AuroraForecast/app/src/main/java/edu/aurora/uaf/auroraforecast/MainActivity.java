@@ -1,7 +1,9 @@
 package edu.aurora.uaf.auroraforecast;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,12 @@ public class MainActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(this);
+		SettingsManager manager=new SettingsManager(sharedPreferences);
+		manager.setInt("kpMin",5);
+		manager.setInt("kpMax",9);
+		manager.sync();
 
 		if (checkPlayServices())
 		{

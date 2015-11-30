@@ -31,7 +31,7 @@ public class MyGcmListenerService extends GcmListenerService
 
 			SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(this);
 			SettingsManager manager=new SettingsManager(sharedPreferences);
-			int kpTrigger=manager.getInt("kpTrigger",7);
+			int kpTrigger=manager.getInt("kpTrigger",manager.getInt("kpMin",5));
 
 			if(kpTrigger<=kpRetrieved)
 			{

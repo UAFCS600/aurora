@@ -44,7 +44,14 @@ public class SettingsManager
 	public void sync()
 	{
 		String token=getString("token","INVALID");
-		int kpTrigger=getInt("kpTrigger",7);
+		int kpTrigger=getInt("kpTrigger",getInt("kpMin",0));
+
+		if(kpTrigger<getInt("kpMin",0))
+			kpTrigger=getInt("kpMin",0);
+		if(kpTrigger>getInt("kpMax",0))
+			kpTrigger=getInt("kpMax",0);
+
+		setInt("kpTrigger",kpTrigger);
 
 		NetworkDispatcher dispatcher=new NetworkDispatcher();
 		String[] params=new String[2];
