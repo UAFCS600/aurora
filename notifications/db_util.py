@@ -18,7 +18,7 @@ def get_clients(config,kp):
 	database=MySQLdb.connect(host=config["notify_host"],user=config["notify_user"],
 		passwd=config["notify_password"],db=config["notify_database"])
 	cursor=database.cursor()
-	cursor.execute("select * from clients where kpTrigger<='"+str(kp)+"';")
+	cursor.execute("select service,token from clients where kpTrigger<='"+str(kp)+"';")
 	clients=cursor.fetchall()
 	cursor.close()
 	database.close()

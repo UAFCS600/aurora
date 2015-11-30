@@ -44,8 +44,8 @@ if __name__=="__main__":
 
 			for client in clients:
 				try:
-					service=str(client[1])
-					token=str(base64.b64decode(client[2]))
+					service=str(client[0])
+					token=str(base64.b64decode(client[1]))
 					if service=="gcm":
 						gcm_clients.append(token)
 				except:
