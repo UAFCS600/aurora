@@ -5,8 +5,6 @@ import config_util
 import db_util
 from gcm import GCM
 import math
-#from functools import partial
-#from multiprocessing import Pool
 import time
 
 def get_time_ms():
@@ -57,20 +55,19 @@ if __name__=="__main__":
 			if len(gcm_clients)>0:
 				client_chunks=big_list_to_chunks(gcm_clients,1000)
 				bad_clients=[]
+
 				print("Starting")
 				start_time=get_time_ms()
+
 				for chunk in client_chunks:
 					print("Processing Chunk ("+str(get_time_ms()-start_time)+"ms)")
 					bad_clients+=process_clients(kp_trigger,chunk)
-				#thread_func=partial(process_clients,kp_trigger)
-				#pool=Pool(processes=4)
-				#pool.map(thread_func,chunks)
-				#pool.close()
-				#pool.join()
+
 				bad_client_chunks=big_list_to_chunks(bad_clients,20)
 				for chunk in bad_client_chunks:
 					print("Processing Bad Client List ("+str(get_time_ms()-start_time)+"ms)")
 					db_util.remove_clients(config,chunk)
+
 				end_time=get_time_ms()
 				print("Total Process Time:  "+str(end_time-start_time)+"ms")
 
