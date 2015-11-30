@@ -63,7 +63,7 @@ if __name__=="__main__":
 					print("Processing Chunk ("+str(get_time_ms()-start_time)+"ms)")
 					bad_clients+=process_clients(kp_trigger,chunk)
 
-				bad_client_chunks=big_list_to_chunks(bad_clients,20)
+				bad_client_chunks=big_list_to_chunks(bad_clients,2000)
 				for chunk in bad_client_chunks:
 					print("Processing Bad Client List ("+str(get_time_ms()-start_time)+"ms)")
 					db_util.remove_clients(config,chunk)

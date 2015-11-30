@@ -29,9 +29,16 @@ def remove_clients(config,bad_clients):
 		database=MySQLdb.connect(host=config["notify_host"],user=config["notify_user"],
 			passwd=config["notify_password"],db=config["notify_database"])
 		cursor=database.cursor()
+
+		query_string="delete from clients where token in (";
 		for bad_client in bad_clients:
-			bad_client=str(base64.b64encode(bad_client))
-			cursor.execute("delete from clients where token='"+str(bad_client)+"';")
+			query_string+="'"+str(base64.b64encode(bad_client))+"',"
+		if query_string[-1]==',':
+			query_string=query_string[:-1]
+		query_string+=");"
+
+		cursor.execute(query_string)
+
 		database.commit()
 		cursor.close()
 		database.close()
