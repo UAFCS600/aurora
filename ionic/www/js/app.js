@@ -22,3 +22,16 @@ angular.module('starter', ['ionic'])
     }
   });
 })
+
+function initPushNotifications() {
+  push = PushNotification.init();
+
+  if(push)
+    document.write('It works!!!');
+}
+
+function onDeviceReady() {
+  
+}
+
+document.addEventListener("deviceready", onDeviceReady, false);
