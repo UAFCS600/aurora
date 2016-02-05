@@ -20,18 +20,21 @@ angular.module('starter', ['ionic'])
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    document.addEventListener("deviceready", onDeviceReady, false);
   });
 })
 
 function initPushNotifications() {
   push = PushNotification.init();
 
-  if(push)
-    document.write('It works!!!');
+  if(push) {
+    alert('It works!!!');
+  }
 }
 
 function onDeviceReady() {
-  
+  initPushNotifications();
 }
 
 document.addEventListener("deviceready", onDeviceReady, false);
