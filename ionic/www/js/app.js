@@ -25,17 +25,25 @@ angular.module('starter', ['ionic'])
   });
 })
 
-function initPushNotifications() {
-  push = PushNotification.init({}); // init needs SOMETHING as an argument, even an empty JSON object
-
-  if(push) {
-    alert('It works!!!');
-  }
-  else {
-    alert("It doesn't work!!!'");
-  }
-}
-
 function onDeviceReady() {
   initPushNotifications();
+}
+
+function initPushNotifications() {
+  var push = PushNotification.init({}); // init needs SOMETHING as an argument, even an empty JSON object
+
+  if(push) {
+    alert('It works!');
+  }
+  else {
+    alert("It doesn't work!");
+  }
+
+  push.on('registration', function(data) {
+      alert("Registration: " + JSON.stringify(data));
+  });
+
+  push.on('notification', function(data) {
+      alert("Notification: " + JSON.stringify(data));
+  });
 }
