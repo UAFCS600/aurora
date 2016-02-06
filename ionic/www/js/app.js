@@ -30,7 +30,15 @@ function onDeviceReady() {
 }
 
 function initPushNotifications() {
-  var push = PushNotification.init({}); // init needs SOMETHING as an argument, even an empty JSON object
+  var id = "209803454821" // this is static for GCM
+  // need to figure out APNS...
+
+  var push = PushNotification.init({
+      "android": {"senderID": id}
+      "ios": {"alert":"true", "badge":"true", "sound":"true"},
+      "windows": {}
+
+  });
 
   if(push) {
     alert('It works!');
