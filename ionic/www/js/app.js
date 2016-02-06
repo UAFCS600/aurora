@@ -34,9 +34,9 @@ function initPushNotifications() {
   // need to figure out APNS...
 
   var push = PushNotification.init({
-      "android": {"senderID": id}
-      "ios": {"alert":"true", "badge":"true", "sound":"true"},
-      "windows": {}
+      //"android": {"senderID": id}
+      //"ios": {"alert":"true", "badge":"true", "sound":"true"},
+      //"windows": {}
 
   });
 
