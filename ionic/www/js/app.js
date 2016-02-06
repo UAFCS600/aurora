@@ -26,15 +26,16 @@ angular.module('starter', ['ionic'])
 })
 
 function initPushNotifications() {
-  push = PushNotification.init();
+  push = PushNotification.init({}); // init needs SOMETHING as an argument, even an empty JSON object
 
   if(push) {
     alert('It works!!!');
+  }
+  else {
+    alert("It doesn't work!!!'");
   }
 }
 
 function onDeviceReady() {
   initPushNotifications();
 }
-
-document.addEventListener("deviceready", onDeviceReady, false);
