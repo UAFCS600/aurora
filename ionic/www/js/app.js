@@ -34,24 +34,50 @@ function initPushNotifications() {
   // need to figure out APNS...
 
   var push = PushNotification.init({
-      //"android": {"senderID": id}
+      "android": {"senderID": id}
       //"ios": {"alert":"true", "badge":"true", "sound":"true"},
       //"windows": {}
 
   });
 
   if(push) {
-    alert('It works!');
+    alert('It works!!');
   }
   else {
     alert("It doesn't work!");
   }
 
   push.on('registration', function(data) {
-      alert("Registration: " + JSON.stringify(data));
+      console.log("Registration: " + JSON.stringify(data));
+
+      postData = {
+                  "service":"gcm" ,
+                  "token":data.registrationId ,
+                  "kpTrigger":1
+                }
+
+      console.log(JSON.stringify(postData));
+
+      postNewToken(postData);
   });
 
   push.on('notification', function(data) {
-      alert("Notification: " + JSON.stringify(data));
+      alert("Notification: " + JSON.stringify(data["message"]));
   });
+
+  function postNewToken(params) {
+    xhttp = new XMLHttpRequest();
+    xhttp.withCredentials = false;
+
+    xhttp.addEventListener("readystatechange", function() {
+      console.log("State changed: " + xhttp.readyState + ' ' + "Status: " + xhttp.status);
+      if (xhttp.readyState == 4 /*&& xhttp.status == 200*/) {
+        alert("Key has been added to push server!");
+      }
+    });
+
+    xhttp.open("POST", "http://aurora.cs.uaf.edu/push_notification/");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(JSON.stringify(params));
+  }
 }
