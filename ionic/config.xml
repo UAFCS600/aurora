@@ -2,20 +2,20 @@
 <widget id="com.ionicframework.Aurora209834" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Aurora</name>
   <description>
-        The UAF Geophysical Institute's aurora forecast app.
-    </description>
+      The UAF Geophysical Institute's aurora forecast app.
+  </description>
   <author email="you@example.com">
-      Noah Betzen
-    </author>
-    <author email="you@example.com">
-        Dustin Dodson
-      </author>
+    Noah Betzen
+  </author>
+  <author email="dustinleedodson@gmail.com">
+    Dustin Dodson
+  </author>
   <author email="you@example.com">
-      Dain Harmon
-    </author>
-    <author email="you@example.com">
-        Alexander Lease
-      </author>
+    Dain Harmon
+  </author>
+  <author email="you@example.com">
+    Alexander Lease
+  </author>
   <content src="index.html"/>
   <access origin="*"/>
   <preference name="webviewbounce" value="false"/>
