@@ -28,6 +28,17 @@ angular.module('starter', ['ionic'])
 
 function onDeviceReady() {
   initPushNotifications();
+  initGeoLocation();
+}
+
+function initGeoLocation() {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    alert("Latitude: " + position.coords.latitude +  '\n' +
+          "Longitude: " + position.coords.longitude + '\n' +
+          "Accuracy: " + position.coords.accuracy);
+  },function(error) {
+    alert("Could not get location!");
+  });
 }
 
 function initPushNotifications() {
