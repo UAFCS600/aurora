@@ -42,7 +42,8 @@ function initGeoLocation() {
           'Speed: '             + position.coords.speed             + '\n' +
           'Timestamp: '         + position.timestamp                + '\n');
   },function(error) {
-    alert("Could not get location!");
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
   });
 }
 
