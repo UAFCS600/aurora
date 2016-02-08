@@ -22,6 +22,7 @@ angular.module('starter', ['ionic'])
     }
 
     document.addEventListener("deviceready", onDeviceReady, false);
+    navigator.splashscreen.hide();
   });
 })
 
