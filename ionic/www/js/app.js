@@ -26,15 +26,15 @@ angular.module('starter', ['ionic'])
 })
 
 function onDeviceReady() {
-    initGeoLocation();
+    showGeoLocationInfo();
     initPushNotifications();
 }
 
-function initGeoLocation() {
+function showGeoLocationInfo() {
     console.log("Initializing geolocation...");
 
     var options = {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
         timeout: 15000,
         maximumAge: 1000*60*5 //Five minutes
     }
