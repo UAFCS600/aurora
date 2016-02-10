@@ -26,11 +26,19 @@ angular.module('starter', ['ionic'])
 })
 
 function onDeviceReady() {
-    initPushNotifications();
     initGeoLocation();
+    initPushNotifications();
 }
 
 function initGeoLocation() {
+    console.log("Initializing geolocation...");
+
+    var options = {
+        enableHighAccuracy: false,
+        timeout: 15000,
+        maximumAge: 1000*60*5 //Five minutes
+    }
+
     navigator.geolocation.getCurrentPosition(function(position) {
         alert('Latitude: ' + position.coords.latitude + '\n' +
             'Longitude: ' + position.coords.longitude + '\n' +
@@ -43,16 +51,18 @@ function initGeoLocation() {
     }, function(error) {
         alert('Code: ' + error.code + '\n' +
             'Message: ' + error.message + '\n');
-    });
+    }, options);
 }
 
 function initPushNotifications() {
-    var id = "209803454821" // this is static for GCM
+    console.log("Initializing push notification service...");
+    var gcmID = "209803454821" // this is static for GCM
+    var apnsId = ""; //Apple iTunes App ID
         // need to figure out APNS...
 
     var push = PushNotification.init({
         "android": {
-            "senderID": id
+            "senderID": gcmID
         }
         //"ios": {"alert":"true", "badge":"true", "sound":"true"},
         //"windows": {}
@@ -60,9 +70,11 @@ function initPushNotifications() {
     });
 
     if (push) {
-        alert('It works!!');
-    } else {
+        console.log("Push notification service successfully initialized.");
+    }
+    else {
         alert("It doesn't work!");
+        console.log("Push notification service failure.");
     }
 
     push.on('registration', function(data) {
@@ -77,6 +89,15 @@ function initPushNotifications() {
         console.log(JSON.stringify(postData));
 
         postNewToken(postData);
+    });
+
+    PushNotification.hasPermission(function(data) {
+        if(data.isEnabled) {
+          console.log("Push notifications enabled.");
+        }
+        else {
+          console.log("Push notifications disabled.");
+        }
     });
 
     push.on('notification', function(data) {
