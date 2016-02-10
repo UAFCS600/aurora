@@ -1,83 +1,128 @@
-// Ionic Starter App
+	// Ionic Starter App
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+	// angular.module is a global place for creating, registering and retrieving Angular modules
+	// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
+	// the 2nd parameter is an array of 'requires'
+	// 'starter.services' is found in services.js
+	// 'starter.controllers' is found in controllers.js
+	angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+	.run(function($ionicPlatform) {
+		  $ionicPlatform.ready(function() {
+				// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+				// for form inputs)
+				if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+					  cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+					  cordova.plugins.Keyboard.disableScroll(true);
 
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
-      cordova.plugins.Keyboard.disableScroll(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
+				}
+				if (window.StatusBar) {
+					  // org.apache.cordova.statusbar required
+					  StatusBar.styleDefault();
+				}
+		  });
+	})
+	
+	.config(function($stateProvider, $urlRouterProvider) {
+		// Ionic uses AngularUI Router which uses the concept of states
+		// Learn more here: https://github.com/angular-ui/ui-router
+		// Set up the various states which the app can be in.
+		// Each state's controller can be found in controllers.js
+		$stateProvider
 
-    document.addEventListener("deviceready", onDeviceReady, false);
-  });
-})
+		// setup an abstract state for the tabs directive
+		.state('tab', {
+			url: '/tab',
+			abstract: true,
+			templateUrl: 'templates/tabs.html'
+		})
 
-function onDeviceReady() {
-  initPushNotifications();
-}
+		// Each tab has its own nav history stack:
+		.state('tab.dash', {
+			url: '/dash',
+			views: {
+				'tab-dash': {
+					templateUrl: 'templates/tab-dash.html',
+					controller: 'DashCtrl'
+				}
+			}
+		})
+	  
+		.state('tab.settings', {
+			url: '/settings',
+			views: {
+				'tab-settings': {
+					templateUrl: 'templates/tab-settings.html',
+					controller: 'SettingsCtrl'
+				}
+			}
+		})
 
-function initPushNotifications() {
-  var id = "209803454821" // this is static for GCM
-  // need to figure out APNS...
+		.state('tab.location', {
+			url: '/location',
+			views: {
+				'tab-settings': {
+					templateUrl: 'templates/setting-location.html',
+				}
+			}
+		})
+		
+		.state('tab.kpAlert', {
+			url: '/kpAlert',
+			views: {
+				'tab-settings': {
+					templateUrl: 'templates/setting-kpa.html',
+				}
+			}
+		})
+		
+		.state('tab.allskyAlert', {
+			url: '/allskyAlert',
+			views: {
+				'tab-settings': {
+					templateUrl: 'templates/setting-allsky.html',
+				}
+			}
+		})
+		
+		.state('tab.quietTime', {
+			url: '/quietTime',
+			views: {
+				'tab-settings': {
+					templateUrl: 'templates/setting-quiet.html',
+				}
+			}
+		})
+		
+		.state('tab.tutorial', {
+			url: '/tutorial',
+			views: {
+				'tab-settings': {
+					templateUrl: 'templates/setting-tutorial.html',
+				}
+			}
+		})
+		
+		.state('tab.about', {
+			url: '/about',
+			views: {
+				'tab-about': {
+					templateUrl: 'templates/tab-about.html',
+					controller: 'AboutCtrl'
+				}
+			}
+		})
+		
+		.state('tab.allsky', {
+			url: '/allsky',
+			views: {
+				'tab-allsky': {
+					templateUrl: 'templates/tab-allsky.html',
+					controller: 'AllskyCtrl'
+				}
+			}
+		});
 
-  var push = PushNotification.init({
-      "android": {"senderID": id}
-      //"ios": {"alert":"true", "badge":"true", "sound":"true"},
-      //"windows": {}
-
-  });
-
-  if(push) {
-    alert('It works!!');
-  }
-  else {
-    alert("It doesn't work!");
-  }
-
-  push.on('registration', function(data) {
-      console.log("Registration: " + JSON.stringify(data));
-
-      postData = {
-                  "service":"gcm" ,
-                  "token":data.registrationId ,
-                  "kpTrigger":1
-                }
-
-      console.log(JSON.stringify(postData));
-
-      postNewToken(postData);
-  });
-
-  push.on('notification', function(data) {
-      alert("Notification: " + JSON.stringify(data["message"]));
-  });
-
-  function postNewToken(params) {
-    xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = false;
-
-    xhttp.addEventListener("readystatechange", function() {
-      console.log("State changed: " + xhttp.readyState + ' ' + "Status: " + xhttp.status);
-      if (xhttp.readyState == 4 /*&& xhttp.status == 200*/) {
-        alert("Key has been added to push server!");
-      }
-    });
-
-    xhttp.open("POST", "http://aurora.cs.uaf.edu/push_notification/");
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send(JSON.stringify(params));
-  }
-}
+		// if none of the above states are matched, use this as the fallback
+		$urlRouterProvider.otherwise('/tab/dash');
+	});
