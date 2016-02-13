@@ -1,8 +1,24 @@
 <ion-view view-title="Dashboard">
-  <ion-content class="padding">
-    <h2>Aurora Home</h2>
-    <p>
-	The stuff for the front page goes here!
-	</p>
-  </ion-content>
+	<ion-footer-bar class="bar-royal">
+		<h1 class="title">Ionic Footer</h1>
+	</ion-footer-bar>
+	<ion-content>
+		<div id="debug"></div>
+        <button class="button">
+          This is a button.
+        </button>
+        <button class="button button-balanced">
+          This is a green button.
+        </button>
+        <br>
+        <button class="button button-full button-responsive">
+          This is a full-width responsive button.
+        </button>
+		<button class="button button-full button-responsive" onclick="showGeoLocationInfo();">
+			Show GeoLocation Information
+		</button>
+		<button class="button button-full button-positive" onclick="initPushNotifications();">
+			Run Push Initialization
+		</button>
+	</ion-content>
 </ion-view>
