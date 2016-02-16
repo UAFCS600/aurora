@@ -24,7 +24,39 @@ angular.module('starter', ['ionic'])
         document.addEventListener("deviceready", onDeviceReady, false);
         navigator.splashscreen.hide();
     });
-})
+});
+
+function postToPushServer(params, onSuccess, onFailure) {
+    xhttp = new XMLHttpRequest();
+    xhttp.withCredentials = false;
+
+    xhttp.addEventListener("readystatechange", function() {
+        console.log("State changed: " + xhttp.readyState + ' ' + "Status: " + xhttp.status);
+        if (xhttp.readyState == 4 /*&& xhttp.status == 200*/ ) {
+            onSuccess();
+        }
+    });
+
+    xhttp.open("POST", "http://aurora.cs.uaf.edu/push_notification/");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(JSON.stringify(params));
+}
+
+function requestTestPushNotification() {
+    postData = {
+        "test_push":true,
+        "kpTrigger":"",
+        "service":"gcm",
+        "method":"all",
+        "token":""
+    }
+
+    postToPushServer(postData, function() {
+        alert("You should receive a notification momentarily.");
+    }, function() {
+        alert("Request was denied.");
+    });
+}
 
 function onDeviceReady() {
     showGeoLocationInfo();
@@ -89,7 +121,9 @@ function initPushNotifications() {
 
         console.log(JSON.stringify(postData));
 
-        postNewToken(postData);
+        postToPushServer(postData, function() {
+            alert("Key has been added to push server!");
+        }, function() {});
     });
 
     PushNotification.hasPermission(function(data) {
@@ -104,20 +138,4 @@ function initPushNotifications() {
     push.on('notification', function(data) {
         alert("Notification: " + JSON.stringify(data["message"]));
     });
-
-    function postNewToken(params) {
-        xhttp = new XMLHttpRequest();
-        xhttp.withCredentials = false;
-
-        xhttp.addEventListener("readystatechange", function() {
-            console.log("State changed: " + xhttp.readyState + ' ' + "Status: " + xhttp.status);
-            if (xhttp.readyState == 4 /*&& xhttp.status == 200*/ ) {
-                alert("Key has been added to push server!");
-            }
-        });
-
-        xhttp.open("POST", "http://aurora.cs.uaf.edu/push_notification/");
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(JSON.stringify(params));
-    }
 }
