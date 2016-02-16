@@ -1,8 +1,11 @@
-angular.module('starter.controllers', [])
+angular.module('aurora.controllers', [])
 
 .controller('DashCtrl', function($scope) {})
 
-.controller('SettingsCtrl', function($scope) {})
+.controller('SettingsCtrl', function($scope) {
+	
+	
+})
 
 .controller('AboutCtrl', function($scope) {})
 
