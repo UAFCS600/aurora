@@ -22,7 +22,8 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
     "org.apache.cordova.splashscreen",
-    "cordova-plugin-geolocation"
+    "cordova-plugin-geolocation",
+    "phonegap-plugin-push"
   ],
   "cordovaPlatforms": [
     "ios",
