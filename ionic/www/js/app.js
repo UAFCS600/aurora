@@ -57,14 +57,20 @@ function showGeoLocationInfo() {
 function initPushNotifications() {
     console.log("Initializing push notification service...");
     var gcmID = "209803454821" // this is static for GCM
-    var apnsId = ""; //Apple iTunes App ID
+    var apnsID = ""; //Apple iTunes App ID
         // need to figure out APNS...
 
     var push = PushNotification.init({
         "android": {
             "senderID": gcmID
+        },
+        "ios": {
+            "senderID": gcmID,
+            "gcmSandbox": "true",
+            "alert": "true",
+            "badge": "true",
+            "sound": "true"
         }
-        //"ios": {"alert":"true", "badge":"true", "sound":"true"},
         //"windows": {}
 
     });
@@ -73,7 +79,6 @@ function initPushNotifications() {
         console.log("Push notification service successfully initialized.");
     }
     else {
-        alert("It doesn't work!");
         console.log("Push notification service failure.");
     }
 
