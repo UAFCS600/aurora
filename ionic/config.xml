@@ -10,7 +10,7 @@
   <author email="dustinleedodson@gmail.com">
     Dustin Dodson
   </author>
-  <author email="you@example.com">
+  <author email="dain.harmon@gmail.com">
     Dain Harmon
   </author>
   <author email="you@example.com">
@@ -21,7 +21,7 @@
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
-  <preference name="android-minSdkVersion" value="16"/>
+  <preference name="android-minSdkVersion" value="15"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="AutoHideSplashScreen" value="false"/>
   <preference name="SplashScreen" value="screen"/>
@@ -70,5 +70,7 @@
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
   <plugin name="phonegap-plugin-push" spec="~1.5.3"/>
+  <plugin name="cordova-plugin-splashscreen" spec="~3.1.0"/>
+  <plugin name="cordova-plugin-geolocation" spec="~2.1.0"/>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
 </widget>
