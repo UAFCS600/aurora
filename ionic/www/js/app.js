@@ -24,6 +24,11 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 		}
 		document.addEventListener("deviceready", onDeviceReady, false);
 		navigator.splashscreen.hide();
+		/*
+		document.body.classList.remove('platform-ios');
+		document.body.classList.remove('platform-android');
+		document.body.classList.add('platform-ios');
+		*/
 	});	
 })
 
@@ -76,6 +81,7 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 		views: {
 			'tab-settings': {
 				templateUrl: 'templates/setting-kpa.html',
+				controller: 'SettingsCtrl',
 			}
 		}
 	})
@@ -85,24 +91,6 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 		views: {
 			'tab-settings': {
 				templateUrl: 'templates/setting-allsky.html',
-			}
-		}
-	})
-	
-	.state('tab.quietTime', {
-		url: '/quietTime',
-		views: {
-			'tab-settings': {
-				templateUrl: 'templates/setting-quiet.html',
-			}
-		}
-	})
-	
-	.state('tab.tutorial', {
-		url: '/tutorial',
-		views: {
-			'tab-settings': {
-				templateUrl: 'templates/setting-tutorial.html',
 			}
 		}
 	})
@@ -193,7 +181,7 @@ function showGeoLocationInfo() {
 }
 
 function initPushNotifications() {
-    console.log("Initializing push notification service...");
+    alert("Initializing push notification service...");
     var gcmID = "209803454821" // this is static for GCM
     var apnsId = ""; //Apple iTunes App ID
         // need to figure out APNS...
@@ -208,7 +196,7 @@ function initPushNotifications() {
     });
 
     if (push) {
-        console.log("Push notification service successfully initialized.");
+        alert("Push notification service successfully initialized.");
     }
     else {
         alert("It doesn't work!");
@@ -216,7 +204,7 @@ function initPushNotifications() {
     }
 
     push.on('registration', function(data) {
-        console.log("Registration: " + JSON.stringify(data));
+        alert("Registration: " + JSON.stringify(data));
 
         postData = {
             "service": "gcm",
@@ -233,10 +221,10 @@ function initPushNotifications() {
 
     PushNotification.hasPermission(function(data) {
         if(data.isEnabled) {
-          console.log("Push notifications enabled.");
+          alert("Push notifications enabled.");
         }
         else {
-          console.log("Push notifications disabled.");
+          alert("Push notifications disabled.");
         }
     });
 

@@ -21,9 +21,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // My custom color. I’ll override the default for $positive.
 // Note that it’s before we load the rest of Ionic.
 // This is important!
-$positive:                        #057b6c !default;
+$positive:                        #057abc !default;
 //$base-background-color: 		  #000000 !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-

@@ -1,1 +1,21 @@
-/* Empty. Add your own CSS if you like */
+ion-popover-view.fit {
+  height: auto;
+}
+
+ion-popover-view.fit ion-content {
+  position: relative;
+}
+
+.platform-android ion-popover-view.fit {
+  margin-top: 10px;
+}
+
+.platform-ios ion-popover-view.fit {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.popover-inner-content {
+  width: 100%;
+  padding: 5px 20px;
+}

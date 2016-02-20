@@ -1,13 +1,25 @@
 <ion-view view-title="KP Alerts">
-	<ion-content class="padding">	
+	<ion-content class="padding" scroll="false">	
 		<h2>KP Alert Things</h2>
 
-		<div class="item range range-balanced">
+		<div class="range range-balanced">
 			<i class="icon ion-ios-sunny-outline"></i>
-			<input type="range" name="volume" min="0" max="100" value="33">
+			<input id="locKPAlert" type="range" name="kpa" min="0" max="10" ng-model="settingblock.locKPAlert", ng-change="saveSettings()">
+				{{locKPAlert}}
 			<i class="icon ion-ios-sunny"></i>
-			<div><a class="button button-icon icon ion-ios-help-outline"></a></div>
+			<div><a class="button button-icon icon ion-ios-help-outline" ng-click="popover.show($event)"></a></div>
 		</div>
 		
 	</ion-content>
 </ion-view>
+
+<script id="popover-lkpa.html" type="text/ng-template">
+  <ion-popover-view class="fit">
+    <ion-content class="padding" scroll="false">
+		<div class="popover-inner-content">
+			This bar determines the KP level of the aurora that notifications will be used for. 
+			Ex: Example Text
+		</div>
+    </ion-content>
+  </ion-popover-view>
+</script>
