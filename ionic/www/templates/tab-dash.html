@@ -2,7 +2,7 @@
 	<ion-footer-bar class="bar-positive">
 		<h1 class="title">Ionic Footer</h1>
 	</ion-footer-bar>
-	<ion-content>
+	<ion-content class="padding" scroll="false">
 		<div id="debug"></div>
         <button class="button">
           This is a button.
@@ -17,10 +17,10 @@
 		<button class="button button-full button-responsive" onclick="showGeoLocationInfo();">
 			Show GeoLocation Information
 		</button>
-		<button class="button button-full button-positive" onclick="initPushNotifications();">
+		<button class="button button-full button-positive" ng-click="initPushNotifications();">
 			Run Push Initialization
 		</button>
-		<button class="button button-full button-positive" onclick="requestTestPushNotification();">
+		<button class="button button-full button-positive" ng-click="requestTestPushNotification();">
 			Request Test Push Notification
 		</button>
 	</ion-content>
