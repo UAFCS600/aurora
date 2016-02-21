@@ -1,15 +1,24 @@
 <ion-view view-title="KP Alerts">
 	<ion-content class="padding" scroll="false">	
 		<!-- <h2>KP Alert Things</h2> -->
-		<div class="range range-balanced">
-			<p1>Aurora Intensity</p1>
-			<!-- <i class="icon ion-ios-sunny-outline"></i> -->
-			<input id="locKPAlert" type="range" name="kpa" min="0" max="10" ng-model="settingblock.locKPAlert", ng-change="saveSettings()">
-				{{locKPAlert}}
-			<!-- <i class="icon ion-ios-sunny"></i> -->
-			<div><a class="button button-icon icon ion-ios-help" ng-click="popover.show($event)"></a></div>
-		</div>
-		
+		<ul class="list">
+			<div class="range range-balanced">
+				<p1>Aurora Intensity</p1>
+				<!-- <i class="icon ion-ios-sunny-outline"></i> -->
+				<input id="locKPAlert" type="range" name="kpa" min="0" max="10" ng-model="settingblock.locKPAlert" ng-change="saveSettings()">
+					{{locKPAlert}}
+				<!-- <i class="icon ion-ios-sunny"></i> -->
+				<div><a class="button button-icon icon ion-ios-help" ng-click="popover.show($event)"></a></div>
+			</div>
+			<label class="toggle toggle-positive">
+				<!-- <p1>Notify in Daytime</p1> -->
+				<input type="checkbox" ng-model="settingblock.locDayNot" ng-change="saveSettings()">
+					<div class="track">
+						<div class="handle"></div>
+					</div>
+			</label>
+			<ion-toggle ng-model="settingblock.locDayNot" toggle-class="toggle-calm" ng-change="saveSettings()">Notify in Daytime</ion-toggle>
+		</ul>
 	</ion-content>
 </ion-view>
 

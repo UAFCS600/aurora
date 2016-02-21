@@ -9,7 +9,7 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 
 .run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
-		if (window.cordova && window.cordova.plugins.Keyboard) {
+		/*if (window.cordova && window.cordova.plugins.Keyboard) {
 			// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 			// for form inputs)
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -18,7 +18,7 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 			// from snapping when text inputs are focused. Ionic handles this internally for
 			// a much nicer keyboard experience.
 			cordova.plugins.Keyboard.disableScroll(true);
-		}
+		}*/
 		if (window.StatusBar) {
 			StatusBar.styleDefault();
 		}
@@ -119,41 +119,9 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 	$urlRouterProvider.otherwise('/tab/dash');
 });
 
-function postToPushServer(params, onSuccess, onFailure) {
-    xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = false;
-
-    xhttp.addEventListener("readystatechange", function() {
-        console.log("State changed: " + xhttp.readyState + ' ' + "Status: " + xhttp.status);
-        if (xhttp.readyState == 4 /*&& xhttp.status == 200*/ ) {
-            onSuccess();
-        }
-    });
-
-    xhttp.open("POST", "http://aurora.cs.uaf.edu/push_notification/");
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send(JSON.stringify(params));
-}
-
-function requestTestPushNotification() {
-    postData = {
-        "test_push":true,
-        "kpTrigger":"",
-        "service":"gcm",
-        "method":"all",
-        "token":""
-    }
-
-    postToPushServer(postData, function() {
-        alert("You should receive a notification momentarily.");
-    }, function() {
-        alert("Request was denied.");
-    });
-}
-
 function onDeviceReady() {
-    showGeoLocationInfo();
-    initPushNotifications();
+    //showGeoLocationInfo();
+    //initPushNotifications();
 }
 
 function showGeoLocationInfo() {
@@ -180,71 +148,3 @@ function showGeoLocationInfo() {
     }, options);
 }
 
-function initPushNotifications() {
-    alert("Initializing push notification service...");
-    var gcmID = "209803454821" // this is static for GCM
-    var apnsId = ""; //Apple iTunes App ID
-        // need to figure out APNS...
-
-    var push = PushNotification.init({
-        "android": {
-            "senderID": gcmID
-        }
-        //"ios": {"alert":"true", "badge":"true", "sound":"true"},
-        //"windows": {}
-
-    });
-
-    if (push) {
-        alert("Push notification service successfully initialized.");
-    }
-    else {
-        alert("It doesn't work!");
-        console.log("Push notification service failure.");
-    }
-
-    push.on('registration', function(data) {
-        alert("Registration: " + JSON.stringify(data));
-
-        postData = {
-            "service": "gcm",
-            "token": data.registrationId,
-            "kpTrigger": 1
-        }
-
-        console.log(JSON.stringify(postData));
-
-        postToPushServer(postData, function() {
-            alert("Key has been added to push server!");
-        }, function() {});
-    });
-
-    PushNotification.hasPermission(function(data) {
-        if(data.isEnabled) {
-          alert("Push notifications enabled.");
-        }
-        else {
-          alert("Push notifications disabled.");
-        }
-    });
-
-    push.on('notification', function(data) {
-        alert("Notification: " + JSON.stringify(data["message"]));
-    });
-
-    function postNewToken(params) {
-        xhttp = new XMLHttpRequest();
-        xhttp.withCredentials = false;
-
-        xhttp.addEventListener("readystatechange", function() {
-            console.log("State changed: " + xhttp.readyState + ' ' + "Status: " + xhttp.status);
-            if (xhttp.readyState == 4 /*&& xhttp.status == 200*/ ) {
-                alert("Key has been added to push server!");
-            }
-        });
-
-        xhttp.open("POST", "http://aurora.cs.uaf.edu/push_notification/");
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(JSON.stringify(params));
-    }
-}
