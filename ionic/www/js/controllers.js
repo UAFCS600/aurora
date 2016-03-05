@@ -92,8 +92,8 @@ angular.module('aurora.controllers', [])
 	//Initialize values
 	$scope.settingblock = {
 		locAlertOn: true,
-		locKPAlert: 3,
-		locDayNot: false,
+		locKPAlert: 9,
+		locDayNot: true,
 		locWeatherNot: false,
 		aSAlertOn: false,
 		aSKPAlert: 7,
@@ -109,8 +109,21 @@ angular.module('aurora.controllers', [])
 		$scope.popover = popover;
 	});
 	
+	function isEmpty(obj) {
+		for(var prop in obj) {
+			if(obj.hasOwnProperty(prop))
+				return false;
+		}
+		return true && JSON.stringify(obj) === JSON.stringify({});
+	}
+	
+	
 	//Load existing settings
-	$scope.settingblock = $localstorage.getObject('settings');
+	var test = $localstorage.getObject('settings');
+	console.log("The value of test '" + test + "'");
+	console.log("The empty value of test:" + isEmpty(test));
+	if(!isEmpty(test))
+		$scope.settingblock = $localstorage.getObject('settings');
 	
 	//Happens at program close. Goes elsewhere probably
 	$scope.saveSettings = function()
