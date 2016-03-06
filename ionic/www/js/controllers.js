@@ -106,7 +106,19 @@ angular.module('aurora.controllers', [])
 	$ionicPopover.fromTemplateUrl('popover-lkpa.html', {
 		scope: $scope,
 	}).then(function(popover) {
-		$scope.popover = popover;
+		$scope.poplkpa = popover;
+	});
+	
+	$ionicPopover.fromTemplateUrl('popover-lDay.html', {
+		scope: $scope,
+	}).then(function(popover) {
+		$scope.poplDay = popover;
+	});
+	
+	$ionicPopover.fromTemplateUrl('popover-lAlert.html', {
+		scope: $scope,
+	}).then(function(popover) {
+		$scope.poplAlert = popover;
 	});
 	
 	function isEmpty(obj) {
@@ -116,11 +128,9 @@ angular.module('aurora.controllers', [])
 		}
 		return true && JSON.stringify(obj) === JSON.stringify({});
 	}
-	
-	
+		
 	//Load existing settings
 	var test = $localstorage.getObject('settings');
-	console.log("The value of test '" + test + "'");
 	console.log("The empty value of test:" + isEmpty(test));
 	if(!isEmpty(test))
 		$scope.settingblock = $localstorage.getObject('settings');

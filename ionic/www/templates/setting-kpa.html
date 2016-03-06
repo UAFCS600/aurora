@@ -4,28 +4,37 @@
 		}">
 	<ion-content class="padding" scroll="false">	
 		<!-- <h2>KP Alert Things</h2> -->
-		<ul class="list">
-			<div class="range range-balanced" style="size=12pt">
-				<p1>Aurora Intensity</p1>
-				<div><a class="button button-icon icon ion-ios-help" ng-click="popover.show($event)"></a></div>
-				<!-- <i class="icon ion-ios-sunny-outline"></i> -->
-				<input id="locKPAlert" type="range" name="kpa" min="0" max="10" ng-model="settingblock.locKPAlert" ng-change="saveSettings()">
-					{{locKPAlert}}
-				<!-- <i class="icon ion-ios-sunny"></i> -->
-			</div>
-			<div><a class="button button-icon icon ion-ios-help" ng-click="popover.show($event)"></a></div>
-			<div>
-			<li class="item item-toggle" style="background-color:black; border:black">
-				<p1>Notify in Daytime</p1>
-				<label class="toggle toggle-positive">
-					<input type="checkbox" ng-model="settingblock.locDayNot" ng-change="saveSettings()">
-						<div class="track">
-							<div class="handle"></div>
-						</div>
-				</label>
-			</li>
-			<a class="button button-icon icon ion-ios-help" ng-click="popover.show($event)"></a></div>
-		</ul>
+				<div class="item" style="background-color:black; border:black">
+			<p1>Local Intensity Notifications</p1>
+			<div style="display:inline-block"><a class="button button-icon icon ion-ios-help" ng-click="poplAlert.show($event)"></a></div>
+			<label class="toggle toggle-positive" style="display:inline-block">
+				<input type="checkbox" ng-model="settingblock.locAlertOn" ng-change="saveSettings()">
+				<div class="track">
+					<div class="handle"></div>
+				</div>
+			</label>
+		</div>
+		
+		<div class="range range-balanced" style="size=12pt">
+			<p1>Aurora Intensity</p1>
+			<div><a class="button button-icon icon ion-ios-help" ng-click="poplkpa.show($event)"></a></div>
+			<!-- <i class="icon ion-ios-sunny-outline"></i> -->
+			<input id="locKPAlert" type="range" name="kpa" min="0" max="10" ng-model="settingblock.locKPAlert" ng-change="saveSettings()">
+				{{locKPAlert}}
+			<!-- <i class="icon ion-ios-sunny"></i> -->
+		</div>
+
+		<div class="item" style="background-color:black; border:black; margin-top:5px">
+			<p1>Notify in Daytime</p1>
+			<div style="display:inline-block"><a class="button button-icon icon ion-ios-help" ng-click="poplDay.show($event)"></a></div>
+			<label class="toggle toggle-positive" style="display:inline-block">
+				<input type="checkbox" ng-model="settingblock.locDayNot" ng-change="saveSettings()">
+				<div class="track">
+					<div class="handle"></div>
+				</div>
+			</label>
+		</div>
+		
 	</ion-content>
 </ion-view>
 
@@ -33,8 +42,27 @@
   <ion-popover-view class="fit">
     <ion-content  scroll="false">
 		<div class="popover-inner-content">
-			<p>This bar determines the KP level of the aurora that notifications will be used for.</p> 
-			<p>Ex: Example Text</p>
+			<p>This bar determines the KP level of the aurora that notifications will be used for.</p>
+		</div>
+    </ion-content>
+  </ion-popover-view>
+</script>
+
+<script id="popover-lDay.html" type="text/ng-template">
+  <ion-popover-view class="fit">
+    <ion-content  scroll="false">
+		<div class="popover-inner-content">
+			<p>This determines if you will recieve notifications during daylight hours.</p>
+		</div>
+    </ion-content>
+  </ion-popover-view>
+</script>
+
+<script id="popover-lAlert.html" type="text/ng-template">
+  <ion-popover-view class="fit">
+    <ion-content  scroll="false">
+		<div class="popover-inner-content">
+			<p>This determines if you will recieve notifications based on local aurora intensity.</p>
 		</div>
     </ion-content>
   </ion-popover-view>
