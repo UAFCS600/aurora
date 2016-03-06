@@ -1,8 +1,17 @@
 angular.module('aurora.controllers', [])
 
-.controller('DashCtrl', function($scope, $http) {
+.controller('DashCtrl', function($scope, $http, $push) {
+	$scope.push = $push;
 
-	$scope.postToPushServer = function(params, onSuccess, onFailure) {
+	$scope.requestPush = function() {
+		$push.requestTestPushNotification();
+	}
+
+	$scope.initPush = function() {
+		$push.initPushNotifications();
+	}
+
+	/*$scope.postToPushServer = function(params, onSuccess, onFailure) {
 		alert("The post begins!");
 		try {
 			$http.post("http://aurora.cs.uaf.edu/push_notification/,",params)
@@ -84,8 +93,7 @@ angular.module('aurora.controllers', [])
 		push.on('notification', function(data) {
 			alert("Notification: " + JSON.stringify(data["message"]));
 		});
-	}
-	
+	}*/
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover) {

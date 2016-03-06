@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $push) {
 	$ionicPlatform.ready(function() {
 		//Keyboard code is dated and causes errors do not restore -Dain Harmon
 		/*if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -24,12 +24,14 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 			StatusBar.styleDefault();
 		}
 		document.addEventListener("deviceready", onDeviceReady, false);
-		navigator.splashscreen.hide();
+		// navigator.splashscreen.hide();
 		/*
 		document.body.classList.remove('platform-ios');
 		document.body.classList.remove('platform-android');
 		document.body.classList.add('platform-ios');
 		*/
+
+		$push.initPushNotifications();
 	});	
 })
 
