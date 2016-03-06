@@ -4,14 +4,8 @@ angular.module('aurora.services', [])
 .factory('$push', function($http) {
 
     function postToPushServer(params, onSuccess, onFailure) {
-        alert("The post to server begins!");
-        try {
-            $http.post("http://aurora.cs.uaf.edu/push_notification/", params)
-                .then(onSuccess, onFailure);
-        } catch (error) {
-            alert("The error that happened: " + error.message);
-        }
-        alert("The post to server ends!");
+        $http.post("http://aurora.cs.uaf.edu/push_notification/", params)
+        .then(onSuccess, onFailure);
     }
 
     function requestTestPushNotification() {
@@ -21,18 +15,20 @@ angular.module('aurora.services', [])
             "service": "gcm",
             "method": "all",
             "token": ""
-        }
+        };
 
-        postToPushServer(postData, function() {
-            alert("You should receive a notification momentarily.");
-        }, function() {
-            alert("Request was denied.");
+        postToPushServer(postData, function(response) {
+            if(response.status == 200) {
+                console.log("AURORA: " + "You should receive a notification momentarily.");
+            }
+        }, function(response) {
+            console.log("AURORA: " + "Request was denied.");
+            console.log("AURORA: Failure status: " + response.status);
         });
     }
 
     function initPushNotifications() {
-        alert("Initializing push notification service...");
-        var gcmID = "209803454821" // this is static for GCM
+        var gcmID = "209803454821"; // this is static for GCM
         var apnsId = ""; //Apple iTunes App ID
         // need to figure out APNS...
 
@@ -40,53 +36,87 @@ angular.module('aurora.services', [])
             "android": {
                 "senderID": gcmID
             }
-            //"ios": {"alert":"true", "badge":"true", "sound":"true"},
+            //"ios": {"console.log":"true", "badge":"true", "sound":"true"},
             //"windows": {}
 
         });
 
         if (push) {
-            alert("Push notification service successfully initialized.");
+            console.log("AURORA: " + "Push notification service successfully initialized.");
         } else {
-            alert("Push notification service NOT successfully initialized.");
+            console.log("AURORA: " + "Push notification service NOT successfully initialized.");
         }
 
         push.on('registration', function(data) {
-            alert("Registration: " + JSON.stringify(data));
-
             postData = {
                 "service": "gcm",
                 "token": data.registrationId,
                 "kpTrigger": 1
             }
 
-            alert(JSON.stringify(postData));
-
-            postToPushServer(postData, function() {
-                alert("Key has been added to push server!");
-            }, function() {
-                alert("Key has not been added to the push server!");
+            postToPushServer(postData, function(response) {
+                if(response.status == 200) {
+                    console.log("AURORA: " + "Key has been added to push server!");
+                }
+            }, function(response) {
+                console.log("AURORA: " + "Key has not been added to the push server!");
+                console.log("AURORA: Failure status: " + response.status);
             });
         });
 
         PushNotification.hasPermission(function(data) {
             if (data.isEnabled) {
-                alert("Push notifications enabled.");
-            } else {
-                alert("Push notifications disabled.");
+                console.log("AURORA: " + "Push notifications enabled.");
+            } 
+            else {
+                console.log("AURORA: " + "Push notifications disabled.");
             }
         });
 
+        //This function **SHOULD** get called when notification is received
         push.on('notification', function(data) {
             alert("Notification: " + JSON.stringify(data["message"]));
+            console.log("AURORA: " + data.message);
+            console.log("AURORA: " + data.title);
+            console.log("AURORA: " + data.count);
+            console.log("AURORA: " + data.sound);
+            console.log("AURORA: " + data.image);
+            console.log("AURORA: " + data.additionalData);
         });
 
-        push.on('error', function(e) {
-            alert("Oh god something horrible happened with the notification: " + e);
+        push.on('error', function(data) {
+            console.log("AURORA: " + e.message);
         });
     }
 
-    return {postToPushServer, requestTestPushNotification, initPushNotifications}
+    return {postToPushServer, requestTestPushNotification, initPushNotifications};
+})
+
+//Geolocation services
+.factory('$geolocation', function() {
+    function showGeoLocationInfo() {
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 1000 * 60 * 5 //Five minutes
+        }
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+            alert('Latitude: ' + position.coords.latitude + '\n' +
+                'Longitude: ' + position.coords.longitude + '\n' +
+                'Altitude: ' + position.coords.altitude + '\n' +
+                'Accuracy: ' + position.coords.accuracy + '\n' +
+                'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
+                'Heading: ' + position.coords.heading + '\n' +
+                'Speed: ' + position.coords.speed + '\n' +
+                'Timestamp: ' + position.timestamp + '\n');
+        }, function(error) {
+            alert('Code: ' + error.code + '\n' +
+                'Message: ' + error.message + '\n');
+        }, options);
+    }
+
+    return {showGeoLocationInfo};
 })
 
 //Local storage services
@@ -104,5 +134,5 @@ angular.module('aurora.services', [])
         getObject: function(key) {
             return JSON.parse($window.localStorage[key] || '{}');
         }
-    }
+    };
 }]);

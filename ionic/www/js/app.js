@@ -23,17 +23,26 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
         if (window.StatusBar) {
             StatusBar.styleDefault();
         }
-        document.addEventListener("deviceready", onDeviceReady, false);
-        // navigator.splashscreen.hide();
-        /*
-        document.body.classList.remove('platform-ios');
-        document.body.classList.remove('platform-android');
-        document.body.classList.add('platform-ios');
-        */
 
         $push.initPushNotifications();
     });
 })
+
+/*.config(function($sceDelegateProvider) {
+    $sceDelegateProvider.resourceUrlWhitelist([
+        // Allow same origin resource loads.
+        'self',
+        // Allow connections to/from push notification server.
+        //Notice the difference between * and **.
+        // 'http://srv*.assets.example.com/**'
+        'http://aurora.cs.uaf.edu/**'
+    ]);
+
+    // The blacklist overrides the whitelist so the open redirect here is blocked.
+    $sceDelegateProvider.resourceUrlBlacklist([
+        
+    ]);
+})*/
 
 .config(function($stateProvider, $urlRouterProvider) {
     // Ionic uses AngularUI Router which uses the concept of states
@@ -121,32 +130,3 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/dash');
 });
-
-function onDeviceReady() {
-    //showGeoLocationInfo();
-    //initPushNotifications();
-}
-
-function showGeoLocationInfo() {
-    console.log("Initializing geolocation...");
-
-    var options = {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 1000 * 60 * 5 //Five minutes
-    }
-
-    navigator.geolocation.getCurrentPosition(function(position) {
-        alert('Latitude: ' + position.coords.latitude + '\n' +
-            'Longitude: ' + position.coords.longitude + '\n' +
-            'Altitude: ' + position.coords.altitude + '\n' +
-            'Accuracy: ' + position.coords.accuracy + '\n' +
-            'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
-            'Heading: ' + position.coords.heading + '\n' +
-            'Speed: ' + position.coords.speed + '\n' +
-            'Timestamp: ' + position.timestamp + '\n');
-    }, function(error) {
-        alert('Code: ' + error.code + '\n' +
-            'Message: ' + error.message + '\n');
-    }, options);
-}
