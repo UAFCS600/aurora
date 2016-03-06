@@ -1,7 +1,7 @@
 angular.module('aurora.services', [])
 
 //Push notification services
-.factory('$push', function($http) {
+.factory('$push', function($http, $location) {
 
     function postToPushServer(params, onSuccess, onFailure) {
         $http.post("http://aurora.cs.uaf.edu/push_notification/", params)
@@ -75,6 +75,7 @@ angular.module('aurora.services', [])
 
         //This function **SHOULD** get called when notification is received
         push.on('notification', function(data) {
+            //Switch to notification view somehow
             alert("Notification: " + JSON.stringify(data["message"]));
             console.log("AURORA: " + data.message);
             console.log("AURORA: " + data.title);

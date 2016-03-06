@@ -69,4 +69,8 @@ angular.module('aurora.controllers', [])
 
 .controller('AboutCtrl', function($scope) {})
 
-.controller('AllskyCtrl', function($scope) {});
+.controller('AllskyCtrl', function($scope) {})
+
+.controller('NotificationCtrl', function($scope, $push) {
+    
+});
