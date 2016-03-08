@@ -51,7 +51,7 @@ angular.module('aurora.services', [])
             postData = {
                 "service": "gcm",
                 "token": data.registrationId,
-                "kpTrigger": 1
+                "kpTrigger": 6
             }
 
             postToPushServer(postData, function(response) {
