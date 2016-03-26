@@ -1,5 +1,23 @@
 angular.module('aurora.services', [])
 
+//Local storage services
+.factory('$localstorage', ['$window', function($window) {
+    return {
+        set: function(key, value) {
+            $window.localStorage[key] = value;
+        },
+        get: function(key, defaultValue) {
+            return $window.localStorage[key] || defaultValue;
+        },
+        setObject: function(key, value) {
+            $window.localStorage[key] = JSON.stringify(value);
+        },
+        getObject: function(key) {
+            return JSON.parse($window.localStorage[key] || '{}');
+        }
+    };
+}])
+
 //Push notification services
 .factory('$push', function($http, $location, $localstorage) {
 
@@ -28,7 +46,7 @@ angular.module('aurora.services', [])
     }
 
     function initPushNotifications() {
-        registered = $localstorage.get('pushRegistered');
+        var registered = $localstorage.get('pushRegistered');
 
         var gcmID = "209803454821"; // this is static for GCM
         var apnsId = ""; //Apple iTunes App ID
@@ -71,7 +89,7 @@ angular.module('aurora.services', [])
         PushNotification.hasPermission(function(data) {
             if (data.isEnabled) {
                 console.log("AURORA: " + "Push notifications enabled.");
-            } 
+            }
             else {
                 console.log("AURORA: " + "Push notifications disabled.");
             }
@@ -99,7 +117,7 @@ angular.module('aurora.services', [])
 
 //Geolocation services
 .factory('$geolocation', function($localstorage) {
-    gps = $localstorage.get('gps');
+    var gps = $localstorage.get('gps');
 
     function showGeoLocationInfo() {
         var options = {
@@ -125,24 +143,6 @@ angular.module('aurora.services', [])
 
     if(typeof gps != 'undefined' && get)
         return {showGeoLocationInfo};
-
-    return {};
+    else
+        return {};
 })
-
-//Local storage services
-.factory('$localstorage', ['$window', function($window) {
-    return {
-        set: function(key, value) {
-            $window.localStorage[key] = value;
-        },
-        get: function(key, defaultValue) {
-            return $window.localStorage[key] || defaultValue;
-        },
-        setObject: function(key, value) {
-            $window.localStorage[key] = JSON.stringify(value);
-        },
-        getObject: function(key) {
-            return JSON.parse($window.localStorage[key] || '{}');
-        }
-    };
-}]);
