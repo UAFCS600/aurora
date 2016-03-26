@@ -15,19 +15,46 @@ angular.module('aurora.controllers', [])
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover) {
-    //Initialize values
-    $scope.settingblock = {
-        locAlertOn: true,
-        locKPAlert: 9,
-        locDayNot: true,
-        locWeatherNot: false,
-        aSAlertOn: false,
-        aSKPAlert: 7,
-        aSDayNot: false,
-        aSWeatherNot: false,
-        gpsUse: true,
-        locationZip: 99701
-    };
+    loadDefaults = function() {
+        $scope.alerts      = true;
+        $scope.kpTrigger   = 1;
+        $scope.gps         = false;
+        $scope.zip         = 90210;
+    }
+
+    loadSettings = function() {
+        $scope.alerts      = $localstorage.get('alerts');
+        $scope.kpTrigger   = $localstorage.get('kpTrigger');
+        $scope.gps         = $localstorage.get('gps');
+        $scope.zip         = $localstorage.get('zip');
+
+        if (typeof $scope.alerts == 'undefined') {
+            loadDefaults();
+            saveSettings();
+        };
+    }
+
+    saveSettings = function() {
+        $localstorage.set('alerts', $scope.alerts);
+        $localstorage.set('kpTrigger', $scope.kpTrigger);
+        $localstorage.set('gps', $scope.gps);
+        $localstorage.set('zip', $scope.zip);
+    }
+
+    outputSettings = function(asAlert) {
+        data = {'alerts' : $scope.alerts, 
+                'kpTrigger' : $scope.kpTrigger, 
+                'gps' : $scope.gps, 
+                'zip' : $scope.zip};
+
+        if(asAlert)
+            alert(data);
+        else
+            console.log(data);
+    }
+
+    loadSettings();
+    outputSettings(false);
 
     $ionicPopover.fromTemplateUrl('popover-lkpa.html', {
         scope: $scope,
@@ -46,25 +73,6 @@ angular.module('aurora.controllers', [])
     }).then(function(popover) {
         $scope.poplAlert = popover;
     });
-
-    function isEmpty(obj) {
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop))
-                return false;
-        }
-        return true && JSON.stringify(obj) === JSON.stringify({});
-    }
-
-    //Load existing settings
-    var test = $localstorage.getObject('settings');
-    console.log("The empty value of test:" + isEmpty(test));
-    if (!isEmpty(test))
-        $scope.settingblock = $localstorage.getObject('settings');
-
-    //Happens at program close. Goes elsewhere probably
-    $scope.saveSettings = function() {
-        $localstorage.setObject('settings', $scope.settingblock);
-    }
 })
 
 .controller('AboutCtrl', function($scope) {})
