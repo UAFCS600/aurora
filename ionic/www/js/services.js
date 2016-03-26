@@ -1,7 +1,7 @@
 angular.module('aurora.services', [])
 
 //Push notification services
-.factory('$push', function($http, $location) {
+.factory('$push', function($http, $location, $localstorage) {
 
     function postToPushServer(params, onSuccess, onFailure) {
         $http.post("http://aurora.cs.uaf.edu/push_notification/", params)
@@ -28,6 +28,8 @@ angular.module('aurora.services', [])
     }
 
     function initPushNotifications() {
+        registered = $localstorage.get('pushRegistered');
+
         var gcmID = "209803454821"; // this is static for GCM
         var apnsId = ""; //Apple iTunes App ID
         // need to figure out APNS...
@@ -43,7 +45,8 @@ angular.module('aurora.services', [])
 
         if (push) {
             console.log("AURORA: " + "Push notification service successfully initialized.");
-        } else {
+        }
+        else {
             console.log("AURORA: " + "Push notification service NOT successfully initialized.");
         }
 
@@ -57,6 +60,7 @@ angular.module('aurora.services', [])
             postToPushServer(postData, function(response) {
                 if(response.status == 200) {
                     console.log("AURORA: " + "Key has been added to push server!");
+                    $localstorage.set('pushRegistered', true);
                 }
             }, function(response) {
                 console.log("AURORA: " + "Key has not been added to the push server!");
@@ -94,7 +98,9 @@ angular.module('aurora.services', [])
 })
 
 //Geolocation services
-.factory('$geolocation', function() {
+.factory('$geolocation', function($localstorage) {
+    gps = $localstorage.get('gps');
+
     function showGeoLocationInfo() {
         var options = {
             enableHighAccuracy: true,
@@ -117,7 +123,10 @@ angular.module('aurora.services', [])
         }, options);
     }
 
-    return {showGeoLocationInfo};
+    if(typeof gps != 'undefined' && get)
+        return {showGeoLocationInfo};
+
+    return {};
 })
 
 //Local storage services
