@@ -141,7 +141,7 @@ angular.module('aurora.services', [])
         }, options);
     }
 
-    if(typeof gps != 'undefined' && get)
+    if(typeof gps != 'undefined' && gps)
         return {showGeoLocationInfo};
     else
         return {};
