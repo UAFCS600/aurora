@@ -1,25 +1,22 @@
-<ion-view view-title="KP Alerts" style=".padding > * {
-		background-color:black;
-		font-size:12pt;
-		}">
-	<ion-content class="padding" scroll="false">	
-		<!-- <h2>KP Alert Things</h2> -->
-				<div class="item" style="background-color:black; border:black">
+<ion-view view-title="KP Alerts>	
+	<ion-content class="padding">	
+		
+		<div class="item" style="background-color:black; border:black">
 			<p1>Local Intensity Notifications</p1>
 			<div style="display:inline-block"><a class="button button-icon icon ion-ios-help" ng-click="poplAlert.show($event)"></a></div>
 			<label class="toggle toggle-positive" style="display:inline-block">
-				<input type="checkbox" ng-model="settingblock.locAlertOn" ng-change="saveSettings()">
+				<input type="checkbox" ng-model="alerts" ng-change="saveSettings()">
 				<div class="track">
 					<div class="handle"></div>
 				</div>
 			</label>
 		</div>
 		
-		<div class="range range-balanced" style="size=12pt">
+		<div class="range range-balanced" style="size=12pt; background-color:black">
 			<p1>Aurora Intensity</p1>
 			<div><a class="button button-icon icon ion-ios-help" ng-click="poplkpa.show($event)"></a></div>
 			<!-- <i class="icon ion-ios-sunny-outline"></i> -->
-			<input id="locKPAlert" type="range" name="kpa" min="0" max="10" ng-model="settingblock.locKPAlert" ng-change="saveSettings()">
+			<input id="locKPAlert" type="range" name="kpa" min="0" max="10" ng-model="kpTrigger" ng-change="saveSettings()">
 				{{locKPAlert}}
 			<!-- <i class="icon ion-ios-sunny"></i> -->
 		</div>
@@ -28,7 +25,7 @@
 			<p1>Notify in Daytime</p1>
 			<div style="display:inline-block"><a class="button button-icon icon ion-ios-help" ng-click="poplDay.show($event)"></a></div>
 			<label class="toggle toggle-positive" style="display:inline-block">
-				<input type="checkbox" ng-model="settingblock.locDayNot" ng-change="saveSettings()">
+				<input type="checkbox" ng-model="daytime" ng-change="saveSettings()">
 				<div class="track">
 					<div class="handle"></div>
 				</div>

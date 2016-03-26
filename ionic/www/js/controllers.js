@@ -18,6 +18,7 @@ angular.module('aurora.controllers', [])
     loadDefaults = function() {
         $scope.alerts      = true;
         $scope.kpTrigger   = 1;
+		$scope.daytime	   = false;
         $scope.gps         = false;
         $scope.zip         = 90210;
     }
@@ -25,6 +26,7 @@ angular.module('aurora.controllers', [])
     loadSettings = function() {
         $scope.alerts      = $localstorage.get('alerts');
         $scope.kpTrigger   = $localstorage.get('kpTrigger');
+		$scope.daytime	   = $localstorage.get('daytime');
         $scope.gps         = $localstorage.get('gps');
         $scope.zip         = $localstorage.get('zip');
 
@@ -37,6 +39,7 @@ angular.module('aurora.controllers', [])
     saveSettings = function() {
         $localstorage.set('alerts', $scope.alerts);
         $localstorage.set('kpTrigger', $scope.kpTrigger);
+		$localstorage.set('daytime', $scope.daytime);
         $localstorage.set('gps', $scope.gps);
         $localstorage.set('zip', $scope.zip);
     }
@@ -44,6 +47,7 @@ angular.module('aurora.controllers', [])
     outputSettings = function(asAlert) {
         data = {'alerts' : $scope.alerts, 
                 'kpTrigger' : $scope.kpTrigger, 
+				'daytime' : $scope.daytime,
                 'gps' : $scope.gps, 
                 'zip' : $scope.zip};
 
