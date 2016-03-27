@@ -1,6 +1,26 @@
 angular.module('aurora.controllers', [])
 
-.controller('DashCtrl', function($scope, $push, $geolocation) {
+.controller('DashCtrl', function($scope, $push, $geolocation, $http) {
+    $scope.updateForecast = function() {
+        $http.get('http://cs472.gi.alaska.edu/kp.php?d=h').success(function(data) {
+            console.log(data);
+            //Finish writing
+        }).error(function(error) {
+            //Finish writing
+            console.log(error);
+        });
+    }
+
+    $scope.loadForecastFromStorage = function() {
+        $scope.forecast = $localstorage.getObject('forecast');
+
+        if(object.keys($scope.forecast).length == 0)
+            $scope.updateForecast();
+    }
+
+    console.log($scope.forecast);
+    $scope.updateForecast();
+
     $scope.requestPush = function() {
         $push.requestTestPushNotification();
     }
