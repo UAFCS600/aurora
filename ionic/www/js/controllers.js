@@ -1,9 +1,16 @@
 angular.module('aurora.controllers', [])
 
-.controller('DashCtrl', function($scope, $push, $geolocation, $http) {
+.controller('DashCtrl', function($scope, $push, $geolocation, $http, $localstorage) {
+    $scope.saveForecast = function() {
+        $localstorage.setObject($scope.forecast);
+    }
+
     $scope.updateForecast = function() {
         $http.get('http://cs472.gi.alaska.edu/kp.php?d=h').success(function(data) {
-            console.log(data);
+            console.log('API data retrieved from GI server!');
+            $scope.forecast = data['data'];
+            $scope.saveForecast();
+            console.log($scope.forecast);
             //Finish writing
         }).error(function(error) {
             //Finish writing
@@ -18,9 +25,6 @@ angular.module('aurora.controllers', [])
             $scope.updateForecast();
     }
 
-    console.log($scope.forecast);
-    $scope.updateForecast();
-
     $scope.requestPush = function() {
         $push.requestTestPushNotification();
     }
@@ -32,10 +36,12 @@ angular.module('aurora.controllers', [])
     $scope.showGeoLocationInfo = function() {
         $geolocation.showGeoLocationInfo();
     }
+
+    $scope.updateForecast();
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover) {
-    loadDefaults = function() {
+    $scope.loadDefaults = function() {
         $scope.alerts      = true;
         $scope.kpTrigger   = 1;
 		$scope.daytime	   = false;
@@ -43,7 +49,7 @@ angular.module('aurora.controllers', [])
         $scope.zip         = 90210;
     }
 
-    loadSettings = function() {
+    $scope.loadSettings = function() {
         $scope.alerts      = $localstorage.get('alerts');
         $scope.kpTrigger   = $localstorage.get('kpTrigger');
 		$scope.daytime	   = $localstorage.get('daytime');
@@ -51,12 +57,12 @@ angular.module('aurora.controllers', [])
         $scope.zip         = $localstorage.get('zip');
 
         if (typeof $scope.alerts == 'undefined') {
-            loadDefaults();
-            saveSettings();
+            $scope.loadDefaults();
+            $scope.saveAllSettings();
         };
     }
 
-    saveSettings = function() {
+    $scope.saveAllSettings = function() {
         $localstorage.set('alerts', $scope.alerts);
         $localstorage.set('kpTrigger', $scope.kpTrigger);
 		$localstorage.set('daytime', $scope.daytime);
@@ -64,7 +70,7 @@ angular.module('aurora.controllers', [])
         $localstorage.set('zip', $scope.zip);
     }
 
-    outputSettings = function(asAlert) {
+    $scope.outputSettings = function(asAlert) {
         data = {'alerts' : $scope.alerts, 
                 'kpTrigger' : $scope.kpTrigger, 
 				'daytime' : $scope.daytime,
@@ -77,8 +83,13 @@ angular.module('aurora.controllers', [])
             console.log(data);
     }
 
-    loadSettings();
-    outputSettings(false);
+    $scope.geolocationToggled = function() {
+        $localstorage.set('gps', !$scope.gps);
+        console.log('AURORA: GPS toggled!');
+    }
+
+    $scope.loadSettings();
+    $scope.outputSettings(true);
 
     $ionicPopover.fromTemplateUrl('popover-lkpa.html', {
         scope: $scope,
