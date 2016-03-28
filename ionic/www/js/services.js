@@ -117,9 +117,11 @@ angular.module('aurora.services', [])
 
 //Geolocation services
 .factory('$geolocation', function($localstorage) {
-    var gps = $localstorage.get('gps');
+    var gps = false;
 
     function showGeoLocationInfo() {
+        gps = $localstorage.get('gps');
+
         var options = {
             enableHighAccuracy: true,
             timeout: 15000,
@@ -145,4 +147,4 @@ angular.module('aurora.services', [])
         return {showGeoLocationInfo};
     else
         return {};
-})
+});
