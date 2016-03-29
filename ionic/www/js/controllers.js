@@ -1,19 +1,19 @@
 angular.module('aurora.controllers', [])
 
 .controller('DashCtrl', function($scope, $push, $geolocation, $kpAPI) {
-    $scope.requestPush = function() {
-        $push.requestTestPushNotification();
+    $scope.requestPush         = function() {
+    $push.requestTestPushNotification();
     }
-
-    $scope.initPush = function() {
-        $push.initPushNotifications();
+    
+    $scope.initPush            = function() {
+    $push.initPushNotifications();
     }
-
+    
     $scope.showGeoLocationInfo = function() {
         $geolocation.showGeoLocationInfo();
     }
 
-    $kpAPI.updateForecast();
+    console.log($kpAPI.getForecast());
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover) {

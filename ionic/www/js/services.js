@@ -152,23 +152,20 @@ angular.module('aurora.services', [])
 //GI API service
 .factory('$kpAPI', function($http, $localstorage) {
     var latestForecast;
-    var APIURL = 'http://cs472.gi.alaska.edu/kp.php?';
+    var apiURL = 'http://cs472.gi.alaska.edu/kp.php?';
 
     saveForecast = function(forecast) {
         $localstorage.setObject('forecast', forecast);
     }
 
     updateForecast = function() {
-        console.log('Old forecast data: ' + latestForecast);
-        console.log('Looking for data from: ' + APIURL + 'd=n');
-        $http.get(APIURL + 'd=n').success(function(data) {
+        $http.get(apiURL + 'd=h').success(function(data) {
             var jsonData = {};
             //Convert array to JSON object
             for (var i = 0; i < data['data'].length - 1; i++) {
                 jsonData['val' + i] = data['data'][i];
             };
 
-            console.log('API data retrieved from GI server: ' + JSON.stringify(jsonData));
             latestForecast = jsonData;
             saveForecast(latestForecast);
             //Finish writing
@@ -185,7 +182,14 @@ angular.module('aurora.services', [])
             updateForecast();
     }
 
-    latestForecast = loadForecastFromStorage();
+    getForecast = function() {
+        if(typeof latestForecast == 'undefined')
+            loadForecastFromStorage();
 
-    return {saveForecast, updateForecast, loadForecastFromStorage};
+        return latestForecast;
+    }
+
+    // window.setInterval(function() {updateForecast();}, 1000);
+
+    return {saveForecast, updateForecast, loadForecastFromStorage, getForecast};
 });
