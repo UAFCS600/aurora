@@ -65,7 +65,7 @@ angular.module('aurora.controllers', [])
     }
 
     $scope.loadSettings();
-    $scope.outputSettings(true);
+    $scope.outputSettings(false);
 
     $ionicPopover.fromTemplateUrl('popover-lkpa.html', {
         scope: $scope,
