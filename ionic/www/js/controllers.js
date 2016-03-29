@@ -1,30 +1,6 @@
 angular.module('aurora.controllers', [])
 
-.controller('DashCtrl', function($scope, $push, $geolocation, $http, $localstorage) {
-    $scope.saveForecast = function() {
-        $localstorage.setObject($scope.forecast);
-    }
-
-    $scope.updateForecast = function() {
-        $http.get('http://cs472.gi.alaska.edu/kp.php?d=h').success(function(data) {
-            console.log('API data retrieved from GI server!');
-            $scope.forecast = data['data'];
-            $scope.saveForecast();
-            console.log($scope.forecast);
-            //Finish writing
-        }).error(function(error) {
-            //Finish writing
-            console.log(error);
-        });
-    }
-
-    $scope.loadForecastFromStorage = function() {
-        $scope.forecast = $localstorage.getObject('forecast');
-
-        if(object.keys($scope.forecast).length == 0)
-            $scope.updateForecast();
-    }
-
+.controller('DashCtrl', function($scope, $push, $geolocation, $kpAPI) {
     $scope.requestPush = function() {
         $push.requestTestPushNotification();
     }
@@ -37,7 +13,7 @@ angular.module('aurora.controllers', [])
         $geolocation.showGeoLocationInfo();
     }
 
-    $scope.updateForecast();
+    $kpAPI.updateForecast();
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover) {

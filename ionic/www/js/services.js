@@ -147,4 +147,45 @@ angular.module('aurora.services', [])
         return {showGeoLocationInfo};
     else
         return {};
+})
+
+//GI API service
+.factory('$kpAPI', function($http, $localstorage) {
+    var latestForecast;
+    var APIURL = 'http://cs472.gi.alaska.edu/kp.php?';
+
+    saveForecast = function(forecast) {
+        $localstorage.setObject('forecast', forecast);
+    }
+
+    updateForecast = function() {
+        console.log('Old forecast data: ' + latestForecast);
+        console.log('Looking for data from: ' + APIURL + 'd=n');
+        $http.get(APIURL + 'd=n').success(function(data) {
+            var jsonData = {};
+            //Convert array to JSON object
+            for (var i = 0; i < data['data'].length - 1; i++) {
+                jsonData['val' + i] = data['data'][i];
+            };
+
+            console.log('API data retrieved from GI server: ' + JSON.stringify(jsonData));
+            latestForecast = jsonData;
+            saveForecast(latestForecast);
+            //Finish writing
+        }).error(function(error) {
+            //Finish writing
+            console.log(error);
+        });
+    }
+
+    loadForecastFromStorage = function() {
+        latestForecast = $localstorage.getObject('forecast');
+
+        if(typeof latestForecast == 'undefined' || Object.keys(latestForecast).length == 0)
+            updateForecast();
+    }
+
+    latestForecast = loadForecastFromStorage();
+
+    return {saveForecast, updateForecast, loadForecastFromStorage};
 });
