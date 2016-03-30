@@ -25,6 +25,11 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
         }
 
         $push.initPushNotifications();
+
+        document.addEventListener('resume', function() {
+            console.log('AURORA: Awakened!');
+            //Update forecast from API here
+        }, false);
     });
 })
 
