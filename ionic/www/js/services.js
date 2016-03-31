@@ -122,36 +122,33 @@ angular.module('aurora.services', [])
 
 //Geolocation services
 .factory('$geolocation', function($localstorage) {
-    var gps = true;
+    return {
+        showGeoLocationInfo : function() {
+            var gps = JSON.parse($localstorage.get('gps'));
 
-    function showGeoLocationInfo() {
-        gps = $localstorage.get('gps');
+            if(gps) {
+                var options = {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 1000 * 60 * 5 //Five minutes
+                }
 
-        var options = {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 1000 * 60 * 5 //Five minutes
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    alert('Latitude: ' + position.coords.latitude + '\n' +
+                        'Longitude: ' + position.coords.longitude + '\n' +
+                        'Altitude: ' + position.coords.altitude + '\n' +
+                        'Accuracy: ' + position.coords.accuracy + '\n' +
+                        'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
+                        'Heading: ' + position.coords.heading + '\n' +
+                        'Speed: ' + position.coords.speed + '\n' +
+                        'Timestamp: ' + position.timestamp + '\n');
+                }, function(error) {
+                    alert('Code: ' + error.code + '\n' +
+                        'Message: ' + error.message + '\n');
+                }, options);
+            }
         }
-
-        navigator.geolocation.getCurrentPosition(function(position) {
-            alert('Latitude: ' + position.coords.latitude + '\n' +
-                'Longitude: ' + position.coords.longitude + '\n' +
-                'Altitude: ' + position.coords.altitude + '\n' +
-                'Accuracy: ' + position.coords.accuracy + '\n' +
-                'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '\n' +
-                'Heading: ' + position.coords.heading + '\n' +
-                'Speed: ' + position.coords.speed + '\n' +
-                'Timestamp: ' + position.timestamp + '\n');
-        }, function(error) {
-            alert('Code: ' + error.code + '\n' +
-                'Message: ' + error.message + '\n');
-        }, options);
-    }
-
-    if(typeof gps != 'undefined' && gps)
-        return {showGeoLocationInfo};
-    else
-        return {};
+    };
 })
 
 //GI API service
