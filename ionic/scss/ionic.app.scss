@@ -21,18 +21,19 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // My custom color. I’ll override the default for $positive.
 // Note that it’s before we load the rest of Ionic.
 // This is important!
-$positive:                        #000066 !default;
-$base-background-color: 		  #000000 !default;
+// $positive:                        #000066 !default;
+// $base-background-color: 		  #000000 !default;
 
 //Use Google Quicksand font
-@font-face
-  font-family: "Quicksand"
-  src: url('../fonts/QuicksandRegular.eot')
-  src: local('QuicksandRegular')
-  src: url('../fonts/QuicksandRegular.svg#bingo') format('svg')
-  src: url('../fonts/QuicksandRegular.ttf')
-  src: url('../fonts/QuicksandRegular.woff')
-  src: url('../fonts/QuicksandRegular.woff2')
+@font-face {
+  font-family: "Quicksand";
+  src: url('../fonts/QuicksandRegular.eot'),
+  local('QuicksandRegular'),
+  url('../fonts/QuicksandRegular.svg') format('svg'),
+  url('../fonts/QuicksandRegular.ttf') format('truetype'),
+  url('../fonts/QuicksandRegular.woff') format('woff'),
+  url('../fonts/QuicksandRegular.woff2') format('woff2');
+}
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
