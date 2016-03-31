@@ -35,5 +35,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   url('../fonts/QuicksandRegular.woff2') format('woff2');
 }
 
+* {
+	font-family: "Quicksand" !important;
+}
+
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
