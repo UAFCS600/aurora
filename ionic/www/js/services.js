@@ -34,34 +34,34 @@ angular.module('aurora.services', [])
         'windows' : {
             'senderID' : windowsId
         }
-    }
+    };
 
     postToPushServer = function(params, onSuccess, onFailure) {
         $http.post("http://aurora.cs.uaf.edu/push_notification/", params)
         .then(onSuccess, onFailure);
-    }
+    };
 
     receivedNotification = function(data) {
         //Switch to notification view somehow
-        alert("Notification: " + JSON.stringify(data["message"]));
+        alert("Notification: " + JSON.stringify(data.message));
         console.log("AURORA: " + data.message);
         console.log("AURORA: " + data.title);
         console.log("AURORA: " + data.count);
         console.log("AURORA: " + data.sound);
         console.log("AURORA: " + data.image);
         console.log("AURORA: " + data.additionalData);
-    }
+    };
 
     receivedError = function(data) {
         console.log("AURORA: " + e.message);
-    }
+    };
 
     notificationServiceRegistered = function(data) {
         postData = {
             "service": "gcm",
             "token": data.registrationId,
             "kpTrigger": 6
-        }
+        };
 
         postToPushServer(postData, function(response) {
             if(response.status == 200) {
@@ -71,7 +71,7 @@ angular.module('aurora.services', [])
             console.log("AURORA: " + "Key has not been added to the push server!");
             console.log("AURORA: Failure status: " + response.status);
         });
-    }
+    };
 
     return {
         requestTestPushNotification : function() {
@@ -117,7 +117,7 @@ angular.module('aurora.services', [])
 
             push.on('error', receivedError);
         }
-    }
+    };
 })
 
 //Geolocation services
@@ -131,7 +131,7 @@ angular.module('aurora.services', [])
                     enableHighAccuracy: true,
                     timeout: 15000,
                     maximumAge: 1000 * 60 * 5 //Five minutes
-                }
+                };
 
                 navigator.geolocation.getCurrentPosition(function(position) {
                     alert('Latitude: ' + position.coords.latitude + '\n' +
@@ -158,15 +158,15 @@ angular.module('aurora.services', [])
 
     saveForecast = function(forecast) {
         $localstorage.setObject('forecast', forecast);
-    }
+    };
 
     updateForecast = function() {
         $http.get(apiURL + 'd=h').success(function(data) {
             var jsonData = {};
             //Convert array to JSON object
-            for (var i = 0; i < data['data'].length - 1; i++) {
-                jsonData['val' + i] = data['data'][i];
-            };
+            for (var i = 0; i < data.data.length - 1; i++) {
+                jsonData['val' + i] = data.data[i];
+            }
 
             latestForecast = jsonData;
             saveForecast(latestForecast);
@@ -175,21 +175,21 @@ angular.module('aurora.services', [])
             //Finish writing
             console.log(error);
         });
-    }
+    };
 
     loadForecastFromStorage = function() {
         latestForecast = $localstorage.getObject('forecast');
 
-        if(typeof latestForecast == 'undefined' || Object.keys(latestForecast).length == 0)
+        if(typeof latestForecast == 'undefined' || Object.keys(latestForecast).length === 0)
             updateForecast();
-    }
+    };
 
     getForecast = function() {
         if(typeof latestForecast == 'undefined')
             loadForecastFromStorage();
 
         return latestForecast;
-    }
+    };
 
     // window.setInterval(function() {updateForecast();}, 1000);
 

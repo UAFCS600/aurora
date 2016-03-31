@@ -11,7 +11,7 @@ angular.module('aurora.controllers', [])
 		$scope.daytime	   = false;
         $scope.gps         = false;
         $scope.zip         = 90210;
-    }
+    };
 
     $scope.loadSettings = function() {
         $scope.alerts      = $localstorage.get('alerts');
@@ -23,8 +23,8 @@ angular.module('aurora.controllers', [])
         if (typeof $scope.alerts == 'undefined') {
             $scope.loadDefaults();
             $scope.saveAllSettings();
-        };
-    }
+        }
+    };
 
     $scope.saveAllSettings = function() {
         $localstorage.set('alerts', $scope.alerts);
@@ -32,7 +32,7 @@ angular.module('aurora.controllers', [])
 		$localstorage.set('daytime', $scope.daytime);
         $localstorage.set('gps', $scope.gps);
         $localstorage.set('zip', $scope.zip);
-    }
+    };
 
     $scope.outputSettings = function(asAlert) {
         data = {'alerts' : $scope.alerts, 
@@ -45,24 +45,24 @@ angular.module('aurora.controllers', [])
             alert(data);
         else
             console.log(data);
-    }
+    };
 
     $scope.requestPush         = function() {
     $push.requestTestPushNotification();
-    }
+    };
     
     $scope.initPush            = function() {
     $push.initPushNotifications();
-    }
+    };
     
     $scope.showGeoLocationInfo = function() {
         $geolocation.showGeoLocationInfo();
-    }
+    };
 
     $scope.geolocationToggled = function() {
         $localstorage.set('gps', !$scope.gps);
         console.log('AURORA: GPS toggled!');
-    }
+    };
 
     $scope.loadSettings();
     $scope.outputSettings(false);
