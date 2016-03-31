@@ -7,7 +7,10 @@ angular.module('aurora.services', [])
             $window.localStorage[key] = JSON.stringify(value);
         },
         get: function(key, defaultValue) {
-            return JSON.parse($window.localStorage[key]) || defaultValue;
+            var temp = $window.localStorage[key];
+            if(typeof temp != 'undefined')
+                return JSON.parse(temp);
+            else return defaultValue;
         },
         setObject: function(key, value) {
             $window.localStorage[key] = JSON.stringify(value);
@@ -124,7 +127,7 @@ angular.module('aurora.services', [])
 .factory('$geolocation', function($localstorage) {
     return {
         showGeoLocationInfo : function() {
-            var gps = $localstorage.get('gps');
+            var gps = $localstorage.get('gps', false);
 
             if(gps) {
                 var options = {
