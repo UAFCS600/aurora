@@ -21,98 +21,94 @@ angular.module('aurora.services', [])
 //Push notification services
 .factory('$push', function($http, $location, $localstorage) {
 
-    function postToPushServer(params, onSuccess, onFailure) {
+    postToPushServer = function(params, onSuccess, onFailure) {
         $http.post("http://aurora.cs.uaf.edu/push_notification/", params)
         .then(onSuccess, onFailure);
     }
 
-    function requestTestPushNotification() {
-        postData = {
-            "test_push": true,
-            "kpTrigger": "",
-            "service": "gcm",
-            "method": "all",
-            "token": ""
-        };
-
-        postToPushServer(postData, function(response) {
-            if(response.status == 200) {
-                console.log("AURORA: " + "You should receive a notification momentarily.");
-            }
-        }, function(response) {
-            console.log("AURORA: " + "Request was denied.");
-            console.log("AURORA: Failure status: " + response.status);
-        });
-    }
-
-    function initPushNotifications() {
-        var registered = $localstorage.get('pushRegistered');
-
-        var gcmID = "209803454821"; // this is static for GCM
-        var apnsId = ""; //Apple iTunes App ID
-        // need to figure out APNS...
-
-        var push = PushNotification.init({
-            "android": {
-                "senderID": gcmID
-            }
-            //"ios": {"console.log":"true", "badge":"true", "sound":"true"},
-            //"windows": {}
-
-        });
-
-        if (push) {
-            console.log("AURORA: " + "Push notification service successfully initialized.");
-        }
-        else {
-            console.log("AURORA: " + "Push notification service NOT successfully initialized.");
-        }
-
-        push.on('registration', function(data) {
+    return {
+        requestTestPushNotification : function() {
             postData = {
+                "test_push": true,
+                "kpTrigger": "",
                 "service": "gcm",
-                "token": data.registrationId,
-                "kpTrigger": 6
-            }
+                "method": "all",
+                "token": ""
+            };
 
             postToPushServer(postData, function(response) {
                 if(response.status == 200) {
-                    console.log("AURORA: " + "Key has been added to push server!");
-                    $localstorage.set('pushRegistered', true);
+                    console.log("AURORA: " + "You should receive a notification momentarily.");
                 }
             }, function(response) {
-                console.log("AURORA: " + "Key has not been added to the push server!");
+                console.log("AURORA: " + "Request was denied.");
                 console.log("AURORA: Failure status: " + response.status);
             });
-        });
+        },
+        initPushNotifications : function() {
+            var gcmID = "209803454821"; // this is static for GCM
+            var apnsId = ""; //Apple iTunes App ID
+            // need to figure out APNS...
 
-        PushNotification.hasPermission(function(data) {
-            if (data.isEnabled) {
-                console.log("AURORA: " + "Push notifications enabled.");
+            var push = PushNotification.init({
+                "android": {
+                    "senderID": gcmID
+                }
+                //"ios": {"console.log":"true", "badge":"true", "sound":"true"},
+                //"windows": {}
+
+            });
+
+            if (push) {
+                console.log("AURORA: " + "Push notification service successfully initialized.");
             }
             else {
-                console.log("AURORA: " + "Push notifications disabled.");
+                console.log("AURORA: " + "Push notification service NOT successfully initialized.");
             }
-        });
 
-        //This function **SHOULD** get called when notification is received
-        push.on('notification', function(data) {
-            //Switch to notification view somehow
-            alert("Notification: " + JSON.stringify(data["message"]));
-            console.log("AURORA: " + data.message);
-            console.log("AURORA: " + data.title);
-            console.log("AURORA: " + data.count);
-            console.log("AURORA: " + data.sound);
-            console.log("AURORA: " + data.image);
-            console.log("AURORA: " + data.additionalData);
-        });
+            push.on('registration', function(data) {
+                postData = {
+                    "service": "gcm",
+                    "token": data.registrationId,
+                    "kpTrigger": 6
+                }
 
-        push.on('error', function(data) {
-            console.log("AURORA: " + e.message);
-        });
+                postToPushServer(postData, function(response) {
+                    if(response.status == 200) {
+                        console.log("AURORA: " + "Key has been added to push server!");
+                    }
+                }, function(response) {
+                    console.log("AURORA: " + "Key has not been added to the push server!");
+                    console.log("AURORA: Failure status: " + response.status);
+                });
+            });
+
+            PushNotification.hasPermission(function(data) {
+                if (data.isEnabled) {
+                    console.log("AURORA: " + "Push notifications enabled.");
+                }
+                else {
+                    console.log("AURORA: " + "Push notifications disabled.");
+                }
+            });
+
+            //This function **SHOULD** get called when notification is received
+            push.on('notification', function(data) {
+                //Switch to notification view somehow
+                alert("Notification: " + JSON.stringify(data["message"]));
+                console.log("AURORA: " + data.message);
+                console.log("AURORA: " + data.title);
+                console.log("AURORA: " + data.count);
+                console.log("AURORA: " + data.sound);
+                console.log("AURORA: " + data.image);
+                console.log("AURORA: " + data.additionalData);
+            });
+
+            push.on('error', function(data) {
+                console.log("AURORA: " + e.message);
+            });
+        }
     }
-
-    return {postToPushServer, requestTestPushNotification, initPushNotifications};
 })
 
 //Geolocation services
