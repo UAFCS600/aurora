@@ -92,4 +92,16 @@ angular.module('aurora.controllers', [])
 
 .controller('NotificationCtrl', function($scope, $push) {
     
+})
+
+.controller('MenuCtrl', function($scope, $ionicSideMenuDelegate) {
+    $scope.toggleLeft = function() {
+        $ionicSideMenuDelegate.toggleLeft();
+    };
+
+    $scope.toggleRight = function() {
+        $ionicSideMenuDelegate.toggleRight();
+    };
+
+    console.log('in MenuCtrl');
 });
