@@ -20,10 +20,57 @@ angular.module('aurora.services', [])
 
 //Push notification services
 .factory('$push', function($http, $location, $localstorage) {
+    var gcmID     = '209803454821'; // this is static for GCM
+    var apnsId    = ''; //Apple iTunes App ID
+    var windowsId = ''; //Windows Store ID
+
+    var initData = {
+        'android' : {
+            'senderID' : gcmID
+        },
+        'ios' : {
+            'senderID' : apnsId
+        },
+        'windows' : {
+            'senderID' : windowsId
+        }
+    }
 
     postToPushServer = function(params, onSuccess, onFailure) {
         $http.post("http://aurora.cs.uaf.edu/push_notification/", params)
         .then(onSuccess, onFailure);
+    }
+
+    receivedNotification = function(data) {
+        //Switch to notification view somehow
+        alert("Notification: " + JSON.stringify(data["message"]));
+        console.log("AURORA: " + data.message);
+        console.log("AURORA: " + data.title);
+        console.log("AURORA: " + data.count);
+        console.log("AURORA: " + data.sound);
+        console.log("AURORA: " + data.image);
+        console.log("AURORA: " + data.additionalData);
+    }
+
+    receivedError = function(data) {
+        console.log("AURORA: " + e.message);
+    }
+
+    notificationServiceRegistered = function(data) {
+        postData = {
+            "service": "gcm",
+            "token": data.registrationId,
+            "kpTrigger": 6
+        }
+
+        postToPushServer(postData, function(response) {
+            if(response.status == 200) {
+                console.log("AURORA: " + "Key has been added to push server!");
+            }
+        }, function(response) {
+            console.log("AURORA: " + "Key has not been added to the push server!");
+            console.log("AURORA: Failure status: " + response.status);
+        });
     }
 
     return {
@@ -46,42 +93,16 @@ angular.module('aurora.services', [])
             });
         },
         initPushNotifications : function() {
-            var gcmID = "209803454821"; // this is static for GCM
-            var apnsId = ""; //Apple iTunes App ID
-            // need to figure out APNS...
-
-            var push = PushNotification.init({
-                "android": {
-                    "senderID": gcmID
-                }
-                //"ios": {"console.log":"true", "badge":"true", "sound":"true"},
-                //"windows": {}
-
-            });
+            var push = PushNotification.init(initData);
 
             if (push) {
                 console.log("AURORA: " + "Push notification service successfully initialized.");
             }
             else {
-                console.log("AURORA: " + "Push notification service NOT successfully initialized.");
+                console.log("AURORA: " + "Push notification service NOT initialized.");
             }
 
-            push.on('registration', function(data) {
-                postData = {
-                    "service": "gcm",
-                    "token": data.registrationId,
-                    "kpTrigger": 6
-                }
-
-                postToPushServer(postData, function(response) {
-                    if(response.status == 200) {
-                        console.log("AURORA: " + "Key has been added to push server!");
-                    }
-                }, function(response) {
-                    console.log("AURORA: " + "Key has not been added to the push server!");
-                    console.log("AURORA: Failure status: " + response.status);
-                });
-            });
+            push.on('registration', notificationServiceRegistered);
 
             PushNotification.hasPermission(function(data) {
                 if (data.isEnabled) {
@@ -92,21 +113,9 @@ angular.module('aurora.services', [])
                 }
             });
 
-            //This function **SHOULD** get called when notification is received
-            push.on('notification', function(data) {
-                //Switch to notification view somehow
-                alert("Notification: " + JSON.stringify(data["message"]));
-                console.log("AURORA: " + data.message);
-                console.log("AURORA: " + data.title);
-                console.log("AURORA: " + data.count);
-                console.log("AURORA: " + data.sound);
-                console.log("AURORA: " + data.image);
-                console.log("AURORA: " + data.additionalData);
-            });
+            push.on('notification', receivedNotification);
 
-            push.on('error', function(data) {
-                console.log("AURORA: " + e.message);
-            });
+            push.on('error', receivedError);
         }
     }
 })
