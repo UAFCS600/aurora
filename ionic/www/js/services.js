@@ -159,42 +159,37 @@ angular.module('aurora.services', [])
     var latestForecast;
     var apiURL = 'http://cs472.gi.alaska.edu/kp.php?';
 
-    saveForecast = function(forecast) {
-        $localstorage.setObject('forecast', forecast);
+    return {
+        saveForecast : function(forecast) {
+            $localstorage.setObject('forecast', forecast);
+        },
+        updateForecast : function() {
+            $http.get(apiURL + 'd=h').success(function(data) {
+                var jsonData = {};
+                //Convert array to JSON object
+                for (var i = 0; i < data.data.length - 1; i++) {
+                    jsonData['val' + i] = data.data[i];
+                }
+
+                latestForecast = jsonData;
+                saveForecast(latestForecast);
+                //Finish writing
+            }).error(function(error) {
+                //Finish writing
+                console.log(error);
+            });
+        },
+        loadForecastFromStorage : function() {
+            latestForecast = $localstorage.getObject('forecast');
+
+            if(typeof latestForecast == 'undefined' || Object.keys(latestForecast).length === 0)
+                updateForecast();
+        },
+        getForecast : function() {
+            if(typeof latestForecast == 'undefined')
+                loadForecastFromStorage();
+
+            return latestForecast;
+        }
     };
-
-    updateForecast = function() {
-        $http.get(apiURL + 'd=h').success(function(data) {
-            var jsonData = {};
-            //Convert array to JSON object
-            for (var i = 0; i < data.data.length - 1; i++) {
-                jsonData['val' + i] = data.data[i];
-            }
-
-            latestForecast = jsonData;
-            saveForecast(latestForecast);
-            //Finish writing
-        }).error(function(error) {
-            //Finish writing
-            console.log(error);
-        });
-    };
-
-    loadForecastFromStorage = function() {
-        latestForecast = $localstorage.getObject('forecast');
-
-        if(typeof latestForecast == 'undefined' || Object.keys(latestForecast).length === 0)
-            updateForecast();
-    };
-
-    getForecast = function() {
-        if(typeof latestForecast == 'undefined')
-            loadForecastFromStorage();
-
-        return latestForecast;
-    };
-
-    // window.setInterval(function() {updateForecast();}, 1000);
-
-    return {saveForecast, updateForecast, loadForecastFromStorage, getForecast};
 });
