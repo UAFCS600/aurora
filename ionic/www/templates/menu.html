@@ -1,0 +1,71 @@
+<ion-side-menus>
+	<ion-side-menu-content>
+		<ion-nav-bar class="bar-stable">
+			<!-- <ion-nav-back-button>
+		</ion-nav-back-button> -->
+			<ion-nav-buttons side="left">
+				<!-- Toggle left side menu -->
+				<button menu-toggle="left" class="button button-icon icon ion-ios-gear" ng-click="toggleLeft();"></button>
+			</ion-nav-buttons>
+			<ion-nav-buttons side="right">
+				<!-- Toggle right side menu -->
+				<button menu-toggle="right" class="button button-icon icon ion-navicon" ng-click="toggleRight();"></button>
+			</ion-nav-buttons>
+		</ion-nav-bar>
+		<ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+	</ion-side-menu-content>
+
+	<ion-side-menu side="left">
+		<header class="bar bar-header bar-stable">
+			<h1 class="title">Left</h1>
+		</header>
+		<ion-content class="has-header">
+			<ion-list>
+				<ion-item menu-close href="#/app/dash">
+					Home
+				</ion-item>
+				<ion-item menu-close href="#/app/allsky">
+					Allsky
+				</ion-item>
+				<ion-item menu-close href="#/app/about">
+					About
+				</ion-item>
+			</ion-list>
+		</ion-content>
+	</ion-side-menu>
+
+	<ion-side-menu side="right">
+		<ion-view>
+			<button>Foo</button>asdfasdfasdfasdfasdf</ion-view>
+		<ion-list>
+			<ion-item menu-close>
+				<a class="button button-block" icon="ion-ios-home" href="#/app/dash">Home</a>
+				<!-- Dashboard Tab -->
+				<!-- <ion-tab title="Home" icon="ion-ios-home" href="#/tab/dash">
+					<ion-nav-view name="tab-dash"></ion-nav-view>
+				</ion-tab> -->
+			</ion-item>
+			<ion-item menu-close>
+				<a class="button button-block" icon="ion-ios-flower" href="#/app/allsky">Allsky</a>
+				<!-- Allsky Tab -->
+				<!-- <ion-tab title="Allsky" icon="ion-ios-flower" href="#/tab/allsky">
+					<ion-nav-view name="tab-allsky"></ion-nav-view>
+				</ion-tab> -->
+			</ion-item>
+			<ion-item menu-close>
+				<a class="button button-block" icon="ion-ios-gear" href="#/app/settings">Settings</a>
+				<!-- Settings Tab -->
+				<!-- <ion-tab title="Settings" icon="ion-ios-gear" href="#/tab/settings">
+					<ion-nav-view name="tab-settings"></ion-nav-view>
+				</ion-tab> -->
+			</ion-item>
+			<ion-item menu-close>
+				<a class="button button-block" icon="ion-ios-information" href="#/app/about">About</a>
+				<!-- About Tab -->
+				<!-- <ion-tab title="About" icon="ion-ios-information" href="#/tab/about">
+					<ion-nav-view name="tab-about"></ion-nav-view>
+				</ion-tab> -->
+			</ion-item>
+		</ion-list>
+	</ion-side-menu>
+</ion-side-menus>
