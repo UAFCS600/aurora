@@ -159,6 +159,13 @@ angular.module('aurora.services', [])
     var latestForecast;
     var apiURL = 'http://cs472.gi.alaska.edu/kp.php?';
 
+    loadForecastFromStorage = function() {
+        latestForecast = $localstorage.getObject('forecast');
+
+        if(typeof latestForecast == 'undefined' || Object.keys(latestForecast).length === 0)
+            updateForecast();
+    };
+
     return {
         saveForecast : function(forecast) {
             $localstorage.setObject('forecast', forecast);
@@ -178,12 +185,6 @@ angular.module('aurora.services', [])
                 //Finish writing
                 console.log(error);
             });
-        },
-        loadForecastFromStorage : function() {
-            latestForecast = $localstorage.getObject('forecast');
-
-            if(typeof latestForecast == 'undefined' || Object.keys(latestForecast).length === 0)
-                updateForecast();
         },
         getForecast : function() {
             if(typeof latestForecast == 'undefined')
