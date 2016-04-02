@@ -1,13 +1,13 @@
 <ion-view view-title="Settings">
 	  <ion-content class="padding">
 			<ion-list>
-				<a class="button button-full button-positive icon icon-right ion-chevron-right" href="#/tab/location">
+				<a class="button button-full button-positive icon icon-right ion-chevron-right" menu-close href="#/app/location">
 					Location Settings
 				</a>
-				<a class="button button-full button-positive icon icon-right ion-chevron-right" href="#/tab/kpAlert">
+				<a class="button button-full button-positive icon icon-right ion-chevron-right" menu-close href="#/app/kpAlert">
 					KP Alert Settings
 				</a>
-				<a class="button button-full button-positive icon icon-right ion-chevron-right" href="#/tab/allskyAlert">
+				<a class="button button-full button-positive icon icon-right ion-chevron-right" menu-close href="#/app/allskyAlert">
 					All Sky Camera Alert Settings
 				</a>
 				<a class="button button-full button-responsive" ng-click="showGeoLocationInfo();">
@@ -19,12 +19,6 @@
 				<a class="button button-full button-positive" ng-click="requestPush();">
 					Request Test Push Notification
 				</a>
-				<!-- <a class="button button-full button-positive icon icon-right ion-chevron-right" href="#/tab/quietTime">
-					Quiet Time For Alerts
-				</a>
-				<a class="button button-full button-positive icon icon-right ion-chevron-right" href="#/tab/tutorial">
-					Tutorial
-				</a> -->
 			</ion-list>
 	  </ion-content>
 </ion-view>

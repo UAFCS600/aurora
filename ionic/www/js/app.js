@@ -74,6 +74,26 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
         }
     })
 
+    .state('app.about', {
+        url: '/about',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/tab-about.html',
+                controller: 'AboutCtrl'
+            }
+        }
+    })
+
+    .state('app.allsky', {
+        url: '/allsky',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/tab-allsky.html',
+                controller: 'AllskyCtrl'
+            }
+        }
+    })
+	
     .state('app.settings', {
         url: '/settings',
         views: {
@@ -108,26 +128,6 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
         views: {
             'menuContent': {
                 templateUrl: 'templates/setting-allsky.html',
-            }
-        }
-    })
-
-    .state('app.about', {
-        url: '/about',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/tab-about.html',
-                controller: 'AboutCtrl'
-            }
-        }
-    })
-
-    .state('app.allsky', {
-        url: '/allsky',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/tab-allsky.html',
-                controller: 'AllskyCtrl'
             }
         }
     });
