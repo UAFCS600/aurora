@@ -20,7 +20,7 @@ ion-popover-view.fit ion-content {
   padding: 5px 20px;
 }
 
-
-p1 {
-    color: rgb(255,255,255);
+.wide-as-needed {
+  overflow: scroll;
+  white-space: nowrap;
 }
