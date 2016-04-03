@@ -166,26 +166,28 @@ angular.module('aurora.services', [])
             updateForecast();
     };
 
-    return {
-        saveForecast : function(forecast) {
-            $localstorage.setObject('forecast', forecast);
-        },
-        updateForecast : function() {
-            $http.get(apiURL + 'd=h').success(function(data) {
-                var jsonData = {};
-                //Convert array to JSON object
-                for (var i = 0; i < data.data.length - 1; i++) {
-                    jsonData['val' + i] = data.data[i];
-                }
+    saveForecast = function(forecast) {
+        $localstorage.setObject('forecast', forecast);
+    };
 
-                latestForecast = jsonData;
-                saveForecast(latestForecast);
-                //Finish writing
-            }).error(function(error) {
-                //Finish writing
-                console.log(error);
-            });
-        },
+    updateForecast = function() {
+        $http.get(apiURL + 'd=h').success(function(data) {
+            var jsonData = {};
+            //Convert array to JSON object
+            for (var i = 0; i < data.data.length - 1; i++) {
+                jsonData['val' + i] = data.data[i];
+            }
+
+            latestForecast = jsonData;
+            saveForecast(latestForecast);
+            //Finish writing
+        }).error(function(error) {
+            //Finish writing
+            console.log(error);
+        });
+    };
+
+    return {
         getForecast : function() {
             if(typeof latestForecast == 'undefined')
                 loadForecastFromStorage();
