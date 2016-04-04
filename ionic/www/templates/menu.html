@@ -21,12 +21,13 @@
 		</header>
 		<ion-content class="has-header">
 			<ion-list>
-				<!-- <ion-item> -->
-					<ion-toggle ng-model="gpsEnabled" toggle-class="toggle-calm">Enable GPS</ion-toggle>
-				<!-- </ion-item> -->
-				<!-- <ion-item style="margin: 0px !important;"> -->
-					<ion-toggle ng-model="notificationsEnabled" toggle-class="toggle-calm">Enable Notifications</ion-toggle>
-				<!-- </ion-item> -->
+				<ion-toggle ng-model="gps" toggle-class="toggle-calm" ng-click="geolocationToggled()">Enable GPS</ion-toggle>
+				<ion-toggle ng-model="notificationsEnabled" toggle-class="toggle-calm">Enable Notifications</ion-toggle>
+
+				<div class="item range">
+					<input type="range" name="kpTrigger">
+				</div>
+
 				<ion-item ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
 				<ion-item ng-click="initPush();">Initialize Push Notifications</ion-item>
 				<ion-item ng-click="requestPush();">Request Test Push Notification</ion-item>

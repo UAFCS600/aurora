@@ -60,7 +60,8 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.geolocationToggled = function() {
-        $localstorage.set('gps', !$scope.gps);
+        $scope.gps = !$localstorage.get('gps');
+        $localstorage.set('gps', $scope.gps);
         console.log('AURORA: GPS toggled!');
     };
 
