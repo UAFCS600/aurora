@@ -48,11 +48,15 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.requestPush         = function() {
-    $push.requestTestPushNotification();
+        $push.requestTestPushNotification();
     };
     
     $scope.initPush            = function() {
-    $push.initPushNotifications();
+        $push.initPushNotifications();
+    };
+
+    $scope.unregisterPush      = function() {
+        $push.unregister();
     };
     
     $scope.showGeoLocationInfo = function() {
@@ -63,6 +67,19 @@ angular.module('aurora.controllers', [])
         $scope.gps = !$localstorage.get('gps');
         $localstorage.set('gps', $scope.gps);
         console.log('AURORA: GPS toggled!');
+    };
+
+    $scope.alertsToggled = function() {
+        $scope.alerts = !$localstorage.get('alerts');
+        $localstorage.set('alerts', $scope.alerts);
+        console.log('AURORA: Alerts toggled!');
+
+        if($scope.alerts) {
+            $scope.initPush();
+        }
+        else {
+            $scope.unregisterPush();
+        }
     };
 
     $scope.loadSettings();

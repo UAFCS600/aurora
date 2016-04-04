@@ -23,6 +23,7 @@ angular.module('aurora.services', [])
 
 //Push notification services
 .factory('$push', function($http, $location, $localstorage) {
+    var push      = false;
     var gcmID     = '209803454821'; // this is static for GCM
     var apnsId    = ''; //Apple iTunes App ID
     var windowsId = ''; //Windows Store ID
@@ -96,7 +97,7 @@ angular.module('aurora.services', [])
             });
         },
         initPushNotifications : function() {
-            var push = PushNotification.init(initData);
+            push = PushNotification.init(initData);
 
             if (push) {
                 console.log("AURORA: " + "Push notification service successfully initialized.");
@@ -119,6 +120,13 @@ angular.module('aurora.services', [])
             push.on('notification', receivedNotification);
 
             push.on('error', receivedError);
+        },
+        unregister : function() {
+            push.unregister(function() {
+                console.log('AURORA: Push notifications unregistered.');
+            }, function() {
+                console.log('AURORA: Could not unregisted push notifications.');
+            });
         }
     };
 })

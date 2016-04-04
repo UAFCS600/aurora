@@ -22,7 +22,7 @@
 		<ion-content class="has-header">
 			<ion-list>
 				<ion-toggle ng-model="gps" toggle-class="toggle-calm" ng-click="geolocationToggled()">Enable GPS</ion-toggle>
-				<ion-toggle ng-model="notificationsEnabled" toggle-class="toggle-calm">Enable Notifications</ion-toggle>
+				<ion-toggle ng-model="alerts" toggle-class="toggle-calm" ng-click="alertsToggled()">Enable Notifications</ion-toggle>
 
 				<div class="item range">
 					<input type="range" name="kpTrigger">
