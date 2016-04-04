@@ -25,7 +25,9 @@
 				<ion-toggle ng-model="alerts" toggle-class="toggle-calm" ng-click="alertsToggled()">Enable Notifications</ion-toggle>
 
 				<div class="item range">
-					<input type="range" name="kpTrigger">
+					KP Trigger
+					<input ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9">
+					{{kpTrigger}}
 				</div>
 
 				<ion-item ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
