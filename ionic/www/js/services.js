@@ -183,7 +183,7 @@ angular.module('aurora.services', [])
             var jsonData = {};
             //Convert array to JSON object
             for (var i = 0; i < data.data.length - 1; i++) {
-                jsonData['val' + i] = data.data[i];
+                jsonData['kp' + i] = data.data[i];
             }
 
             latestForecast = jsonData;
@@ -197,6 +197,7 @@ angular.module('aurora.services', [])
 
     return {
         getForecast : function() {
+            window.setInterval(updateForecast, 1000*60*15);
             if(typeof latestForecast == 'undefined')
                 loadForecastFromStorage();
 
