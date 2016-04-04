@@ -6,19 +6,19 @@ angular.module('aurora.controllers', [])
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation) {
     $scope.loadDefaults = function() {
-        $scope.alerts      = true;
-        $scope.kpTrigger   = 1;
-		$scope.daytime	   = false;
-        $scope.gps         = false;
-        $scope.zip         = 90210;
+        $scope.alerts    = true;
+        $scope.kpTrigger = 1;
+        $scope.daytime   = false;
+        $scope.gps       = false;
+        $scope.zip       = 90210;
     };
 
     $scope.loadSettings = function() {
-        $scope.alerts      = $localstorage.get('alerts');
-        $scope.kpTrigger   = $localstorage.get('kpTrigger');
-		$scope.daytime	   = $localstorage.get('daytime');
-        $scope.gps         = $localstorage.get('gps');
-        $scope.zip         = $localstorage.get('zip');
+        $scope.alerts    = $localstorage.get('alerts');
+        $scope.kpTrigger = $localstorage.get('kpTrigger');
+        $scope.daytime   = $localstorage.get('daytime');
+        $scope.gps       = $localstorage.get('gps');
+        $scope.zip       = $localstorage.get('zip');
 
         if (typeof $scope.alerts == 'undefined') {
             $scope.loadDefaults();
@@ -80,6 +80,12 @@ angular.module('aurora.controllers', [])
         else {
             $scope.unregisterPush();
         }
+    };
+
+    $scope.kpTriggerChange = function() {
+        $scope.kpTrigger = document.getElementById('kpTrigger').value;
+        $localstorage.set('kpTrigger', $scope.kpTrigger);
+        //update on server somehow
     };
 
     $scope.loadSettings();

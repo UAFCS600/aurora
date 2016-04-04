@@ -26,7 +26,7 @@
 
 				<div class="item range">
 					KP Trigger
-					<input ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9">
+					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="kpTriggerChange()">
 					{{kpTrigger}}
 				</div>
 
