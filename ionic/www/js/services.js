@@ -183,15 +183,22 @@ angular.module('aurora.services', [])
             var jsonData = {};
             //Convert array to JSON object
             for (var i = 0; i < data.data.length; i++) {
-                jsonData['kp' + i] = {};
-                jsonData['kp' + i].kp = data.data[i].kp;
+                jsonData['kp' + i]      = {};
+                jsonData['kp' + i].kp   = data.data[i].kp;
                 jsonData['kp' + i].date = data.data[i].predicted_time.substring(0,10);
                 jsonData['kp' + i].time = data.data[i].predicted_time.substring(11,16);
             }
 
             latestForecast = jsonData;
-            saveForecast(latestForecast);
             console.log('Updated KP data.');
+        }).error(function(error) {
+            //Finish writing
+            console.log(error);
+        });
+
+        $http.get(apiURL + 'd=n').success(function(data) {
+            latestForecast['now'] = Math.floor(data.data[0].kp);
+            saveForecast(latestForecast);
         }).error(function(error) {
             //Finish writing
             console.log(error);
@@ -201,6 +208,7 @@ angular.module('aurora.services', [])
     return {
         getForecast : function() {
             window.setInterval(updateForecast, 1000*60*15);
+            updateForecast();
             if(typeof latestForecast == 'undefined')
                 loadForecastFromStorage();
 
