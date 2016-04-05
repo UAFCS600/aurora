@@ -197,7 +197,7 @@ angular.module('aurora.services', [])
         });
 
         $http.get(apiURL + 'd=n').success(function(data) {
-            latestForecast['now'] = Math.floor(data.data[0].kp);
+            latestForecast.now = Math.floor(data.data[0].kp);
             saveForecast(latestForecast);
         }).error(function(error) {
             //Finish writing
