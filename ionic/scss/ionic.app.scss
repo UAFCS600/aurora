@@ -39,5 +39,17 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	font-family: "Quicksand" !important;
 }
 
+.kp-now {
+	height: 75vh;
+	text-align: center;
+	line-height: 70vh;
+	vertical-align: middle;
+	font-size: 85vh;
+}
+
+.kp-forecast {
+	height: 35vh;
+}
+
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";

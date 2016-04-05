@@ -1,22 +1,26 @@
 <ion-view view-title="Dashboard" controller="DashCtrl">
 	<ion-pane>
 		<ion-content>
-			<ion-scroll direction="x" class="wide-as-needed">
-				<div style="text-align:center; font-size:1000%">
+			<div class="row">
+				<div class="col kp-now">
 					{{forecast.now}}
 				</div>
-				<div ng-repeat="kp in forecast" style="width:22%; display:inline-block">
-					<div class="padding" style="text-align:center; font-size:95%">
-						{{kp.time}}
+			</div>
+			<div class="row kp-forecast">
+				<ion-scroll direction="x" class="col wide-as-needed has-bouncing">
+					<div ng-repeat="kp in forecast" style="width:22%; display:inline-block">
+						<div class="padding" style="text-align:center; font-size:95%">
+							{{kp.time}}
+						</div>
+						<div class="padding" style="text-align:center; font-size:400%">
+							{{kp.kp}}
+						</div>
+						<div class="padding" style="text-align:center; font-size:90%">
+							{{kp.date}}
+						</div>
 					</div>
-					<div class="padding" style="text-align:center; font-size:400%">
-						{{kp.kp}}
-					</div>
-					<div class="padding" style="text-align:center; font-size:90%">
-						{{kp.date}}
-					</div>
-				</div>
-			</ion-scroll>
+				</ion-scroll>
+			</div>
 		</ion-content>
 	</ion-pane>
 </ion-view>
