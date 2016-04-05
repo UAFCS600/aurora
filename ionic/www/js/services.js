@@ -208,7 +208,7 @@ angular.module('aurora.services', [])
     return {
         getForecast : function() {
             window.setInterval(updateForecast, 1000*60*15);
-            updateForecast();
+            updateForecast(); //TODO: Needs to be removed on production
             if(typeof latestForecast == 'undefined')
                 loadForecastFromStorage();
 
