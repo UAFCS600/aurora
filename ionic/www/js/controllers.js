@@ -1,6 +1,7 @@
 angular.module('aurora.controllers', [])
 
 .controller('DashCtrl', function($scope, $push, $geolocation, $kpAPI) {
+    $scope.forecast = $kpAPI.getForecast();
     console.log($kpAPI.getForecast());
 })
 

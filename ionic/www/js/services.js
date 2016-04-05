@@ -179,16 +179,19 @@ angular.module('aurora.services', [])
     };
 
     updateForecast = function() {
-        $http.get(apiURL + 'd=h').success(function(data) {
+        $http.get(apiURL + 'd=d').success(function(data) {
             var jsonData = {};
             //Convert array to JSON object
-            for (var i = 0; i < data.data.length - 1; i++) {
-                jsonData['kp' + i] = data.data[i];
+            for (var i = 0; i < data.data.length; i++) {
+                jsonData['kp' + i] = {};
+                jsonData['kp' + i].kp = data.data[i].kp;
+                jsonData['kp' + i].date = data.data[i].predicted_time.substring(0,10);
+                jsonData['kp' + i].time = data.data[i].predicted_time.substring(11,16);
             }
 
             latestForecast = jsonData;
             saveForecast(latestForecast);
-            //Finish writing
+            console.log('Updated KP data.');
         }).error(function(error) {
             //Finish writing
             console.log(error);
