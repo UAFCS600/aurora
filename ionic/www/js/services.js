@@ -202,7 +202,7 @@ angular.module('aurora.services', [])
                 //var theYear = dateObject.getFullYear();
 
                 var timeString = theHour + ":" + theMin + AMorPM;
-                var dateString = theDay + ", " + theMonth + " " + theDate;// + ", " + theYear;
+                var dateString = theDay + "," + theMonth + " " + theDate;// + ", " + theYear;
 
                 console.log(timeString + " " + dateString);
 

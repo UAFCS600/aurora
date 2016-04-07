@@ -24,9 +24,9 @@ $dark:                            #444 !default;
 
 .kp-now {
   text-align: center;
-  line-height: 70vh;
+  line-height: 30rem;
   vertical-align: middle;
-  font-size: 70vh; }
+  font-size: 30rem; }
 
 .kp-forecast {
   position: fixed;
