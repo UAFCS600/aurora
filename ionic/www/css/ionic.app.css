@@ -22,6 +22,19 @@ $dark:                            #444 !default;
 * {
   font-family: "Quicksand" !important; }
 
+.kp-now {
+  text-align: center;
+  line-height: 70vh;
+  vertical-align: middle;
+  font-size: 70vh; }
+
+.kp-forecast {
+  position: fixed;
+  bottom: 0px; }
+
+.scroll {
+  height: 100%; }
+
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/

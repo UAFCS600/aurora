@@ -40,15 +40,19 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .kp-now {
-	height: 75vh;
 	text-align: center;
 	line-height: 70vh;
 	vertical-align: middle;
-	font-size: 85vh;
+	font-size: 70vh;
 }
 
 .kp-forecast {
-	height: 35vh;
+    position: fixed;
+    bottom: 0px;
+}
+
+.scroll {
+    height: 100%;
 }
 
 // Include all of Ionic
