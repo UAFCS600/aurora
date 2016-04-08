@@ -1,6 +1,6 @@
 angular.module('aurora.controllers', [])
 
-.controller('DashCtrl', function($scope, $push, $geolocation, $kpAPI) {
+.controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform) {
     $scope.forecast = $kpAPI.getForecast();
     console.log($kpAPI.getForecast());
 
@@ -25,6 +25,7 @@ angular.module('aurora.controllers', [])
         }
     };
 
+    $ionicPlatform.on('resume', $kpAPI.getForecast);
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation) {
@@ -80,6 +81,10 @@ angular.module('aurora.controllers', [])
 
     $scope.unregisterPush      = function() {
         $push.unregister();
+    };
+
+    $scope.changeKpTrigger     = function(kpTrigger) {
+        $push.changeKpTrigger(kpTrigger);
     };
 
     $scope.showGeoLocationInfo = function() {
