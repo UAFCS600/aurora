@@ -3,6 +3,28 @@ angular.module('aurora.controllers', [])
 .controller('DashCtrl', function($scope, $push, $geolocation, $kpAPI) {
     $scope.forecast = $kpAPI.getForecast();
     console.log($kpAPI.getForecast());
+
+    var viewportHeight = window.innerHeight;
+    if(viewportHeight > 300)
+    {
+        var kpnow = document.getElementById("kp-now");
+        kpnow.style.height = viewportHeight/2 + "px";
+        kpnow.style.lineHeight = viewportHeight/2 + "px";
+        kpnow.style.fontSize = viewportHeight/2 + "px";
+    }
+
+
+    window.onresize = function() {
+        var viewportHeight = window.innerHeight;
+        if(viewportHeight > 300)
+        {
+            var kpnow = document.getElementById("kp-now");
+            kpnow.style.height = viewportHeight/2 + "px";
+            kpnow.style.lineHeight = viewportHeight/2 + "px";
+            kpnow.style.fontSize = viewportHeight/2 + "px";
+        }
+    };
+
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation) {
@@ -36,10 +58,10 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.outputSettings = function(asAlert) {
-        data = {'alerts' : $scope.alerts, 
-                'kpTrigger' : $scope.kpTrigger, 
+        data = {'alerts' : $scope.alerts,
+                'kpTrigger' : $scope.kpTrigger,
 				'daytime' : $scope.daytime,
-                'gps' : $scope.gps, 
+                'gps' : $scope.gps,
                 'zip' : $scope.zip};
 
         if(asAlert)
@@ -51,7 +73,7 @@ angular.module('aurora.controllers', [])
     $scope.requestPush         = function() {
         $push.requestTestPushNotification();
     };
-    
+
     $scope.initPush            = function() {
         $push.initPushNotifications();
     };
@@ -59,7 +81,7 @@ angular.module('aurora.controllers', [])
     $scope.unregisterPush      = function() {
         $push.unregister();
     };
-    
+
     $scope.showGeoLocationInfo = function() {
         $geolocation.showGeoLocationInfo();
     };
@@ -116,5 +138,5 @@ angular.module('aurora.controllers', [])
 .controller('AllskyCtrl', function($scope) {})
 
 .controller('NotificationCtrl', function($scope, $push) {
-    
+
 });

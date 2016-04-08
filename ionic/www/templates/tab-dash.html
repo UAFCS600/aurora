@@ -2,20 +2,20 @@
 	<ion-pane>
 		<ion-content>
 			<div class="row">
-				<div class="col kp-now">
+				<div class="col" id="kp-now">
 					{{forecast.now}}
 				</div>
 			</div>
-			<div class="row kp-forecast">
+			<div class="row" id="kp-forecast">
 				<ion-scroll direction="x" class="col wide-as-needed has-bouncing">
 					<div ng-repeat="kp in forecast" style="width:22%; display:inline-block">
-						<div class="padding" style="text-align:center; font-size:95%">
+						<div class="forecast" id="kp-time">
 							{{kp.time}}
 						</div>
-						<div class="padding" style="text-align:center; font-size:400%">
+						<div class="forecast" id="kp-kp">
 							{{kp.kp}}
 						</div>
-						<div class="padding" style="text-align:center; font-size:90%">
+						<div class="forecast" id="kp-date">
 							<div style="display: inline-block;">{{kp.date.split(",")[0]}}</div>
 							<br>
 							<div style="display: inline-block;">{{kp.date.split(",")[1]}}</div>

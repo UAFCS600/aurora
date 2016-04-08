@@ -22,18 +22,33 @@ $dark:                            #444 !default;
 * {
   font-family: "Quicksand" !important; }
 
-.kp-now {
-  text-align: center;
-  line-height: 20rem;
+#kp-now {
   vertical-align: middle;
-  font-size: 20rem; }
+  text-align: center; }
 
-.kp-forecast {
+#kp-forecast {
   position: fixed;
   bottom: 0px; }
 
+.forecast {
+  text-align: center; }
+
+#kp-kp {
+  margin-top: 4%;
+  margin-bottom: 4%;
+  font-weight: bold;
+  font-size: 200%; }
+
 .scroll {
   height: 100%; }
+
+@media (max-height: 300px) {
+  #kp-now {
+    vertical-align: middle;
+    text-align: center;
+    height: 50px !important;
+    line-height: 50px !important;
+    font-size: 50px !important; } }
 
 /*!
   Ionicons, v2.0.1
