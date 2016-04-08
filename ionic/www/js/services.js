@@ -70,6 +70,7 @@ angular.module('aurora.services', [])
         postToPushServer(postData, function(response) {
             if(response.status == 200) {
                 console.log("AURORA: " + "Key has been added to push server!");
+                $localstorage.set('pushToken', data.registrationId);
             }
         }, function(response) {
             console.log("AURORA: " + "Key has not been added to the push server!");
@@ -126,6 +127,21 @@ angular.module('aurora.services', [])
                 console.log('AURORA: Push notifications unregistered.');
             }, function() {
                 console.log('AURORA: Could not unregisted push notifications.');
+            });
+        },
+        changeKpTrigger : function(kpTrigger) {
+            var registrationId = $localstorage.get('pushToken');
+
+            var postData = {
+                'changeKpTrigger' : true,
+                'token' : registrationId,
+                'kpTrigger' : kpTrigger
+            };
+
+            postToPushServer(postData, function() {
+                console.log("AURORA: kpTrigger changed!");
+            }, function() {
+                console.log("AURORA: Could not change kpTrigger.");
             });
         }
     };
