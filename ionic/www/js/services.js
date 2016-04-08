@@ -204,8 +204,6 @@ angular.module('aurora.services', [])
                 var timeString = theHour + ":" + theMin + AMorPM;
                 var dateString = theDay + "," + theMonth + " " + theDate;// + ", " + theYear;
 
-                console.log(timeString + " " + dateString);
-
                 jsonData['kp' + i].time = timeString;
                 jsonData['kp' + i].date = dateString;
 
