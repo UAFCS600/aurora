@@ -84,6 +84,7 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.changeKpTrigger     = function(kpTrigger) {
+        $localstorage.set('kpTrigger', kpTrigger);
         $push.changeKpTrigger(kpTrigger);
     };
 
@@ -108,12 +109,6 @@ angular.module('aurora.controllers', [])
         else {
             $scope.unregisterPush();
         }
-    };
-
-    $scope.kpTriggerChange = function() {
-        $scope.kpTrigger = document.getElementById('kpTrigger').value;
-        $localstorage.set('kpTrigger', $scope.kpTrigger);
-        //update on server somehow
     };
 
     $scope.loadSettings();
