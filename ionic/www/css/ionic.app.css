@@ -19,6 +19,9 @@ $dark:                            #444 !default;
   font-family: "Quicksand";
   src: url("../fonts/QuicksandRegular.eot"), local("QuicksandRegular"), url("../fonts/QuicksandRegular.svg") format("svg"), url("../fonts/QuicksandRegular.ttf") format("truetype"), url("../fonts/QuicksandRegular.woff") format("woff"), url("../fonts/QuicksandRegular.woff2") format("woff2"); }
 
+.bar-clear {
+  border-color: red; }
+
 * {
   font-family: "Quicksand" !important; }
 

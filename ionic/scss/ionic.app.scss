@@ -15,6 +15,7 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
+
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
@@ -33,6 +34,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   url('../fonts/QuicksandRegular.ttf') format('truetype'),
   url('../fonts/QuicksandRegular.woff') format('woff'),
   url('../fonts/QuicksandRegular.woff2') format('woff2');
+}
+
+.bar-clear {
+		border-color:red;
 }
 
 * {

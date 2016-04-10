@@ -24,3 +24,8 @@ ion-popover-view.fit ion-content {
   overflow: scroll;
   white-space: nowrap;
 }
+
+#menuitem { 
+	background-color: transparent;
+	border: transparent;
+}

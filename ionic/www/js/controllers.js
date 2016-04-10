@@ -1,6 +1,6 @@
 angular.module('aurora.controllers', [])
 
-.controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform) {
+.controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform, $background) {
     $scope.forecast = $kpAPI.getForecast();
     console.log($kpAPI.getForecast());
 
@@ -24,11 +24,12 @@ angular.module('aurora.controllers', [])
             kpnow.style.fontSize = viewportHeight/2 + "px";
         }
     };
-
+	
+	$scope.backgroundurl = $background.getBackground();
     $ionicPlatform.on('resume', $kpAPI.getForecast);
 })
 
-.controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation) {
+.controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background) {
     $scope.loadDefaults = function() {
         $scope.alerts    = true;
         $scope.kpTrigger = 1;
@@ -84,6 +85,7 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.changeKpTrigger     = function(kpTrigger) {
+        $localstorage.set('kpTrigger', kpTrigger);
         $push.changeKpTrigger(kpTrigger);
     };
 
@@ -109,16 +111,11 @@ angular.module('aurora.controllers', [])
             $scope.unregisterPush();
         }
     };
-
-    $scope.kpTriggerChange = function() {
-        $scope.kpTrigger = document.getElementById('kpTrigger').value;
-        $localstorage.set('kpTrigger', $scope.kpTrigger);
-        //update on server somehow
-    };
-
+	
     $scope.loadSettings();
     $scope.outputSettings(false);
-
+	$scope.backgroundurl = $background.getBackground();
+	
     $ionicPopover.fromTemplateUrl('popover-lkpa.html', {
         scope: $scope,
     }).then(function(popover) {
@@ -138,10 +135,12 @@ angular.module('aurora.controllers', [])
     });
 })
 
-.controller('AboutCtrl', function($scope) {})
+.controller('AboutCtrl', function($scope, $background) {
+	$scope.backgroundurl = $background.getBackground();
+})
 
-.controller('AllskyCtrl', function($scope) {})
+.controller('AllskyCtrl', function($scope, $background) {
+	$scope.backgroundurl = $background.getBackground();
+})
 
-.controller('NotificationCtrl', function($scope, $push) {
-
-});
+.controller('NotificationCtrl', function($scope, $push) {});

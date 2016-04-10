@@ -251,4 +251,59 @@ angular.module('aurora.services', [])
             return latestForecast;
         }
     };
+})
+
+.factory('$background', function($kpAPI) {
+	backgroundlist = [
+		{
+			id: 1,
+			url: "../../img/background-none.jpg"
+		},
+		{
+			id: 2,
+			url: "../../img/background-low.jpg"
+		},
+		{
+			id: 3,
+			url: "../../img/background-moderate.jpg"	
+		},
+		{
+			id: 4,
+			url: "../../img/background-high.jpg"
+		}
+	]	
+	
+	return {
+		getBackground : function() {
+			forecast = $kpAPI.getForecast();
+			var url = null;
+			//forecast.now = 2;
+			switch(forecast.now)
+			{
+				case 1:
+				case 2:
+				case 3:
+					url = backgroundlist[0].url;
+					break;
+				case 4:
+				case 5:
+					url = backgroundlist[1].url;
+					break;
+				case 6:
+				case 7:
+					url = backgroundlist[2].url;
+					break;
+				case 8:
+				case 9:
+					url = backgroundlist[3].url;
+					break;
+				default:
+					url = backgroundlist[0].url;
+					break;
+			}
+			return url;
+		}
+	}
 });
+
+
