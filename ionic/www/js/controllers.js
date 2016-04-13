@@ -25,8 +25,12 @@ angular.module('aurora.controllers', [])
         }
     };
 	
-	$scope.backgroundurl = $background.getBackground();
-    $ionicPlatform.on('resume', $kpAPI.getForecast);
+    $scope.backgroundurl = $background.getBackground();
+
+    $ionicPlatform.on('resume', function() {
+        $scope.forecast = $kpAPI.getForecast();
+        $scope.backgroundurl = $background.getBackground();
+    });
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background) {
