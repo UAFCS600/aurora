@@ -102,34 +102,6 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
                 controller: 'SettingsCtrl'
             }
         }
-    })
-
-    .state('app.location', {
-        url: '/location',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/setting-location.html',
-            }
-        }
-    })
-
-    .state('app.kpAlert', {
-        url: '/kpAlert',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/setting-kpa.html',
-                controller: 'SettingsCtrl',
-            }
-        }
-    })
-
-    .state('app.allskyAlert', {
-        url: '/allskyAlert',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/setting-allsky.html',
-            }
-        }
     });
 
     // if none of the above states are matched, use this as the fallback

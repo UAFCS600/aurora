@@ -115,24 +115,6 @@ angular.module('aurora.controllers', [])
     $scope.loadSettings();
     $scope.outputSettings(false);
 	$scope.backgroundurl = $background.getBackground();
-	
-    $ionicPopover.fromTemplateUrl('popover-lkpa.html', {
-        scope: $scope,
-    }).then(function(popover) {
-        $scope.poplkpa = popover;
-    });
-
-    $ionicPopover.fromTemplateUrl('popover-lDay.html', {
-        scope: $scope,
-    }).then(function(popover) {
-        $scope.poplDay = popover;
-    });
-
-    $ionicPopover.fromTemplateUrl('popover-lAlert.html', {
-        scope: $scope,
-    }).then(function(popover) {
-        $scope.poplAlert = popover;
-    });
 })
 
 .controller('AboutCtrl', function($scope, $background) {
