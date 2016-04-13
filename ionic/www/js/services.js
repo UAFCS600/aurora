@@ -271,7 +271,7 @@ angular.module('aurora.services', [])
 			id: 4,
 			url: "../../img/background-high.jpg"
 		}
-	]	
+	];
 	
 	return {
 		getBackground : function() {
@@ -303,7 +303,7 @@ angular.module('aurora.services', [])
 			}
 			return url;
 		}
-	}
+	};
 });
 
 
