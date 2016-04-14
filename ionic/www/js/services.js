@@ -205,6 +205,8 @@ angular.module('aurora.services', [])
         if(theMin < 10) { theMin = "00"; }
         var AMorPM = theHour < 12 ? "am" : "pm";
         if(theHour > 12) { theHour -= 12; }
+        else if(theHour == '00') {theHour = '12';}
+        else if(theHour[0] == '0') {theHour = theHour[1];}
         var theDate = dateObject.getDate();
         var theMonth = months[dateObject.getMonth()];
 
