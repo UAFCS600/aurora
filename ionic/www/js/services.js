@@ -257,19 +257,19 @@ angular.module('aurora.services', [])
 	backgroundlist = [
 		{
 			id: 1,
-			url: "../../img/background-none.jpg"
+			url: "img/background-none.jpg"
 		},
 		{
 			id: 2,
-			url: "../../img/background-low.jpg"
+			url: "img/background-low.jpg"
 		},
 		{
 			id: 3,
-			url: "../../img/background-moderate.jpg"	
+			url: "img/background-moderate.jpg"	
 		},
 		{
 			id: 4,
-			url: "../../img/background-high.jpg"
+			url: "img/background-high.jpg"
 		}
 	];
 	
