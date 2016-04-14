@@ -194,35 +194,38 @@ angular.module('aurora.services', [])
         $localstorage.setObject('forecast', forecast);
     };
 
-    updateForecast = function() {
-        $http.get(apiURL + 'd=d').success(function(data) {
-            var jsonData = {};
-            //Convert array to JSON object
+    formatTime = function(timeStr) {
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        
+        var dateObject = new Date(timeStr.substring(0,10));
+        var theDay = days[dateObject.getDay()];
+        var theHour = timeStr.substring(11,13);
+        var theMin = timeStr.substring(14,16);
+        if(theMin < 10) { theMin = "00"; }
+        var AMorPM = theHour < 12 ? "am" : "pm";
+        if(theHour > 12) { theHour -= 12; }
+        var theDate = dateObject.getDate();
+        var theMonth = months[dateObject.getMonth()];
 
-            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        var time = theHour + ":" + theMin + AMorPM;
+        var date = theDay + "," + theMonth + " " + theDate;
+
+        return {time, date};
+    }
+
+    updateForecast = function() {
+        $http.get(apiURL + 'd=d&f=t').success(function(data) {
+            var jsonData = {};
 
             for (var i = 0; i < data.data.length; i++) {
                 jsonData['kp' + i]      = {};
                 jsonData['kp' + i].kp   = data.data[i].kp;
 
-                var dateObject = new Date(data.data[i].predicted_time.substring(0,16));
-                var theDay = days[dateObject.getDay()];
-                var theHour = dateObject.getHours();
-                var theMin = dateObject.getMinutes();
-                if(theMin < 10) { theMin = "0" + theMin; }
-                var AMorPM = theHour < 12 ? "am" : "pm";
-                if(theHour > 12) { theHour -= 12; }
-                var theDate = dateObject.getDate();
-                var theMonth = months[dateObject.getMonth()];
-                //var theYear = dateObject.getFullYear();
+                var time = formatTime(data.data[i].predicted_time);
 
-                var timeString = theHour + ":" + theMin + AMorPM;
-                var dateString = theDay + "," + theMonth + " " + theDate;// + ", " + theYear;
-
-                jsonData['kp' + i].time = timeString;
-                jsonData['kp' + i].date = dateString;
-
+                jsonData['kp' + i].time = time.time;
+                jsonData['kp' + i].date = time.date;
             }
 
             latestForecast = jsonData;
@@ -232,7 +235,7 @@ angular.module('aurora.services', [])
             console.log(error);
         });
 
-        $http.get(apiURL + 'd=n').success(function(data) {
+        $http.get(apiURL + 'd=n&f=t').success(function(data) {
             latestForecast.now = Math.floor(data.data[0].kp);
             saveForecast(latestForecast);
         }).error(function(error) {
