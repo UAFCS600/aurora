@@ -1,24 +1,53 @@
 angular.module('aurora.controllers', [])
 
-.controller('DashCtrl', function($scope, $push, $geolocation, $kpAPI) {
+.controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform, $background) {
+    $scope.forecast = $kpAPI.getForecast();
     console.log($kpAPI.getForecast());
+
+    var viewportHeight = window.innerHeight;
+    if(viewportHeight > 300)
+    {
+        var kpnow = document.getElementById("kp-now");
+        kpnow.style.height = viewportHeight/2 + "px";
+        kpnow.style.lineHeight = viewportHeight/2 + "px";
+        kpnow.style.fontSize = viewportHeight/2 + "px";
+    }
+
+
+    window.onresize = function() {
+        var viewportHeight = window.innerHeight;
+        if(viewportHeight > 300)
+        {
+            var kpnow = document.getElementById("kp-now");
+            kpnow.style.height = viewportHeight/2 + "px";
+            kpnow.style.lineHeight = viewportHeight/2 + "px";
+            kpnow.style.fontSize = viewportHeight/2 + "px";
+        }
+    };
+	
+    $scope.backgroundurl = $background.getBackground();
+
+    $ionicPlatform.on('resume', function() {
+        $scope.forecast = $kpAPI.getForecast();
+        $scope.backgroundurl = $background.getBackground();
+    });
 })
 
-.controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation) {
+.controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background) {
     $scope.loadDefaults = function() {
-        $scope.alerts      = true;
-        $scope.kpTrigger   = 1;
-		$scope.daytime	   = false;
-        $scope.gps         = false;
-        $scope.zip         = 90210;
+        $scope.alerts    = true;
+        $scope.kpTrigger = 1;
+        $scope.daytime   = false;
+        $scope.gps       = false;
+        $scope.zip       = 90210;
     };
 
     $scope.loadSettings = function() {
-        $scope.alerts      = $localstorage.get('alerts');
-        $scope.kpTrigger   = $localstorage.get('kpTrigger');
-		$scope.daytime	   = $localstorage.get('daytime');
-        $scope.gps         = $localstorage.get('gps');
-        $scope.zip         = $localstorage.get('zip');
+        $scope.alerts    = $localstorage.get('alerts');
+        $scope.kpTrigger = $localstorage.get('kpTrigger');
+        $scope.daytime   = $localstorage.get('daytime');
+        $scope.gps       = $localstorage.get('gps');
+        $scope.zip       = $localstorage.get('zip');
 
         if (typeof $scope.alerts == 'undefined') {
             $scope.loadDefaults();
@@ -35,10 +64,10 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.outputSettings = function(asAlert) {
-        data = {'alerts' : $scope.alerts, 
-                'kpTrigger' : $scope.kpTrigger, 
+        data = {'alerts' : $scope.alerts,
+                'kpTrigger' : $scope.kpTrigger,
 				'daytime' : $scope.daytime,
-                'gps' : $scope.gps, 
+                'gps' : $scope.gps,
                 'zip' : $scope.zip};
 
         if(asAlert)
@@ -48,60 +77,56 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.requestPush         = function() {
-    $push.requestTestPushNotification();
+        $push.requestTestPushNotification();
     };
-    
+
     $scope.initPush            = function() {
-    $push.initPushNotifications();
+        $push.initPushNotifications();
     };
-    
+
+    $scope.unregisterPush      = function() {
+        $push.unregister();
+    };
+
+    $scope.changeKpTrigger     = function(kpTrigger) {
+        $localstorage.set('kpTrigger', kpTrigger);
+        $push.changeKpTrigger(kpTrigger);
+    };
+
     $scope.showGeoLocationInfo = function() {
         $geolocation.showGeoLocationInfo();
     };
 
     $scope.geolocationToggled = function() {
-        $localstorage.set('gps', !$scope.gps);
+        $scope.gps = !$localstorage.get('gps');
+        $localstorage.set('gps', $scope.gps);
         console.log('AURORA: GPS toggled!');
     };
 
+    $scope.alertsToggled = function() {
+        $scope.alerts = !$localstorage.get('alerts');
+        $localstorage.set('alerts', $scope.alerts);
+        console.log('AURORA: Alerts toggled!');
+
+        if($scope.alerts) {
+            $scope.initPush();
+        }
+        else {
+            $scope.unregisterPush();
+        }
+    };
+	
     $scope.loadSettings();
     $scope.outputSettings(false);
-
-    $ionicPopover.fromTemplateUrl('popover-lkpa.html', {
-        scope: $scope,
-    }).then(function(popover) {
-        $scope.poplkpa = popover;
-    });
-
-    $ionicPopover.fromTemplateUrl('popover-lDay.html', {
-        scope: $scope,
-    }).then(function(popover) {
-        $scope.poplDay = popover;
-    });
-
-    $ionicPopover.fromTemplateUrl('popover-lAlert.html', {
-        scope: $scope,
-    }).then(function(popover) {
-        $scope.poplAlert = popover;
-    });
+	$scope.backgroundurl = $background.getBackground();
 })
 
-.controller('AboutCtrl', function($scope) {})
-
-.controller('AllskyCtrl', function($scope) {})
-
-.controller('NotificationCtrl', function($scope, $push) {
-    
+.controller('AboutCtrl', function($scope, $background) {
+	$scope.backgroundurl = $background.getBackground();
 })
 
-.controller('MenuCtrl', function($scope, $ionicSideMenuDelegate) {
-    $scope.toggleLeft = function() {
-        $ionicSideMenuDelegate.toggleLeft();
-    };
+.controller('AllskyCtrl', function($scope, $background) {
+	$scope.backgroundurl = $background.getBackground();
+})
 
-    $scope.toggleRight = function() {
-        $ionicSideMenuDelegate.toggleRight();
-    };
-
-    console.log('in MenuCtrl');
-});
+.controller('NotificationCtrl', function($scope, $push) {});

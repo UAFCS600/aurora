@@ -57,81 +57,53 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
     $stateProvider
 
     // setup an abstract state for the tabs directive
-        .state('tab', {
-        url: '/tab',
+    .state('app', {
+        url: '/app',
         abstract: true,
-        templateUrl: 'templates/tabs.html'
+        templateUrl: 'templates/menu.html'
     })
 
     // Each tab has its own nav history stack:
-    .state('tab.dash', {
+    .state('app.dash', {
         url: '/dash',
         views: {
-            'tab-dash': {
+            'menuContent': {
                 templateUrl: 'templates/tab-dash.html',
                 controller: 'DashCtrl'
             }
         }
     })
 
-    .state('tab.settings', {
-        url: '/settings',
-        views: {
-            'tab-settings': {
-                templateUrl: 'templates/tab-settings.html',
-                controller: 'SettingsCtrl'
-            }
-        }
-    })
-
-    .state('tab.location', {
-        url: '/location',
-        views: {
-            'tab-settings': {
-                templateUrl: 'templates/setting-location.html',
-            }
-        }
-    })
-
-    .state('tab.kpAlert', {
-        url: '/kpAlert',
-        views: {
-            'tab-settings': {
-                templateUrl: 'templates/setting-kpa.html',
-                controller: 'SettingsCtrl',
-            }
-        }
-    })
-
-    .state('tab.allskyAlert', {
-        url: '/allskyAlert',
-        views: {
-            'tab-settings': {
-                templateUrl: 'templates/setting-allsky.html',
-            }
-        }
-    })
-
-    .state('tab.about', {
+    .state('app.about', {
         url: '/about',
         views: {
-            'tab-about': {
+            'menuContent': {
                 templateUrl: 'templates/tab-about.html',
                 controller: 'AboutCtrl'
             }
         }
     })
 
-    .state('tab.allsky', {
+    .state('app.allsky', {
         url: '/allsky',
         views: {
-            'tab-allsky': {
+            'menuContent': {
                 templateUrl: 'templates/tab-allsky.html',
                 controller: 'AllskyCtrl'
+            }
+        }
+    })
+	
+    .state('app.settings', {
+        url: '/settings',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/tab-settings.html',
+                controller: 'SettingsCtrl'
             }
         }
     });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/tab/dash');
+    $urlRouterProvider.otherwise('/app/dash');
 });

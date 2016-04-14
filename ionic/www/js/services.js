@@ -23,6 +23,7 @@ angular.module('aurora.services', [])
 
 //Push notification services
 .factory('$push', function($http, $location, $localstorage) {
+    var push      = false;
     var gcmID     = '209803454821'; // this is static for GCM
     var apnsId    = ''; //Apple iTunes App ID
     var windowsId = ''; //Windows Store ID
@@ -69,6 +70,7 @@ angular.module('aurora.services', [])
         postToPushServer(postData, function(response) {
             if(response.status == 200) {
                 console.log("AURORA: " + "Key has been added to push server!");
+                $localstorage.set('pushToken', data.registrationId);
             }
         }, function(response) {
             console.log("AURORA: " + "Key has not been added to the push server!");
@@ -96,7 +98,7 @@ angular.module('aurora.services', [])
             });
         },
         initPushNotifications : function() {
-            var push = PushNotification.init(initData);
+            push = PushNotification.init(initData);
 
             if (push) {
                 console.log("AURORA: " + "Push notification service successfully initialized.");
@@ -119,6 +121,28 @@ angular.module('aurora.services', [])
             push.on('notification', receivedNotification);
 
             push.on('error', receivedError);
+        },
+        unregister : function() {
+            push.unregister(function() {
+                console.log('AURORA: Push notifications unregistered.');
+            }, function() {
+                console.log('AURORA: Could not unregisted push notifications.');
+            });
+        },
+        changeKpTrigger : function(kpTrigger) {
+            var registrationId = $localstorage.get('pushToken');
+
+            var postData = {
+                'changeKpTrigger' : true,
+                'token' : registrationId,
+                'kpTrigger' : kpTrigger
+            };
+
+            postToPushServer(postData, function() {
+                console.log("AURORA: kpTrigger changed!");
+            }, function() {
+                console.log("AURORA: Could not change kpTrigger.");
+            });
         }
     };
 })
@@ -159,27 +183,6 @@ angular.module('aurora.services', [])
     var latestForecast;
     var apiURL = 'http://cs472.gi.alaska.edu/kp.php?';
 
-    saveForecast = function(forecast) {
-        $localstorage.setObject('forecast', forecast);
-    };
-
-    updateForecast = function() {
-        $http.get(apiURL + 'd=h').success(function(data) {
-            var jsonData = {};
-            //Convert array to JSON object
-            for (var i = 0; i < data.data.length - 1; i++) {
-                jsonData['val' + i] = data.data[i];
-            }
-
-            latestForecast = jsonData;
-            saveForecast(latestForecast);
-            //Finish writing
-        }).error(function(error) {
-            //Finish writing
-            console.log(error);
-        });
-    };
-
     loadForecastFromStorage = function() {
         latestForecast = $localstorage.getObject('forecast');
 
@@ -187,14 +190,125 @@ angular.module('aurora.services', [])
             updateForecast();
     };
 
-    getForecast = function() {
-        if(typeof latestForecast == 'undefined')
-            loadForecastFromStorage();
-
-        return latestForecast;
+    saveForecast = function(forecast) {
+        $localstorage.setObject('forecast', forecast);
     };
 
-    // window.setInterval(function() {updateForecast();}, 1000);
+    formatTime = function(timeStr) {
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        
+        var dateObject = new Date(timeStr.substring(0,10));
+        var theDay = days[dateObject.getDay()];
+        var theHour = timeStr.substring(11,13);
+        var theMin = timeStr.substring(14,16);
+        if(theMin < 10) { theMin = "00"; }
+        var AMorPM = theHour < 12 ? "am" : "pm";
+        if(theHour > 12) { theHour -= 12; }
+        else if(theHour == '00') {theHour = '12';}
+        else if(theHour[0] == '0') {theHour = theHour[1];}
+        var theDate = dateObject.getDate();
+        var theMonth = months[dateObject.getMonth()];
 
-    return {saveForecast, updateForecast, loadForecastFromStorage, getForecast};
+        var time = theHour + ":" + theMin + AMorPM;
+        var date = theDay + "," + theMonth + " " + theDate;
+
+        return {time, date};
+    }
+
+    updateForecast = function() {
+        $http.get(apiURL + 'd=d&f=t').success(function(data) {
+            var jsonData = {};
+
+            for (var i = 0; i < data.data.length; i++) {
+                jsonData['kp' + i]      = {};
+                jsonData['kp' + i].kp   = data.data[i].kp;
+
+                var time = formatTime(data.data[i].predicted_time);
+
+                jsonData['kp' + i].time = time.time;
+                jsonData['kp' + i].date = time.date;
+            }
+
+            latestForecast = jsonData;
+            console.log('Updated KP data.');
+        }).error(function(error) {
+            //Finish writing
+            console.log(error);
+        });
+
+        $http.get(apiURL + 'd=n&f=t').success(function(data) {
+            latestForecast.now = Math.floor(data.data[0].kp);
+            saveForecast(latestForecast);
+        }).error(function(error) {
+            //Finish writing
+            console.log(error);
+        });
+    };
+
+    return {
+        getForecast : function() {
+            window.setInterval(updateForecast, 1000*60*15);
+            updateForecast(); //TODO: Needs to be removed on production
+            if(typeof latestForecast == 'undefined')
+                loadForecastFromStorage();
+
+            return latestForecast;
+        }
+    };
+})
+
+.factory('$background', function($kpAPI) {
+	backgroundlist = [
+		{
+			id: 1,
+			url: "img/background-none.jpg"
+		},
+		{
+			id: 2,
+			url: "img/background-low.jpg"
+		},
+		{
+			id: 3,
+			url: "img/background-moderate.jpg"	
+		},
+		{
+			id: 4,
+			url: "img/background-high.jpg"
+		}
+	];
+	
+	return {
+		getBackground : function() {
+			forecast = $kpAPI.getForecast();
+			var url = null;
+			//forecast.now = 2;
+			switch(forecast.now)
+			{
+				case 1:
+				case 2:
+				case 3:
+					url = backgroundlist[0].url;
+					break;
+				case 4:
+				case 5:
+					url = backgroundlist[1].url;
+					break;
+				case 6:
+				case 7:
+					url = backgroundlist[2].url;
+					break;
+				case 8:
+				case 9:
+					url = backgroundlist[3].url;
+					break;
+				default:
+					url = backgroundlist[0].url;
+					break;
+			}
+			return url;
+		}
+	};
 });
+
+

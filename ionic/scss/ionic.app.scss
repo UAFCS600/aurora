@@ -15,6 +15,7 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
+
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
@@ -35,8 +36,48 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   url('../fonts/QuicksandRegular.woff2') format('woff2');
 }
 
+.bar-clear {
+		border-color:red;
+}
+
 * {
 	font-family: "Quicksand" !important;
+  color: white !important;
+}
+
+#kp-now {
+  vertical-align: middle;
+	text-align: center;
+}
+
+#kp-forecast {
+    position: fixed;
+    bottom: 0px;
+}
+
+.forecast {
+    text-align:center;
+}
+
+#kp-kp {
+    margin-top: 4%;
+    margin-bottom: 4%;
+    font-weight: bold;
+    font-size: 200%;
+}
+
+.scroll {
+    height: 100%;
+}
+
+@media (max-height: 300px) {
+  #kp-now {
+    vertical-align: middle;
+    text-align: center;
+    height: 50px !important;
+    line-height: 50px !important;
+    font-size: 50px !important;
+  }
 }
 
 // Include all of Ionic
