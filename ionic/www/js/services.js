@@ -213,7 +213,7 @@ angular.module('aurora.services', [])
         var time = theHour + ":" + theMin + AMorPM;
         var date = theDay + "," + theMonth + " " + theDate;
 
-        return {time, date};
+        return {'time':time, 'date':date};
     };
 
     updateForecast = function() {
