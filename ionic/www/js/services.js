@@ -214,7 +214,7 @@ angular.module('aurora.services', [])
         var date = theDay + "," + theMonth + " " + theDate;
 
         return {time, date};
-    }
+    };
 
     updateForecast = function() {
         $http.get(apiURL + 'd=d&f=t').success(function(data) {
