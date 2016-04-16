@@ -197,6 +197,8 @@ angular.module('aurora.services', [])
     };
 
     formatTime = function(timeStr) {
+        // source: http://stackoverflow.com/questions/14638018/current-time-formatting-with-javascript
+
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
