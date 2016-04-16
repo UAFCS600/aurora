@@ -22,7 +22,7 @@ angular.module('aurora.services', [])
 }])
 
 //Push notification services
-.factory('$push', function($http, $location, $localstorage) {
+.factory('$push', function($http, $location, $localstorage, $kpAPI) {
     var push      = false;
     var gcmID     = '209803454821'; // this is static for GCM
     var apnsId    = ''; //Apple iTunes App ID
@@ -46,9 +46,11 @@ angular.module('aurora.services', [])
     };
 
     receivedNotification = function(data) {
-        //Switch to notification view somehow
-        alert("Notification: " + JSON.stringify(data.message));
-        console.log("AURORA: " + data.message);
+        var message = JSON.parse(data.message);
+        var kpTrigger = message.kpTrigger;
+        $kpAPI.setNow(kpTrigger);
+
+        console.log("AURORA: " + kpTrigger);
         console.log("AURORA: " + data.title);
         console.log("AURORA: " + data.count);
         console.log("AURORA: " + data.sound);
@@ -238,7 +240,7 @@ angular.module('aurora.services', [])
         });
 
         $http.get(apiURL + 'd=n&f=t').success(function(data) {
-            latestForecast.now = Math.floor(data.data[0].kp);
+            latestForecast.now = Math.ceil(data.data[0].kp);
             saveForecast(latestForecast);
         }).error(function(error) {
             //Finish writing
@@ -248,12 +250,18 @@ angular.module('aurora.services', [])
 
     return {
         getForecast : function() {
-            window.setInterval(updateForecast, 1000*60*15);
-            updateForecast(); //TODO: Needs to be removed on production
+            updateForecast();
             if(typeof latestForecast == 'undefined')
                 loadForecastFromStorage();
 
             return latestForecast;
+        },
+        setNow : function(kpNow) {
+            if(typeof latestForecast == 'undefined')
+                loadForecastFromStorage();
+
+            latestForecast.now = kpNow;
+            saveForecast(latestForecast);
         }
     };
 })
