@@ -17,6 +17,9 @@ angular.module('aurora.services', [])
         },
         getObject: function(key) {
             return JSON.parse($window.localStorage[key] || '{}');
+        },
+        remove : function(key) {
+            localStorage.removeItem(key);
         }
     };
 }])
@@ -193,6 +196,7 @@ angular.module('aurora.services', [])
     };
 
     saveForecast = function(forecast) {
+        $localstorage.remove('forecast');
         $localstorage.setObject('forecast', forecast);
     };
 
@@ -224,7 +228,7 @@ angular.module('aurora.services', [])
         var ampm = theHour < 12 ? "am" : "pm";
         if(theHour > 12) { theHour -= 12; }
         else if(theHour < 12) { theHour[0] = ""; }
-        else if(theHour == 0) { theHour = 12; }
+        else if(theHour === 0) { theHour = 12; }
 
         var theMin = apiDate.getMinutes();
         if(theMin < 10) { theMin = "0" + theMin; }
