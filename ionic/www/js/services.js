@@ -197,22 +197,39 @@ angular.module('aurora.services', [])
     };
 
     formatTime = function(timeStr) {
+        // source: http://stackoverflow.com/questions/14638018/current-time-formatting-with-javascript
+
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        
-        var dateObject = new Date(timeStr.substring(0,10));
-        var theDay = days[dateObject.getDay()];
-        var theHour = timeStr.substring(11,13);
-        var theMin = timeStr.substring(14,16);
-        if(theMin < 10) { theMin = "00"; }
-        var AMorPM = theHour < 12 ? "am" : "pm";
-        if(theHour > 12) { theHour -= 12; }
-        else if(theHour == '00') {theHour = '12';}
-        else if(theHour[0] == '0') {theHour = theHour[1];}
-        var theDate = dateObject.getDate();
-        var theMonth = months[dateObject.getMonth()];
 
-        var time = theHour + ":" + theMin + AMorPM;
+        // timeStr is in format:
+        //      2016-04-17T21:01:00.0+00:00
+
+        var apiDate = new Date(timeStr); // this will always be Alaska time
+        var localDate = new Date();
+
+        // getTimezoneOffset gives: GMT - timeobject (480 for Alaska, which is GMT-8)
+        // so, adding 480 minutes to the Alaska time gives GMT
+        var apiOffset = apiDate.getTimezoneOffset();
+        var localOffset = localDate.getTimezoneOffset();
+        var apiToLocal = apiOffset - localOffset;
+
+        apiDate.setMinutes(apiDate.getMinutes() + apiToLocal);
+
+        var theDate = apiDate.getDate();
+        var theMonth = months[apiDate.getMonth()];
+        var theDay = days[apiDate.getDay()];
+        var theHour = apiDate.getHours();
+
+        var ampm = theHour < 12 ? "am" : "pm";
+        if(theHour > 12) { theHour -= 12; }
+        else if(theHour < 12) { theHour[0] = ""; }
+        else if(theHour == 0) { theHour = 12; }
+
+        var theMin = apiDate.getMinutes();
+        if(theMin < 10) { theMin = "0" + theMin; }
+
+        var time = theHour + ":" + theMin + ampm;
         var date = theDay + "," + theMonth + " " + theDate;
 
         return {'time':time, 'date':date};
@@ -278,14 +295,14 @@ angular.module('aurora.services', [])
 		},
 		{
 			id: 3,
-			url: "img/background-moderate.jpg"	
+			url: "img/background-moderate.jpg"
 		},
 		{
 			id: 4,
 			url: "img/background-high.jpg"
 		}
 	];
-	
+
 	return {
 		getBackground : function() {
 			forecast = $kpAPI.getForecast();
@@ -318,5 +335,3 @@ angular.module('aurora.services', [])
 		}
 	};
 });
-
-
