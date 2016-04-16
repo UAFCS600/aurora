@@ -122,7 +122,11 @@ angular.module('aurora.controllers', [])
 })
 
 .controller('AboutCtrl', function($scope, $background) {
-	$scope.backgroundurl = $background.getBackground();
+    $scope.backgroundurl = $background.getBackground();
+})
+
+.controller('FeedbackCtrl', function($scope, $background) {
+    $scope.backgroundurl = $background.getBackground();
 })
 
 .controller('AllskyCtrl', function($scope, $background) {

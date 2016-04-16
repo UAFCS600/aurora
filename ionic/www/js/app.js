@@ -74,6 +74,16 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
         }
     })
 
+    .state('app.feedback', {
+        url: '/feedback',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/tab-feedback.html',
+                controller: 'FeedbackCtrl'
+            }
+        }
+    })
+
     .state('app.about', {
         url: '/about',
         views: {
