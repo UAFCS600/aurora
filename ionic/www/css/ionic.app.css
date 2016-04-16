@@ -23,7 +23,8 @@ $dark:                            #444 !default;
   border-color: red; }
 
 * {
-  font-family: "Quicksand" !important; }
+  font-family: "Quicksand" !important;
+  color: white !important; }
 
 #kp-now {
   vertical-align: middle;
