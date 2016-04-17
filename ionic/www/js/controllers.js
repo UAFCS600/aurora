@@ -28,7 +28,7 @@ angular.module('aurora.controllers', [])
             kpnow.style.fontSize = viewportHeight/2 + "px";
         }
     };
-	
+
     $scope.backgroundurl = $background.getBackground();
 
     $ionicPlatform.on('resume', function() {
@@ -119,7 +119,7 @@ angular.module('aurora.controllers', [])
             $scope.unregisterPush();
         }
     };
-	
+
     $scope.loadSettings();
     $scope.outputSettings(false);
 	$scope.backgroundurl = $background.getBackground();

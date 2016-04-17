@@ -66,16 +66,28 @@ angular.module('aurora.services', [])
     };
 
     notificationServiceRegistered = function(data) {
-        postData = {
-            "service": "gcm",
-            "token": data.registrationId,
-            "kpTrigger": 6
-        };
+        if(ionic.Platform.isAndroid())
+        {
+            postData = {
+                "service": "gcm",
+                "token": data.registrationId,
+                "kpTrigger": 6
+            };
+        }
+        else if(ionic.Platform.isIOS())
+        {
+            postData = {
+                "service": "apns",
+                "token": data.registrationId,
+                "kpTrigger": 6
+            };
+        }
 
         postToPushServer(postData, function(response) {
             if(response.status == 200) {
                 console.log("AURORA: " + "Key has been added to push server!");
                 $localstorage.set('pushToken', data.registrationId);
+                alert(data.registrationId);
             }
         }, function(response) {
             console.log("AURORA: " + "Key has not been added to the push server!");
@@ -85,13 +97,26 @@ angular.module('aurora.services', [])
 
     return {
         requestTestPushNotification : function() {
-            postData = {
-                "test_push": true,
-                "kpTrigger": "",
-                "service": "gcm",
-                "method": "all",
-                "token": ""
-            };
+            if(ionic.Platform.isAndroid())
+            {
+                postData = {
+                    "test_push": true,
+                    "kpTrigger": "",
+                    "service": "gcm",
+                    "method": "all",
+                    "token": ""
+                };
+            }
+            else if(ionic.Platform.isIOS())
+            {
+                postData = {
+                    "test_push": true,
+                    "kpTrigger": "",
+                    "service": "apns",
+                    "method": "all",
+                    "token": ""
+                };
+            }
 
             postToPushServer(postData, function(response) {
                 if(response.status == 200) {
@@ -208,17 +233,18 @@ angular.module('aurora.services', [])
 
         // timeStr is in format:
         //      2016-04-17T21:01:00.0+00:00
-
-        var apiDate = new Date(timeStr); // this will always be Alaska time
+        // which is UTC
+        var apiDate = new Date(timeStr);
         var localDate = new Date();
 
-        // getTimezoneOffset gives: GMT - timeobject (480 for Alaska, which is GMT-8)
-        // so, adding 480 minutes to the Alaska time gives GMT
-        var apiOffset = apiDate.getTimezoneOffset();
+        // getTimezoneOffset gives: UTC - timeobject
+        // (480 minutes for Alaska, which is GMT-8)
+        // so, adding 480 minutes to the Alaska time gives UTC
         var localOffset = localDate.getTimezoneOffset();
-        var apiToLocal = apiOffset - localOffset;
 
-        apiDate.setMinutes(apiDate.getMinutes() + apiToLocal);
+        // this fixes the Date constructor always using the local device offset
+        // basically setting the apiDate to actual UTC
+        apiDate.setMinutes(apiDate.getMinutes() + localOffset);
 
         var theDate = apiDate.getDate();
         var theMonth = months[apiDate.getMonth()];
