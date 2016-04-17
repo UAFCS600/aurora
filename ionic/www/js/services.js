@@ -241,28 +241,32 @@ angular.module('aurora.services', [])
 
     updateForecast = function() {
         $http.get(apiURL + 'd=d&f=t').success(function(data) {
-            var jsonData = {};
+            if(data.data[0] != 'undefined') {
+                var jsonData = {};
 
-            for (var i = 0; i < data.data.length; i++) {
-                jsonData['kp' + i]      = {};
-                jsonData['kp' + i].kp   = data.data[i].kp;
+                for (var i = 0; i < data.data.length; i++) {
+                    jsonData['kp' + i]      = {};
+                    jsonData['kp' + i].kp   = data.data[i].kp;
 
-                var time = formatTime(data.data[i].predicted_time);
+                    var time = formatTime(data.data[i].predicted_time);
 
-                jsonData['kp' + i].time = time.time;
-                jsonData['kp' + i].date = time.date;
+                    jsonData['kp' + i].time = time.time;
+                    jsonData['kp' + i].date = time.date;
+                }
+
+                latestForecast = jsonData;
+                console.log('Updated KP data.');
             }
-
-            latestForecast = jsonData;
-            console.log('Updated KP data.');
         }).error(function(error) {
             //Finish writing
             console.log(error);
         });
 
         $http.get(apiURL + 'd=n&f=t').success(function(data) {
-            latestForecast.now = Math.ceil(data.data[0].kp);
-            saveForecast(latestForecast);
+            if(data.data[0] != 'undefined') {
+                latestForecast.now = Math.ceil(data.data[0].kp);
+                saveForecast(latestForecast);
+            }
         }).error(function(error) {
             //Finish writing
             console.log(error);
@@ -311,7 +315,7 @@ angular.module('aurora.services', [])
 		getBackground : function() {
 			forecast = $kpAPI.getForecast();
 			var url = null;
-			//forecast.now = 2;
+
 			switch(forecast.now)
 			{
 				case 1:
