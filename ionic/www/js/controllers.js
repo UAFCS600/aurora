@@ -2,7 +2,11 @@ angular.module('aurora.controllers', [])
 
 .controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform, $background) {
     $scope.forecast = $kpAPI.getForecast();
-    console.log($kpAPI.getForecast());
+
+    var checkKpNow = function() {
+        if(!$scope.forecast.now)
+            $scope.forecast.now = 0;
+    }
 
     var viewportHeight = window.innerHeight;
     if(viewportHeight > 300)
@@ -33,7 +37,7 @@ angular.module('aurora.controllers', [])
     });
 })
 
-.controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background) {
+.controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background, $ionicPlatform) {
     $scope.loadDefaults = function() {
         $scope.alerts    = true;
         $scope.kpTrigger = 1;
@@ -119,18 +123,29 @@ angular.module('aurora.controllers', [])
     $scope.loadSettings();
     $scope.outputSettings(false);
 	$scope.backgroundurl = $background.getBackground();
+
+    $ionicPlatform.on('resume', function() {
+        $scope.backgroundurl = $background.getBackground();
+    });
 })
 
-.controller('AboutCtrl', function($scope, $background) {
+.controller('AboutCtrl', function($scope, $background, $ionicPlatform) {
     $scope.backgroundurl = $background.getBackground();
+    $ionicPlatform.on('resume', function() {
+        $scope.backgroundurl = $background.getBackground();
+    });
 })
 
-.controller('FeedbackCtrl', function($scope, $background) {
+.controller('FeedbackCtrl', function($scope, $background, $ionicPlatform) {
     $scope.backgroundurl = $background.getBackground();
+    $ionicPlatform.on('resume', function() {
+        $scope.backgroundurl = $background.getBackground();
+    });
 })
 
-.controller('AllskyCtrl', function($scope, $background) {
+.controller('AllskyCtrl', function($scope, $background, $ionicPlatform) {
 	$scope.backgroundurl = $background.getBackground();
-})
-
-.controller('NotificationCtrl', function($scope, $push) {});
+    $ionicPlatform.on('resume', function() {
+        $scope.backgroundurl = $background.getBackground();
+    });
+});
