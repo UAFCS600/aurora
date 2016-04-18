@@ -6,7 +6,7 @@ angular.module('aurora.controllers', [])
     var checkKpNow = function() {
         if(!$scope.forecast.now)
             $scope.forecast.now = 0;
-    }
+    };
 
     var viewportHeight = window.innerHeight;
     if(viewportHeight > 300)
