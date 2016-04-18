@@ -254,10 +254,11 @@ angular.module('aurora.services', [])
         var ampm = theHour < 12 ? "am" : "pm";
         if(theHour > 12) { theHour -= 12; }
         else if(theHour < 12) { theHour[0] = ""; }
-        else if(theHour === 0) { theHour = 12; }
+        
+        if(theHour == '0') { theHour = "12"; }
 
         var theMin = apiDate.getMinutes();
-        if(theMin < 10) { theMin = "0" + theMin; }
+        if(theMin < 10) { theMin = "00"; }
 
         var time = theHour + ":" + theMin + ampm;
         var date = theDay + "," + theMonth + " " + theDate;
