@@ -87,7 +87,7 @@ angular.module('aurora.services', [])
             if(response.status == 200) {
                 console.log("AURORA: " + "Key has been added to push server!");
                 $localstorage.set('pushToken', data.registrationId);
-                alert(data.registrationId);
+                console.log(data.registrationId);
             }
         }, function(response) {
             console.log("AURORA: " + "Key has not been added to the push server!");
