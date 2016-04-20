@@ -33,7 +33,7 @@ angular.module('aurora.controllers', [])
     });
 })
 
-.controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background) {
+.controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background, ionicTimePicker) {
     $scope.loadDefaults = function() {
         $scope.alerts    = true;
         $scope.kpTrigger = 1;
@@ -119,6 +119,21 @@ angular.module('aurora.controllers', [])
     $scope.loadSettings();
     $scope.outputSettings(false);
 	$scope.backgroundurl = $background.getBackground();
+	
+	$scope.timeWindow = function()
+	{		
+		var time1 = {
+			callback: function (val) {      //Mandatory
+				if (typeof (val) === 'undefined') {
+					console.log('Time not selected');
+				} else {
+					var selectedTime = new Date(val * 1000);
+					console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), 'H :', selectedTime.getUTCMinutes(), 'M');
+				}
+			}
+		};
+		ionicTimePicker.openTimePicker(time1);
+	}
 })
 
 .controller('AboutCtrl', function($scope, $background) {

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
+angular.module('aurora', ['ionic', 'ionic-timepicker', 'aurora.controllers', 'aurora.services'])
 
 .run(function($ionicPlatform, $push) {
     $ionicPlatform.ready(function() {
@@ -116,4 +116,15 @@ angular.module('aurora', ['ionic', 'aurora.controllers', 'aurora.services'])
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/dash');
+})
+
+.config(function (ionicTimePickerProvider) {
+    var timePickerObj = {
+      inputTime: 64800,
+      format: 12,
+      step: 15,
+      setLabel: 'Set',
+      closeLabel: 'Close'
+    };
+    ionicTimePickerProvider.configTimePicker(timePickerObj);
 });
