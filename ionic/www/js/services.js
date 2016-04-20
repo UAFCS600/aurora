@@ -182,7 +182,9 @@ angular.module('aurora.services', [])
     return {
         showGeoLocationInfo : function() {
             var gps = $localstorage.get('gps', false);
-
+			
+			var idealKp='N/A';
+			
             if(gps) {
                 var options = {
                     enableHighAccuracy: true,
@@ -199,7 +201,8 @@ angular.module('aurora.services', [])
                         'Heading: ' + position.coords.heading + '\n' +
                         'Speed: ' + position.coords.speed + '\n' +
                         'Timestamp: ' + position.timestamp + '\n');*/
-						//geographic location geomagnetic pole as of 2015
+					
+					//geographic location geomagnetic pole as of 2015
 					var mslat = 80.375*Math.PI/180;
 					var mslong = -72.625*Math.PI/180;
 					
@@ -304,6 +307,20 @@ angular.module('aurora.services', [])
 					alert('Geomagnetic Latitude: ' + mlat + '\n' +
 						'Geomagnetic Longitude: ' + mlong + '\n' +
 						'Altitude: ' + malt);
+					
+					//using chart found here: https://www.spaceweatherlive.com/en/help/the-kp-index
+					idealKp='4';
+					if(mlat<58.3)
+						idealKp='5';
+					if(mlat<56.3)
+						idealKp='6';
+					if(mlat<54.2)
+						idealKp='7';
+					if(mlat<52.2)
+						idealKp='8';
+					if(mlat<50.1)
+						idealKp='9';
+					
                 }, function(error) {
                     alert('Code: ' + error.code + '\n' +
                         'Message: ' + error.message + '\n');
