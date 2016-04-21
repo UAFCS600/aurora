@@ -45,6 +45,43 @@ angular.module('aurora.controllers', [])
         $scope.gps       = false;
         $scope.zip       = 90210;
     };
+	
+	$scope.makeTimes = function() {
+		$scope.time1 =
+		{
+			'hours' : "08",
+			'minutes' : "00",
+			'half' : "AM",
+			'epoch' : 28800
+		}
+		$scope.time2 =
+		{
+			'hours' : "08",
+			'minutes' : "00",
+			'half' : "PM",
+			'epoch' : 72000
+		}
+		
+		console.log("Value of time1: " + $scope.time1);
+	}
+	
+	$scope.loadTimes = function() {
+		//if($scope.timesactive)	?
+		//if(numtimes>1)			?
+		$scope.time1 	 = $localstorage.getObject('time1');
+		$scope.time2 	 = $localstorage.getObject('time2');
+		console.log("Value of time1: " + $scope.time1);
+		if (typeof $scope.time1.hours == 'undefined')
+		{
+			$scope.makeTimes();
+			$scope.saveTimes();
+		}
+	}
+	
+	$scope.saveTimes = function() { 
+		$localstorage.setObject('time1', $scope.time1);
+		$localstorage.setObject('time2', $scope.time2);
+	}
 
     $scope.loadSettings = function() {
         $scope.alerts    = $localstorage.get('alerts');
@@ -121,22 +158,10 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.loadSettings();
+	$scope.loadTimes();
     $scope.outputSettings(false);
 	$scope.backgroundurl = $background.getBackground();
-	$scope.time1 =
-	{
-		'hours' : "08",
-		'minutes' : "00",
-		'half' : "AM",
-		'epoch' : 28800
-	}
-	$scope.time2 =
-	{
-		'hours' : "08",
-		'minutes' : "00",
-		'half' : "PM",
-		'epoch' : 72000
-	}
+	
 	
 	$scope.timeWindow = function(timeObj)
 	{		
