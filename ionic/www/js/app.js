@@ -120,7 +120,7 @@ angular.module('aurora', ['ionic', 'ionic-timepicker', 'aurora.controllers', 'au
 
 .config(function (ionicTimePickerProvider) {
     var timePickerObj = {
-      inputTime: 64800,
+      inputTime: 28800,
       format: 12,
       step: 15,
       setLabel: 'Set',

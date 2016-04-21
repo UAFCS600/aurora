@@ -464,7 +464,7 @@ angular.module('aurora.services', [])
 		getBackground : function() {
 			forecast = $kpAPI.getForecast();
 			var url = null;
-			forecast.now = 4;
+			//forecast.now = 5;
 			switch(forecast.now)
 			{
 				case 1:

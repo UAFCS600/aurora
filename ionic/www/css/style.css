@@ -32,20 +32,20 @@ ion-popover-view.fit ion-content {
 
 .ionic_timepicker_popup .heading {
 	background: #156178 !important;
-	background: linear-gradient(#392A7B,#056450) !important;
+	background: linear-gradient(#392A7B,#054F42) !important;
 }
 
 .ionic_timepicker_popup .button_set {
 	background: #156178 !important;
-	background: linear-gradient(#056450,#392A7B) !important;
+	background: linear-gradient(#054F42,#392A7B) !important;
 }
 
 .ionic_timepicker_popup .button_close {
 	background: #156178 !important;
-	background: linear-gradient(#056450,#392A7B) !important;
+	background: linear-gradient(#054F42,#392A7B) !important;
 }
 
 .ionic_timepicker_popup .popup {
-	background: #056450 !important;
-	background: radial-gradient(#056450,#392A7B) !important;
+	background: #054F42 !important;
+	background: radial-gradient(#054F42,#392A7B) !important;
 }
