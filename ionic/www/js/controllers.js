@@ -141,7 +141,7 @@ angular.module('aurora.controllers', [])
 	$scope.timeWindow = function(timeObj)
 	{		
 		var time = {
-			callback: function (val) {      //Mandatory
+			callback: function (val, tObj) {      //Mandatory
 				if (typeof (val) === 'undefined') {
 					console.log('Time not selected');
 				} else {
@@ -149,48 +149,48 @@ angular.module('aurora.controllers', [])
 					console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), 'H :', selectedTime.getUTCMinutes(), 'M');
 					
 					//Store value for loading window again
-					timeObj.epoch = val;
+					tObj.epoch = val;
 					
 					//AM vs PM
 					if(selectedTime.getUTCHours()>12)
-						timeObj.half = "PM";
+						tObj.half = "PM";
 					else
-						timeObj.half = "AM";
+						tObj.half = "AM";
 					
 					//Hours
 					var hour = (selectedTime.getUTCHours()%12);
 					if (selectedTime.getUTCHours() == 0 )
 					{
 						hour = 12;
-						timeObj.half = "PM";
+						tObj.half = "PM";
 					}
 					
 					if (selectedTime.getUTCHours() == 12)
 					{
 						hour = 12;
-						timeObj.half = "AM";
+						tObj.half = "AM";
 					}
 					
-					$scope.time.hours = hour.toString();
-					if(timeObj.length < 2)
+					tObj.hours = hour.toString();
+					if(tObj.hours.length < 2)
 					{
-						var temp = $scope.time.hours;
-						timeObj.hours = "0" + temp;
+						var temp = tObj.hours;
+						tObj.hours = "0" + temp;
 					}
 					
 					//Minutes 
 					var min = selectedTime.getUTCMinutes();
-					$scope.time.minutes = min.toString();
-					if(timeObj.minutes.length < 2)
+					tObj.minutes = min.toString();
+					if(tObj.minutes.length < 2)
 					{
-						var temp = timeObj.minutes;
-						timeObj.minutes = "0" + temp;
+						var temp = tObj.minutes;
+						tObj.minutes = "0" + temp;
 					}	
 				}
 			},
 			inputTime: timeObj.epoch
 		};
-		ionicTimePicker.openTimePicker(time);
+		ionicTimePicker.openTimePicker(time, timeObj);
 	}
 
     $ionicPlatform.on('resume', function() {

@@ -108,7 +108,7 @@ angular.module('ionic-timepicker.provider', [])
         $scope.time.format = $scope.mainObj.format;
       }
 
-      provider.openTimePicker = function (ipObj) {
+      provider.openTimePicker = function (ipObj, timeObj) {
         var buttons = [];
         $scope.mainObj = angular.extend({}, config, ipObj);
         setMinSecs($scope.mainObj.inputTime, $scope.mainObj.format);
@@ -128,7 +128,7 @@ angular.module('ionic-timepicker.provider', [])
             } else {
               totalSec = ($scope.time.hours * 60 * 60) + ($scope.time.minutes * 60);
             }
-            $scope.mainObj.callback(totalSec);
+            $scope.mainObj.callback(totalSec, timeObj);
           }
         });
 
@@ -138,7 +138,7 @@ angular.module('ionic-timepicker.provider', [])
         });
 
         $scope.popup = $ionicPopup.show({
-          templateUrl: 'ionic-timepicker.html',
+          templateUrl: 'lib/ionic-timepicker/src/ionic-timepicker.html',
           scope: $scope,
           cssClass: 'ionic_timepicker_popup',
           buttons: buttons
