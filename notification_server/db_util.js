@@ -67,8 +67,11 @@ dbUtil.prototype.updateClient = function(clientInfo, onSuccess, onFailure) {
 				}
 				else {
 					console.log('Changed ' + result.changedRows + ' rows');
-					success = true;
-					onSuccess('Updated registration.');
+					if(result.changedRows > 0) {
+						success = true;
+						onSuccess('Updated registration.');
+					}
+					else onFailure('No matching token.');
 				}
 
 				connection.release();
@@ -134,7 +137,7 @@ dbUtil.prototype.getTokens = function(onSuccess, onFailure) {
 			connection.release();
 		}
 	});
-}
+};
 
 dbUtil.prototype.close = function() {
 	this.pool.end(function (err) {
