@@ -478,7 +478,6 @@ angular.module('aurora.services', [])
                 }
 
                 latestForecast = jsonData;
-                console.log('Updated KP data.');
             }
         }).error(function(error) {
             //Finish writing
@@ -494,6 +493,8 @@ angular.module('aurora.services', [])
             //Finish writing
             console.log(error);
         });
+        
+        console.log('Updated KP data.');
     };
 
     return {
@@ -538,7 +539,6 @@ angular.module('aurora.services', [])
 		getBackground : function() {
             forecast     = $kpAPI.getForecast();
             var url      = null;
-            forecast.now = 5;
 			switch(forecast.now)
 			{
 				case 1:
