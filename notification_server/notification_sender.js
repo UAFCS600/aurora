@@ -41,12 +41,13 @@ var sendGCMMessages = function(kp, clients) {
 
     var message = new gcm.Message();
      
-    message.addData('message', '');
-     
+    message.addData('message', JSON.stringify({kptrigger:kp}));
+    
+    console.log('Using GCM Sender ID: ' + config.gcmApiKey);
     var sender = new gcm.Sender(config.gcmApiKey);
      
     sender.send(message, { registrationTokens: clients }, function (err, response) {
-        if(err) console.error(err);
+        if(err) console.log('Error: ' + err + '\nResponse: ' + response);
         else {
             var results    = response.results;
             var badClients = [];
