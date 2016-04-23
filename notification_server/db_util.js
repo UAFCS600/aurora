@@ -43,8 +43,49 @@ dbUtil.prototype.insertClient = function(clientInfo, onSuccess, onFailure) {
 	});
 };
 
+dbUtil.prototype.getQueryInfoFromClientInfo = function(clientInfo) {
+	query  = '';
+	params = [];
+
+	if(clientInfo.kpTrigger) {
+		if(query.length > 0) query += ', ';
+		query += 'kpTrigger = ?';
+		params.push(clientInfo.kpTrigger);
+	}
+
+	if(clientInfo.notify_start_time) {
+		if(query.length > 0) query += ', ';
+		query += 'notify_start_time = ?';
+		params.push(clientInfo.notify_start_time);
+	}
+
+	if(clientInfo.notify_stop_time) {
+		if(query.length > 0) query += ', ';
+		query += 'notify_stop_time = ?';
+		params.push(clientInfo.notify_stop_time);
+	}
+
+	if(clientInfo.latitude) {
+		if(query.length > 0) query += ', ';
+		query += 'latitude = ?';
+		params.push(clientInfo.latitude);
+	}
+
+	if(clientInfo.longitude) {
+		if(query.length > 0) query += ', ';
+		query += 'longitude = ?';
+		params.push(clientInfo.longitude);
+	}
+
+	if(clientInfo.token)
+		params.push(clientInfo.token);
+
+	return [query, params];
+};
+
 dbUtil.prototype.updateClient = function(clientInfo, onSuccess, onFailure) {
 	success = this.success;
+	var getUpdateQueryInfo = this.getQueryInfoFromClientInfo;
 
 	this.pool.getConnection(function(err, connection) {
 		if(err) {
@@ -53,8 +94,10 @@ dbUtil.prototype.updateClient = function(clientInfo, onSuccess, onFailure) {
 			onFailure(err);
 		}
 		else {
-			connection.query('UPDATE clients SET kpTrigger = ?, notify_start_time = ?, notify_stop_time = ? where token = ?',
-			[clientInfo.kpTrigger, clientInfo.notify_start_time, clientInfo.notify_stop_time, clientInfo.token],
+			var queryInfo = getUpdateQueryInfo(clientInfo);
+			var query = 'UPDATE clients SET ' + queryInfo[0] + ' where token = ?';
+			connection.query(query,
+			queryInfo[1],
 			function (err, result) {
 				if (err) {
 					console.log('Could not execute query: ' + err);
