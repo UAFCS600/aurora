@@ -66,13 +66,17 @@ var handlePostData = function(postData, onSuccess, onFailure) {
 };
 
 dispatcher.onError(function(req, res) {
-    console.log('Received request for nonexistent page. Sending 404.');
+    console.log('Received request for nonexistent page.\nSending 404.');
     res.writeHead(404);
     res.end('404 - NOT FOUND');
 });  
 
 dispatcher.onPost('/notification_service', function(req, res) {
-    console.log('Received post: ' + JSON.stringify(req.params));
+    var params = Object.keys(req.params)[0];
+    params = params.replace(/[\\]+/g, '');
+    params = JSON.parse(params);
+
+    console.log('Received post: ' + JSON.stringify(params));
     var onSuccess = function(successMessage) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end(JSON.stringify({message:successMessage}));
@@ -83,7 +87,7 @@ dispatcher.onPost('/notification_service', function(req, res) {
         res.end(JSON.stringify({err:errorMessage}));
     };
 
-    handlePostData(req.params, onSuccess, onFailure);
+    handlePostData(params, onSuccess, onFailure);
 });
 
 var handleRequest = function(request, response){
