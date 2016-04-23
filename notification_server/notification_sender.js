@@ -88,7 +88,7 @@ var sendKpToClients = function(kp) {
 
 var requestOptions = {
 	host: 'cs472.gi.alaska.edu',
-    path: '/kp.php?d=d'
+    path: '/kp.php?d=n'
 };
 
 var receivedResponse = function(response) {
