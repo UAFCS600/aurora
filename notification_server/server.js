@@ -72,9 +72,15 @@ dispatcher.onError(function(req, res) {
 });  
 
 dispatcher.onPost('/notification_service', function(req, res) {
-    var params = Object.keys(req.params)[0];
-    params = params.replace(/[\\]+/g, '');
-    params = JSON.parse(params);
+    var params;
+    try{
+        params = Object.keys(req.params)[0];
+        params = params.replace(/[\\]+/g, '');
+        params = JSON.parse(params);
+    }
+    catch(err) {
+        params = req.params;
+    }
 
     console.log('Received post: ' + JSON.stringify(params));
     var onSuccess = function(successMessage) {
