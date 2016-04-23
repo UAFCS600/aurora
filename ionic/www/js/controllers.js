@@ -42,7 +42,7 @@ angular.module('aurora.controllers', [])
         $scope.alerts    = true;
         $scope.kpTrigger = 1;
         $scope.daytime   = false;
-        $scope.gps       = false;
+        $scope.gps       = true;
         $scope.zip       = 90210;
     };
 	
@@ -61,6 +61,7 @@ angular.module('aurora.controllers', [])
 			'half' : "PM",
 			'epoch' : 72000
 		};
+        
 		console.log("Value of time1: " + $scope.time1);
 	};
 	
@@ -129,15 +130,17 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.changeKpTrigger     = function(kpTrigger) {
+        var info = {'kpTrigger':kpTrigger};
+
         $localstorage.set('kpTrigger', kpTrigger);
-        $push.changeKpTrigger(kpTrigger);
+        $push.updateInfo(info);
     };
 
     $scope.showGeoLocationInfo = function() {
         $geolocation.showGeoLocationInfo();
     };
 
-    $scope.geolocationToggled = function() {
+    $scope.geolocationToggled  = function() {
         $scope.gps = !$localstorage.get('gps');
         $localstorage.set('gps', $scope.gps);
         console.log('AURORA: GPS toggled!');
@@ -205,16 +208,16 @@ angular.module('aurora.controllers', [])
 					//Minutes 
 					var min = selectedTime.getUTCMinutes();
 					tObj.minutes = min.toString();
-					if(tObj.minutes.length < 2)
-					{
-						var temp2 = tObj.minutes;
-						tObj.minutes = "0" + temp2;
+					if(tObj.minutes.length < 2) {
+						var tempMin = tObj.minutes;
+						tObj.minutes = "0" + tempMin;
 					}	
 				}
 				scope.saveTimes();
 			},
 			inputTime: timeObj.epoch
 		};
+
 		ionicTimePicker.openTimePicker(time, timeObj, $scope);
 	};
 

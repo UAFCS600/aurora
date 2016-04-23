@@ -1,0 +1,28 @@
+{
+  "name": "aurora_notification_server",
+  "version": "1.0.0",
+  "description": "Server for sending push notifications for UAF Geophysical Institute",
+  "main": "server.js",
+  "dependencies": {
+    "httpdispatcher": "^1.0.0",
+    "mysql": "^2.10.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "=("
+  },
+  "keywords": [
+    "aurora",
+    "push",
+    "server",
+    "notifications",
+    "notification"
+  ],
+  "author": "UAF Computer Science Class of 2016",
+  "license": "MIT"
+}
