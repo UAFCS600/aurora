@@ -1,12 +1,13 @@
-var mysql = require('mysql');
+var mysql  = require('mysql');
+var config = require('./config.json');
 
-dbUtil = function() {};
+dbUtil     = function() {};
 
 dbUtil.prototype.success = false;
 dbUtil.prototype.pool = mysql.createPool({
 											host               : "localhost",
-											user               : "push",
-											password           : "pushpass",
+											user               : config.dbUser,
+											password           : config.dbPass,
 											database           : "push_notifications",
 											connectionLimit    : 30,
 											waitForConnections : true
@@ -40,11 +41,6 @@ dbUtil.prototype.insertClient = function(clientInfo, onSuccess, onFailure) {
 			});
 		}
 	});
-
-	// console.log('Waiting for database transaction to complete.');
-	// while(true);
-
-	// return success;
 };
 
 dbUtil.prototype.updateClient = function(clientInfo, onSuccess, onFailure) {
@@ -90,13 +86,13 @@ dbUtil.prototype.removeClient = function(clientInfo, onSuccess, onFailure) {
 			onFailure(err);
 		}
 		else {
-			connection.query('DELETE FROM clients Where token = ?',
+			connection.query('DELETE FROM clients WHERE token = ?',
 			[clientInfo.token],
 			function (err, result) {
-				if (err) {
-					console.log('Could not execute query: ' + err);
+				console.log(result);
+				if (err || result.affectedRows < 1) {
 					success = false;
-					onFailure(err);
+					onFailure((err ? err:'token does not exist.'));
 				}
 				else {
 					success = true;
@@ -109,8 +105,26 @@ dbUtil.prototype.removeClient = function(clientInfo, onSuccess, onFailure) {
 	});
 };
 
-dbUtil.prototype.getTokens = function(onSuccess, onFailure) {
+dbUtil.prototype.getTokens = function(kpTrigger, service, onSuccess, onFailure) {
 	success = this.success;
+	console.log('Trigger: ' + kpTrigger);
+
+	var getTimeNow  = function() {
+		var today   = new Date();
+		var hours   = today.getHours();
+		var minutes = today.getMinutes();
+		var seconds = today.getSeconds();
+
+		if(hours.length < 2)   hours   = '0' + hours;
+		if(minutes.length < 2) minutes = '0' + minutes;
+		if(seconds.length < 2) seconds = '0' + seconds;
+
+		var time = hours + ':' +
+				   minutes + ':' +
+				   seconds;
+
+		return time;
+	};
 
 	this.pool.getConnection(function(err, connection) {
 		if(err) {
@@ -119,7 +133,14 @@ dbUtil.prototype.getTokens = function(onSuccess, onFailure) {
 			onFailure(err);
 		}
 		else {
-			connection.query('SELECT token from clients', function(err, rows, fields) {
+			var timeRightNow = getTimeNow();
+			var query = "SELECT token FROM clients WHERE notify_start_time < '" + timeRightNow +
+			            "' AND notify_stop_time > '" + timeRightNow + "' AND kpTrigger <= '" + 
+			            kpTrigger + "' AND service = '" + service + "'";
+		    console.log('Query: ' + query);
+
+			connection.query(query,
+				function(err, rows, fields) {
 				if (err) {
 					console.log('Could not get tokens: ' + err);
 					onFailure(err);
@@ -129,7 +150,6 @@ dbUtil.prototype.getTokens = function(onSuccess, onFailure) {
 					for(var row in rows) {
 						retArr.push(rows[row].token);
 					}
-					console.log('Received tokens: ' + retArr);
 					onSuccess(retArr);
 				}
 			});
