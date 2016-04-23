@@ -46,40 +46,52 @@ angular.module('aurora.controllers', [])
     };
 	
 	$scope.makeTimes = function() {
-		$scope.time1 =
-		{
-			'hours' : "08",
-			'minutes' : "00",
-			'half' : "AM",
-			'epoch' : 28800
-		};
-		$scope.time2 =
-		{
-			'hours' : "08",
-			'minutes' : "00",
-			'half' : "PM",
-			'epoch' : 72000
+		$scope.notifyStartTime = {
+            'hours'  : "08",
+            'minutes': "00",
+            'half'   : "AM",
+            'epoch'  : 28800
+        };
+		$scope.notifyStopTime = {
+            'hours'  : "08",
+            'minutes': "00",
+            'half'   : "PM",
+            'epoch'  : 72000
 		};
         
-		console.log("Value of time1: " + $scope.time1);
+		console.log("Value of notifyStartTime: " + $scope.notifyStartTime);
 	};
 	
 	$scope.loadTimes = function() {
 		//if($scope.timesactive)	?
 		//if(numtimes>1)			?
-		$scope.time1 	 = $localstorage.getObject('time1');
-		$scope.time2 	 = $localstorage.getObject('time2');
-		console.log($scope.time1);
-		if (typeof $scope.time1.hours == 'undefined')
+		$scope.notifyStartTime 	 = $localstorage.getObject('notifyStartTime');
+		$scope.notifyStopTime 	 = $localstorage.getObject('notifyStopTime');
+		console.log($scope.notifyStartTime);
+		if (typeof $scope.notifyStartTime.hours == 'undefined')
 		{
 			$scope.makeTimes();
 			$scope.saveTimes();
 		}
 	};
+
+    $scope.formatTimeForPushServer = function(time) {
+        var hours   = time.hours;
+        var minutes = time.minutes;
+        if(time.half == 'PM' && hours != 12) hours = parseInt(hours) + 12;
+        if(time.half == 'AM' && hours == 12) hours = '00';
+
+        return (hours + ':' + minutes + ':00');
+    };
 	
-	$scope.saveTimes = function() { 
-		$localstorage.setObject('time1', $scope.time1);
-		$localstorage.setObject('time2', $scope.time2);
+	$scope.saveTimes = function() {
+		$localstorage.setObject('notifyStartTime', $scope.notifyStartTime);
+		$localstorage.setObject('notifyStopTime', $scope.notifyStopTime);
+        
+        var notifyStartTime = $scope.formatTimeForPushServer($scope.notifyStartTime);
+        var notifyStopTime  = $scope.formatTimeForPushServer($scope.notifyStopTime);
+
+        $push.updateInfo({'notify_start_time':notifyStartTime, 'notify_stop_time':notifyStopTime});
 	};
 
     $scope.loadSettings  = function() {
@@ -104,11 +116,13 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.outputSettings = function(asAlert) {
-        data = {'alerts' : $scope.alerts,
-                'kpTrigger' : $scope.kpTrigger,
-				'daytime' : $scope.daytime,
-                'gps' : $scope.gps,
-                'zip' : $scope.zip};
+        data = {
+            'alerts'   : $scope.alerts,
+            'kpTrigger': $scope.kpTrigger,
+            'daytime'  : $scope.daytime,
+            'gps'      : $scope.gps,
+            'zip'      : $scope.zip
+            };
 
         if(asAlert)
             alert(data);
@@ -168,9 +182,10 @@ angular.module('aurora.controllers', [])
 	{		
 		var time = {
 			callback: function (val, tObj, scope) {      //Mandatory
-				if (typeof (val) === 'undefined') {
+				if (!val) {
 					console.log('Time not selected');
-				} else {
+				}
+                else {
 					var selectedTime = new Date(val * 1000);
 					console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), 'H :', selectedTime.getUTCMinutes(), 'M');
 					
@@ -212,7 +227,7 @@ angular.module('aurora.controllers', [])
                         tObj.minutes = "0" + tempMin;
 					}	
 				}
-				scope.saveTimes();
+				$scope.saveTimes();
 			},
 			inputTime: timeObj.epoch
 		};
