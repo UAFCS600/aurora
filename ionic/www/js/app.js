@@ -2,18 +2,7 @@ angular.module('aurora', ['ionic', 'ionic-timepicker', 'aurora.controllers', 'au
 
 .run(function($ionicPlatform, $push, $geolocation) {
     $ionicPlatform.ready(function() {
-        var info = {};
-
-        var getGeolocation = function() {
-            $geolocation.getInfo(info, function() {
-                console.log('AURORA: Setting geolocation information.');
-                $push.updateInfo(info);
-            });
-        };
-
-        $push.initPushNotifications(function() {
-            getGeolocation();
-        });
+        $push.initPushNotifications();
 
         if (window.StatusBar) {
             StatusBar.styleDefault();

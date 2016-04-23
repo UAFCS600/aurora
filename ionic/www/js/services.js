@@ -25,9 +25,9 @@ angular.module('aurora.services', [])
 }])
 
 //Push notification services
-.factory('$push', function($http, $location, $localstorage, $kpAPI) {
+.factory('$push', function($http, $location, $localstorage, $kpAPI, $geolocation) {
     var push      = false;
-    var gcmID     = '638344930515';//'209803454821'; // this is static for GCM
+    var gcmID     = '638344930515';
     var apnsId    = ''; //Apple iTunes App ID
     var windowsId = ''; //Windows Store ID
     
@@ -43,12 +43,23 @@ angular.module('aurora.services', [])
         }
     };
 
-    postToPushServer = function(params, onSuccess, onFailure) {
+    var postToPushServer = function(params, onSuccess, onFailure) {
         $http.post("http://aurora.cs.uaf.edu/notification_service", params)
         .then(onSuccess, onFailure);
     };
 
-    receivedNotification = function(data) {
+    var update = function(info) {
+        info.token = $localstorage.get('pushToken');
+        info.mode  = 'update';
+
+        postToPushServer(info, function() {
+            console.log("AURORA: Info changed.");
+        }, function() {
+            console.log("AURORA: Could not change info.");
+        });
+    };
+
+    var receivedNotification = function(data) {
         var message   = JSON.parse(data.message);
         var kpTrigger = message.kpTrigger;
         $kpAPI.setNow(kpTrigger);
@@ -61,24 +72,33 @@ angular.module('aurora.services', [])
         console.log("AURORA: " + data.additionalData);
     };
 
-    receivedError = function(data) {
+    var receivedError = function(data) {
         console.log("AURORA: " + e.message);
     };
 
-    notificationServiceRegistered = function(data) {
-        var postData = {};
+    var notificationServiceRegistered = function(data) {
+        var postData  = {};
+        var kpTrigger = $localstorage.get('kpTrigger', 6);
+        var info      = {};
+
+        var getGeolocation = function() {
+            $geolocation.getInfo(info, function() {
+                console.log('AURORA: Setting geolocation information.');
+                update(info);
+            });
+        };
 
         if(ionic.Platform.isAndroid()) {
             postData.mode      = "register";
             postData.service   = "gcm";
             postData.token     = data.registrationId;
-            postData.kpTrigger = 6;
+            postData.kpTrigger = kpTrigger;
         }
         else if(ionic.Platform.isIOS()) {
             postData.mode      = "register";
             postData.service   = "apns";
             postData.token     = data.registrationId;
-            postData.kpTrigger = 6;
+            postData.kpTrigger = kpTrigger;
         }
 
         console.log('AURORA: ' + postData);
@@ -89,6 +109,7 @@ angular.module('aurora.services', [])
                 console.log("AURORA: " + "Key has been added to push server!");
                 $localstorage.set('pushToken', data.registrationId);
                 console.log("AURORA: Your token: " + data.registrationId);
+                getGeolocation();
             }
         }, function(response) {
             console.log("AURORA: " + "Key has not been added to the push server!");
@@ -103,9 +124,9 @@ angular.module('aurora.services', [])
                 postData = {
                     "test_push": true,
                     "kpTrigger": "",
-                    "service": "gcm",
-                    "method": "all",
-                    "token": ""
+                    "service"  : "gcm",
+                    "method"   : "all",
+                    "token"    : ""
                 };
             }
             else if(ionic.Platform.isIOS())
@@ -113,9 +134,9 @@ angular.module('aurora.services', [])
                 postData = {
                     "test_push": true,
                     "kpTrigger": "",
-                    "service": "apns",
-                    "method": "all",
-                    "token": ""
+                    "service"  : "apns",
+                    "method"   : "all",
+                    "token"    : ""
                 };
             }
 
@@ -156,23 +177,22 @@ angular.module('aurora.services', [])
             if(callback)
                 callback();
         },
-        unregister : function() {
-            push.unregister(function() {
-                console.log('AURORA: Push notifications unregistered.');
-            }, function() {
-                console.log('AURORA: Could not unregisted push notifications.');
-            });
+        register : function() {
+            var token = $localstorage.get('pushToken');
+            notificationServiceRegistered({registrationId:token});
         },
-        updateInfo : function(info) {
+        unregister : function() {
+            var info   = {};
             info.token = $localstorage.get('pushToken');
-            info.mode  = 'update';
+            info.mode  = 'remove';
 
             postToPushServer(info, function() {
-                console.log("AURORA: Info changed.");
+                console.log("AURORA: Push notifications disabled.");
             }, function() {
-                console.log("AURORA: Could not change info.");
+                console.log("AURORA: Could not disable push notifications.");
             });
-        }
+        },
+        updateInfo : update
     };
 })
 
