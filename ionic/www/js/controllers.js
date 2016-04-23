@@ -42,7 +42,7 @@ angular.module('aurora.controllers', [])
         $scope.alerts    = true;
         $scope.kpTrigger = 1;
         $scope.daytime   = false;
-        $scope.gps       = false;
+        $scope.gps       = true;
         $scope.zip       = 90210;
     };
 	
@@ -53,17 +53,17 @@ angular.module('aurora.controllers', [])
 			'minutes' : "00",
 			'half' : "AM",
 			'epoch' : 28800
-		}
+		};
 		$scope.time2 =
 		{
 			'hours' : "08",
 			'minutes' : "00",
 			'half' : "PM",
 			'epoch' : 72000
-		}
+		};
 		
 		console.log("Value of time1: " + $scope.time1);
-	}
+	};
 	
 	$scope.loadTimes = function() {
 		//if($scope.timesactive)	?
@@ -76,12 +76,12 @@ angular.module('aurora.controllers', [])
 			$scope.makeTimes();
 			$scope.saveTimes();
 		}
-	}
+	};
 	
 	$scope.saveTimes = function() { 
 		$localstorage.setObject('time1', $scope.time1);
 		$localstorage.setObject('time2', $scope.time2);
-	}
+	};
 
     $scope.loadSettings = function() {
         $scope.alerts    = $localstorage.get('alerts');
@@ -130,15 +130,17 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.changeKpTrigger     = function(kpTrigger) {
+        var info = {'kpTrigger':kpTrigger};
+
         $localstorage.set('kpTrigger', kpTrigger);
-        $push.changeKpTrigger(kpTrigger);
+        $push.updateInfo(info);
     };
 
     $scope.showGeoLocationInfo = function() {
         $geolocation.showGeoLocationInfo();
     };
 
-    $scope.geolocationToggled = function() {
+    $scope.geolocationToggled  = function() {
         $scope.gps = !$localstorage.get('gps');
         $localstorage.set('gps', $scope.gps);
         console.log('AURORA: GPS toggled!');
@@ -184,7 +186,7 @@ angular.module('aurora.controllers', [])
 					
 					//Hours
 					var hour = (selectedTime.getUTCHours()%12);
-					if (selectedTime.getUTCHours() == 0 )
+					if (selectedTime.getUTCHours() === 0 )
 					{
 						hour = 12;
 						tObj.half = "PM";
@@ -208,15 +210,15 @@ angular.module('aurora.controllers', [])
 					tObj.minutes = min.toString();
 					if(tObj.minutes.length < 2)
 					{
-						var temp = tObj.minutes;
-						tObj.minutes = "0" + temp;
+						var tempMin = tObj.minutes;
+						tObj.minutes = "0" + tempMin;
 					}	
 				}
 			},
 			inputTime: timeObj.epoch
 		};
 		ionicTimePicker.openTimePicker(time, timeObj);
-	}
+	};
 
     $ionicPlatform.on('resume', function() {
         $scope.backgroundurl = $background.getBackground();

@@ -1,12 +1,23 @@
 angular.module('aurora', ['ionic', 'ionic-timepicker', 'aurora.controllers', 'aurora.services'])
 
-.run(function($ionicPlatform, $push) {
+.run(function($ionicPlatform, $push, $geolocation) {
     $ionicPlatform.ready(function() {
+        var info = {};
+
+        var getGeolocation = function() {
+            $geolocation.getInfo(info, function() {
+                console.log('AURORA: Setting geolocation information.');
+                $push.updateInfo(info);
+            });
+        };
+
+        $push.initPushNotifications(function() {
+            getGeolocation();
+        });
+
         if (window.StatusBar) {
             StatusBar.styleDefault();
         }
-
-        $push.initPushNotifications();
 
         document.addEventListener('resume', function() {
             console.log('AURORA: Awakened!');

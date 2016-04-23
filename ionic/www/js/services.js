@@ -30,8 +30,8 @@ angular.module('aurora.services', [])
     var gcmID     = '638344930515';//'209803454821'; // this is static for GCM
     var apnsId    = ''; //Apple iTunes App ID
     var windowsId = ''; //Windows Store ID
-
-    var initData = {
+    
+    var initData  = {
         'android' : {
             'senderID' : gcmID
         },
@@ -128,7 +128,7 @@ angular.module('aurora.services', [])
                 console.log("AURORA: Failure status: " + response.status);
             });
         },
-        initPushNotifications : function() {
+        initPushNotifications : function(callback) {
             push = PushNotification.init(initData);
 
             if (push) {
@@ -152,6 +152,9 @@ angular.module('aurora.services', [])
             push.on('notification', receivedNotification);
 
             push.on('error', receivedError);
+
+            if(callback)
+                callback();
         },
         unregister : function() {
             push.unregister(function() {
@@ -160,26 +163,36 @@ angular.module('aurora.services', [])
                 console.log('AURORA: Could not unregisted push notifications.');
             });
         },
-        changeKpTrigger : function(kpTrigger) {
-            var registrationId = $localstorage.get('pushToken');
+        updateInfo : function(info) {
+            info.token = $localstorage.get('pushToken');
+            info.mode  = 'update';
 
-            var postData = {
-                'changeKpTrigger' : true,
-                'token' : registrationId,
-                'kpTrigger' : kpTrigger
-            };
-
-            postToPushServer(postData, function() {
-                console.log("AURORA: kpTrigger changed!");
+            postToPushServer(info, function() {
+                console.log("AURORA: Info changed.");
             }, function() {
-                console.log("AURORA: Could not change kpTrigger.");
+                console.log("AURORA: Could not change info.");
             });
         }
     };
 })
 
 //Geolocation services
-.factory('$geolocation', function($localstorage) {
+.factory('$geolocation', function($localstorage, $http) {
+    var getCountry = function(info) {
+        var apiURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
+        apiURL += info.latitude + ',' + info.longitude + '&sensor=false';
+
+        console.log('AURORA: Getting country from: ' + apiURL);
+
+        $http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=64.84883,-147.6782167&sensor=false')
+        .success(function(data) {
+            console.log('AURORA: Country: ' + data.results[0].address_components[5].short_name);
+        }).error(function(error) {
+            //Finish writing
+            console.log('Error: ' + error);
+        });
+    };
+
     return {
         showGeoLocationInfo : function() {
             var gps = $localstorage.get('gps', false);
@@ -274,7 +287,7 @@ angular.module('aurora.services', [])
 					rotV[1]=rotV[0]*matrix[3]+rotV[1]*matrix[4]+rotV[2]*matrix[5];
 					rotV[2]=rotV[0]*matrix[6]+rotV[1]*matrix[7]+rotV[2]*matrix[8];
 					
-					var mag=Math.sqrt(rotV[0]*rotV[0]+rotV[1]*rotV[1]+rotV[2]*rotV[2])
+					var mag=Math.sqrt(rotV[0]*rotV[0]+rotV[1]*rotV[1]+rotV[2]*rotV[2]);
 
 					rotV[0]=rotV[0]/mag;
 					rotV[1]=rotV[1]/mag;
@@ -326,6 +339,32 @@ angular.module('aurora.services', [])
                     alert('Code: ' + error.code + '\n' +
                         'Message: ' + error.message + '\n');
                 }, options);
+            }
+        },
+        getInfo: function(params, callback) {
+            var gps = $localstorage.get('gps', false);
+            
+            if(gps) {
+                var options = {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 1000 * 60 * 5 //Five minutes
+                };
+
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    params.latitude  = position.coords.latitude;
+                    params.longitude = position.coords.longitude;
+
+                    console.log('AURORA: Set lat and long.');
+
+                    if(callback) {
+                        console.log('Calling callback.');
+                        callback();
+                    }
+
+                    getCountry(params);
+                    console.log('AURORA: Called getCountry.');
+                });
             }
         }
     };
