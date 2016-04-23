@@ -177,7 +177,7 @@ angular.module('aurora.services', [])
 })
 
 //Geolocation services
-.factory('$geolocation', function($localstorage) {
+.factory('$geolocation', function($localstorage, $http) {
     var getCountry = function(info) {
         var apiURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
         apiURL += info.latitude + ',' + info.longitude + '&sensor=false';
