@@ -178,7 +178,7 @@ dbUtil.prototype.getTokens = function(kpTrigger, service, onSuccess, onFailure) 
 		else {
 			var timeRightNow = getTimeNow();
 			var query = "SELECT token FROM clients WHERE notify_start_time < '" + timeRightNow +
-			            "' AND notify_stop_time > '" + timeRightNow + "' AND kpTrigger >= '" + 
+			            "' AND notify_stop_time > '" + timeRightNow + "' AND kpTrigger <= '" + 
 			            kpTrigger + "' AND service = '" + service + "'";
 		    console.log('Query: ' + query);
 
