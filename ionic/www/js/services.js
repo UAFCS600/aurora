@@ -240,7 +240,7 @@ angular.module('aurora.services', [])
 
     //This could actually call some API in the future, or a call to this could be replaced with an API call
     var getMagneticPole = function() {
-        //geographic location geomagnetic pole as of 2015
+        //geographic location geomagnetic pole as of 2015 coords are east positive
         var pole = { 
             latitude : 80.375*Math.PI/180,
             longitude : -72.625*Math.PI/180
@@ -261,73 +261,51 @@ angular.module('aurora.services', [])
         var galt   = geographicCoord.altitude;
         
         //set alt to radius of earth if no good data
-        if(galt<1000)
-            galt = 6371000;
+        /*if(galt<1000)
+            galt = 6371000;*/
         
         //rectangular coordinates
-        var x    = galt*Math.cos(glat)*Math.cos(glong);
-        var y    = galt*Math.cos(glat)*Math.sin(glong);
-        var z    = galt*Math.sin(glat);
+        var x    = /*galt**/Math.cos(glat)*Math.cos(glong);
+        var y    = /*galt**/Math.cos(glat)*Math.sin(glong);
+        var z    = /*galt**/Math.sin(glat);
         
         var matrix;
-        var rotation;
-        var rotV = [0, 1, 0];
+        var rotation;		
+		rotation = mslong;
+		var rotation2 = Math.PI/2-mslat;
+		matrix        = [0,0,0, 0,0,0, 0,0,0];
+		
+		matrix[0*3+0] = Math.cos(rotation)*Math.cos(rotation2);
+        matrix[1*3+0] = -1*Math.sin(rotation);
+        matrix[2*3+0] = Math.cos(rotation)*Math.sin(rotation2);
         
-        //Rotate by longitude
-        matrix        = [0,0,0, 0,0,0, 0,0,0];
-        rotation      = mslong;
-        matrix[0*3+0] = Math.cos(rotation);
-        matrix[0*3+1] = -1*Math.sin(rotation);
-        matrix[1*3+0] = Math.sin(rotation);
+        matrix[0*3+1] = Math.sin(rotation)*Math.cos(rotation2);
         matrix[1*3+1] = Math.cos(rotation);
-        matrix[2*3+2] = 1;
+        matrix[2*3+1] = Math.sin(rotation)*Math.sin(rotation2);
+        
+        matrix[0*3+2] = -1*Math.sin(rotation2);
+        matrix[1*3+2] = 0;
+        matrix[2*3+2] = Math.cos(rotation2);
+		
         
         //apply matrix
-        x       = x*matrix[0]+y*matrix[1]+z*matrix[2];
-        y       = x*matrix[3]+y*matrix[4]+z*matrix[5];
-        z       = x*matrix[6]+y*matrix[7]+z*matrix[8];
-        
-        //Establish the rotation vector for the latitude shift
-        rotV[0] = rotV[0]*matrix[0]+rotV[1]*matrix[1]+rotV[2]*matrix[2];
-        rotV[1] = rotV[0]*matrix[3]+rotV[1]*matrix[4]+rotV[2]*matrix[5];
-        rotV[2] = rotV[0]*matrix[6]+rotV[1]*matrix[7]+rotV[2]*matrix[8];
-        
-        var mag = Math.sqrt(rotV[0]*rotV[0]+rotV[1]*rotV[1]+rotV[2]*rotV[2]);
-        
-        rotV[0] = rotV[0]/mag;
-        rotV[1] = rotV[1]/mag;
-        rotV[2] = rotV[2]/mag;
-        
-        //Rotate by latitude
-        matrix        = [0,0,0, 0,0,0, 0,0,0];
-        rotation      = Math.PI/2-mslat;
-        matrix[0*3+0] = Math.cos(rotation)+rotV[0]*rotV[0]*(1-Math.cos(rotation));
-        matrix[0*3+1] = rotV[0]*rotV[1]*(1-Math.cos(rotation))-1*rotV[2]*Math.sin(rotation);
-        matrix[0*3+2] = rotV[0]*rotV[2]*(1-Math.cos(rotation))+rotV[1]*Math.sin(rotation);
-        
-        matrix[1*3+0] = rotV[0]*rotV[1]*(1-Math.cos(rotation))+rotV[2]*Math.sin(rotation);
-        matrix[1*3+1] = Math.cos(rotation)+rotV[1]*rotV[1]*(1-Math.cos(rotation));
-        matrix[1*3+2] = rotV[1]*rotV[2]*(1-Math.cos(rotation))-1*rotV[0]*Math.sin(rotation);
-        
-        matrix[2*3+0] = rotV[0]*rotV[2]*(1-Math.cos(rotation))-1*rotV[1]*Math.sin(rotation);
-        matrix[2*3+2] = rotV[1]*rotV[2]*(1-Math.cos(rotation))+rotV[0]*Math.sin(rotation);
-        matrix[2*3+2] = Math.cos(rotation)+rotV[2]*rotV[2]*(1-Math.cos(rotation));
-        
-        //apply matrix
-        x = x*matrix[0]+y*matrix[1]+z*matrix[2];
-        y = x*matrix[3]+y*matrix[4]+z*matrix[5];
-        z = x*matrix[6]+y*matrix[7]+z*matrix[8];
+        xt  = x*matrix[0]+y*matrix[1]+z*matrix[2];
+        yt  = x*matrix[3]+y*matrix[4]+z*matrix[5];
+        zt  = x*matrix[6]+y*matrix[7]+z*matrix[8];
+		x=xt;
+		y=yt;
+		z=zt;
         
         //convert back
         var mlat  = Math.atan(z/Math.sqrt(Math.pow(x,2)+Math.pow(y,2)))*180/Math.PI;
         var mlong = Math.atan(y/x)*180/Math.PI;
-        var malt  = Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2)); //not needed
+        //var malt  = Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2)); //not needed
         //Method is imperfect but close enough
         
         var magCoords = {
             latitude : mlat,
-            longitude : mlong,
-            altitude : malt
+            longitude : mlong
+            //altitude : malt
         };
         
         return magCoords;
