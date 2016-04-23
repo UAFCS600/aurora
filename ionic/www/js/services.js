@@ -27,7 +27,7 @@ angular.module('aurora.services', [])
 //Push notification services
 .factory('$push', function($http, $location, $localstorage, $kpAPI) {
     var push      = false;
-    var gcmID     = '209803454821'; // this is static for GCM
+    var gcmID     = '638344930515';//'209803454821'; // this is static for GCM
     var apnsId    = ''; //Apple iTunes App ID
     var windowsId = ''; //Windows Store ID
 
@@ -44,12 +44,12 @@ angular.module('aurora.services', [])
     };
 
     postToPushServer = function(params, onSuccess, onFailure) {
-        $http.post("http://aurora.cs.uaf.edu/push_notification/", params)
+        $http.post("http://aurora.cs.uaf.edu/notification_service", params)
         .then(onSuccess, onFailure);
     };
 
     receivedNotification = function(data) {
-        var message = JSON.parse(data.message);
+        var message   = JSON.parse(data.message);
         var kpTrigger = message.kpTrigger;
         $kpAPI.setNow(kpTrigger);
 
@@ -66,22 +66,23 @@ angular.module('aurora.services', [])
     };
 
     notificationServiceRegistered = function(data) {
-        if(ionic.Platform.isAndroid())
-        {
-            postData = {
-                "service": "gcm",
-                "token": data.registrationId,
-                "kpTrigger": 6
-            };
+        var postData = {};
+
+        if(ionic.Platform.isAndroid()) {
+            postData.mode      = "register";
+            postData.service   = "gcm";
+            postData.token     = data.registrationId;
+            postData.kpTrigger = 6;
         }
-        else if(ionic.Platform.isIOS())
-        {
-            postData = {
-                "service": "apns",
-                "token": data.registrationId,
-                "kpTrigger": 6
-            };
+        else if(ionic.Platform.isIOS()) {
+            postData.mode      = "register";
+            postData.service   = "apns";
+            postData.token     = data.registrationId;
+            postData.kpTrigger = 6;
         }
+
+        console.log('AURORA: ' + postData);
+        console.log('AURORA: ' + JSON.stringify(postData));
 
         postToPushServer(postData, function(response) {
             if(response.status == 200) {
