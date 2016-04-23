@@ -1,8 +1,6 @@
 <ion-side-menus>
 	<ion-side-menu-content drag-content="false">
 		<ion-nav-bar class="bar-clear">
-			<!-- <ion-nav-back-button>
-		</ion-nav-back-button> -->
 			<ion-nav-buttons side="left">
 				<!-- Toggle left side menu -->
 				<button menu-toggle="left" class="button button-icon icon ion-ios-gear-outline" ng-click="toggleLeft();"></button>
@@ -27,8 +25,7 @@
 
 				<div class="item range" id="menuitem">
 					Aurora Intensity
-					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)">
-					{{kpTrigger}}
+					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)"> {{kpTrigger}}
 				</div>
 
 				<ion-item id="menuitem" ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
