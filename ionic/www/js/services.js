@@ -184,17 +184,25 @@ angular.module('aurora.services', [])
 	getIdealKP = function(gmagcoords) {
 		var idealKp = 'N/A';
 		//using chart found here: https://www.spaceweatherlive.com/en/help/the-kp-index
-		idealKp='4';
-		if(gmagcoords.latitude<58.3)
-			idealKp='5';
-		if(gmagcoords.latitude<56.3)
-			idealKp='6';
-		if(gmagcoords.latitude<54.2)
-			idealKp='7';
-		if(gmagcoords.latitude<52.2)
+		idealKp='9';
+		if(Math.abs(gmagcoords.latitude)>50.1)
 			idealKp='8';
-		if(gmagcoords.latitude<50.1)
-			idealKp='9';
+		if(Math.abs(gmagcoords.latitude)>52.2)
+			idealKp='7';
+		if(Math.abs(gmagcoords.latitude)>54.2)
+			idealKp='6';
+		if(Math.abs(gmagcoords.latitude)>56.3)
+			idealKp='5';
+		if(Math.abs(gmagcoords.latitude)>58.3)
+			idealKp='4';
+		if(Math.abs(gmagcoords.latitude)>60.4)
+			idealKp='3';
+		if(Math.abs(gmagcoords.latitude)>62.4)
+			idealKp='2';
+		if(Math.abs(gmagcoords.latitude)>64.5)
+			idealKp='1';				
+		
+		return idealKp;
 	};
 	
 	//This could actually call some API in the future, or a call to this could be replaced with an API call
@@ -349,6 +357,11 @@ angular.module('aurora.services', [])
 		getMagCoord : function(geoCoords)
 		{
 			var output = convertGeographicToGeomagnetic(geoCoords);
+			return output;
+		},
+		showIdealKP : function(magCoord)
+		{
+			var output = getIdealKP(magCoord);
 			return output;
 		}
     };

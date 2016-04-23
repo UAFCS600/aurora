@@ -228,84 +228,68 @@ angular.module('aurora.controllers', [])
     $ionicPlatform.on('resume', function() {
         $scope.backgroundurl = $background.getBackground();
     });
-	var geoCoords = {
-		a : {
-			latitude : 36.796,
-			longitude : 81.050,
+	
+	makeGeoCoord = function(lat,lon)
+	{
+		var output = {
+			latitude : lat,
+			longitude : lon,
 			altitude : 0
-		},
-		b : {
-			latitude : 53.776,
-			longitude : -94.760,
-			altitude : 0
-		},
-		c : {
-			latitude : -20.370,	
-			longitude : 20.595,
-			altitude : 0
-		},
-		d : {
-			latitude : -73.574,	
-			longitude : -67.640,
-			altitude : 0
-		},
-		e : {
-			latitude : -27.728,
-			longitude : 135.290,
-			altitude : 0
-		}
-	};
-	var magCoords = {
-		a : {
-			latitude : 36.796,
-			longitude : 81.050,
-			altitude : 0
-		},
-		b : {
-			latitude : 53.776,
-			longitude : -94.760,
-			altitude : 0
-		},
-		c : {
-			latitude : -20.370,	
-			longitude : 20.595,
-			altitude : 0			
-		},
-		d : {
-			latitude : -73.574,	
-			longitude : -67.640,
-			altitude : 0
-		},
-		e : {
-			latitude : -27.728,
-			longitude : 135.290,
-			altitude : 0
-		}
+		};
+		return output;
 	};
 	
-	magCoords.a = $geolocation.getMagCoord(geoCoords.a);
-	magCoords.b = $geolocation.getMagCoord(geoCoords.b);
-	magCoords.c = $geolocation.getMagCoord(geoCoords.c);
-	magCoords.d = $geolocation.getMagCoord(geoCoords.d);
-	magCoords.e = $geolocation.getMagCoord(geoCoords.e);
+	var rawCoords = [
+		//KP = 5
+		// 59.91, 10.75,
+		// 47.6,-122.34,	
+		// 41.88,-87.63,	
+		// 43.65,-79.39,	
+		// 44.67,-63.59,
+		// 55.96,-3.18,	
+		// 57.72,11.97,	
+		// 56.94,24.10,
+		// -42.88,147.32,
+		// -46.41,168.35
+		//KP = 9
+		 35.68,-100.32,		
+		 35.75,-80.19,
+		 40.41,-3.7,	
+		 43.29,5.36,	
+		 41.90,12.49,		
+		 44.42,26.09,
+		 47.88,106.89,
+		 -23.70,133.88,	
+		 -27.47,153.06,	
+		 -54.80,-68.30,	
+		 -33.92,18.45
+	];
 	
-	console.log("Geological/Geomagnetic Coordinate Pairs");
-	console.log(geoCoords.a);
-	console.log(magCoords.a);
-	console.log(geoCoords.b);
-	console.log(magCoords.b);
-	console.log(geoCoords.c);
-	console.log(magCoords.c);
-	console.log(geoCoords.d);
-	console.log(magCoords.d);
-	console.log(geoCoords.e);
-	console.log(magCoords.e);
-	// Geomagnetic	36.02S	149.13W
-	// Geomagnetic	63.81S	3.21E
-	// Geomagnetic	20.49S	89.62E
-	// Geomagnetic	62.36N	28.82W
-	// Geomagnetic	27.83N	156.26E
-
+	var geoCoords = [];
+	for (i = 0; i<rawCoords.length; i+=2)
+	{
+		geoCoords.push(makeGeoCoord(rawCoords[i],rawCoords[i+1]));
+	}
+	
+	var magCoords = [];
+	for (i=0; i<geoCoords.length; i++)
+	{
+		magCoords.push($geolocation.getMagCoord(geoCoords[i]));
+	}
+	
+	var idealKps = [];
+	for (i=0; i<magCoords.length; i++)
+	{
+		idealKps.push($geolocation.showIdealKP(magCoords[i]));
+	}
+	
+	console.log("Geological Coordinates");
+	console.log(geoCoords);
+	console.log("Magnetic Coordinates");
+	console.log(magCoords);
+	console.log("Ideal Kps");
+	console.log(idealKps);
+	
 })
 
 .controller('FeedbackCtrl', function($scope, $background, $ionicPlatform) {
