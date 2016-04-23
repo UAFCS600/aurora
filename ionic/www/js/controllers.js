@@ -79,16 +79,30 @@ angular.module('aurora.controllers', [])
 		console.log("Value of time3: " + $scope.time3);
 	};
 	
-	$scope.toggleTimes = function () {
+	$scope.initTimes = function () {
 		var t1 = document.getElementById("times_1");
-		if ( t1.style.display != 'none' ) {
+		var t2 = document.getElementById("times_2");
+		var p = document.getElementById("plus");
+		var m = document.getElementById("minus");
+		if ($scope.quietTime == false) {
 			t1.style.display = 'none';
+			t2.style.display = 'none';
+			p.style.display = 'none';
+			m.style.display = 'none';
+		}
+		else if($scope.secondTime == false) {
+			t1.style.display = 'flex';
+			t2.style.display = 'none';
+			p.style.display = 'flex';
+			m.style.display = 'none';
 		}
 		else {
 			t1.style.display = 'flex';
+			t2.style.display = 'flex';
+			p.style.display = 'none';
+			m.style.display = 'flex';
 		}
 	}
-	
 	
 	$scope.loadTimes = function() {
 		//if($scope.timesactive)	?
@@ -118,6 +132,8 @@ angular.module('aurora.controllers', [])
         $scope.daytime   = $localstorage.get('daytime');
         $scope.gps       = $localstorage.get('gps');
         $scope.zip       = $localstorage.get('zip');
+		$scope.quietTime = $localstorage.get('quietTime');
+		$scope.secondTime= $localstorage.get('secondTime');
 
         if (typeof $scope.alerts == 'undefined') {
             $scope.loadDefaults();
@@ -131,6 +147,8 @@ angular.module('aurora.controllers', [])
 		$localstorage.set('daytime', $scope.daytime);
         $localstorage.set('gps', $scope.gps);
         $localstorage.set('zip', $scope.zip);
+		$localstorage.set('quietTime', $scope.quietTime);
+		$localstorage.set('secondTime', $scope.secondTime);
     };
 
     $scope.outputSettings = function(asAlert) {
@@ -187,11 +205,28 @@ angular.module('aurora.controllers', [])
             $scope.unregisterPush();
         }
     };
+	
+	$scope.quietTimeToggled = function() 
+	{
+		$scope.quietTime = !$localstorage.get('quietTime');
+        $localstorage.set('quietTime', $scope.quietTime);
+		$scope.initTimes();
+        console.log('AURORA: Quiet Time toggled!');
+	}
+	
+	$scope.secondTimeToggled = function() 
+	{
+		$scope.secondTime = !$localstorage.get('secondTime');
+        $localstorage.set('secondTime', $scope.secondTime);
+		$scope.initTimes();
+        console.log('AURORA: Second Time toggled!');
+	}
 
     $scope.loadSettings();
 	$scope.loadTimes();
     $scope.outputSettings(false);
 	$scope.backgroundurl = $background.getBackground();
+	$scope.initTimes();
 	
 	
 	$scope.timeWindow = function(timeObj)

@@ -26,22 +26,28 @@
 				<ion-toggle id="menuitem" ng-model="alerts" toggle-class="toggle-calm" ng-click="alertsToggled()">Enable Notifications</ion-toggle>
 
 				<div class="item range" id="menuitem">
-					KP Trigger
+					Aurora Intensity
 					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)">
 					{{kpTrigger}}
 				</div>
 
 				<ion-item id="menuitem" ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
-				<ion-item id="menuitem" ng-click="toggleTimes();">Notification Quiet Hours</ion-item>
+				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Quiet Hours</ion-toggle>
 				<div id="times_1" style="display : flex; justify-content : center; align-items : center">
 					<ion-item id="menuitem" ng-click="timeWindow(time1);" style="display: inline-block">{{time1.hours}}:{{time1.minutes}} {{time1.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
 					<ion-item id="menuitem" ng-click="timeWindow(time2);" style="display: inline-block">{{time2.hours}}:{{time2.minutes}} {{time2.half}}</ion-item>
 				</div>
+				<div id="plus" style="display : flex; justify-content : center; align-items : center">
+					<button class="button button-icon icon ion-ios-plus-outline" ng-click="secondTimeToggled();"></button>
+				</div>
 				<div id="times_2" style="display : flex; justify-content : center; align-items : center">
 					<ion-item id="menuitem" ng-click="timeWindow(time3);" style="display: inline-block">{{time3.hours}}:{{time3.minutes}} {{time3.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
 					<ion-item id="menuitem" ng-click="timeWindow(time4);" style="display: inline-block">{{time4.hours}}:{{time4.minutes}} {{time4.half}}</ion-item>
+				</div>
+				<div id="minus" style="display : flex; justify-content : center; align-items : center">
+					<button class="button button-icon icon ion-ios-minus-outline" ng-click="secondTimeToggled();"></button>
 				</div>
 			</ion-list>
 		</ion-content>
