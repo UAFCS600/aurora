@@ -43,6 +43,8 @@ angular.module('aurora.controllers', [])
         $scope.daytime   = false;
         $scope.gps       = true;
         $scope.zip       = 90210;
+		$scope.quietTime = false;
+		$scope.secondTime= false;
     };
 	
 	$scope.makeTimes = function() {
@@ -60,17 +62,43 @@ angular.module('aurora.controllers', [])
 			'half' : "PM",
 			'epoch' : 72000
 		};
-        
-		console.log("Value of time1: " + $scope.time1);
+		$scope.time3 =
+		{
+			'hours' : "08",
+			'minutes' : "00",
+			'half' : "AM",
+			'epoch' : 28800
+		};
+		$scope.time4 =
+		{
+			'hours' : "08",
+			'minutes' : "00",
+			'half' : "PM",
+			'epoch' : 72000
+		};       
+		console.log("Value of time3: " + $scope.time3);
 	};
+	
+	$scope.toggleTimes = function () {
+		var t1 = document.getElementById("times_1");
+		if ( t1.style.display != 'none' ) {
+			t1.style.display = 'none';
+		}
+		else {
+			t1.style.display = 'flex';
+		}
+	}
+	
 	
 	$scope.loadTimes = function() {
 		//if($scope.timesactive)	?
 		//if(numtimes>1)			?
 		$scope.time1 	 = $localstorage.getObject('time1');
 		$scope.time2 	 = $localstorage.getObject('time2');
-		console.log($scope.time1);
-		if (typeof $scope.time1.hours == 'undefined')
+		$scope.time3 	 = $localstorage.getObject('time3');
+		$scope.time4 	 = $localstorage.getObject('time4');
+		console.log($scope.time3);
+		if (typeof $scope.time3.hours == 'undefined')
 		{
 			$scope.makeTimes();
 			$scope.saveTimes();
@@ -80,6 +108,8 @@ angular.module('aurora.controllers', [])
 	$scope.saveTimes = function() { 
 		$localstorage.setObject('time1', $scope.time1);
 		$localstorage.setObject('time2', $scope.time2);
+		$localstorage.setObject('time3', $scope.time3);
+		$localstorage.setObject('time4', $scope.time4);
 	};
 
     $scope.loadSettings  = function() {
@@ -242,7 +272,7 @@ angular.module('aurora.controllers', [])
 	};
 	
 	var rawCoords = [
-		//KP = 5
+		//KP = 5 x10
 		// 59.91, 10.75,
 		// 47.6,-122.34,	
 		// 41.88,-87.63,	
@@ -253,7 +283,7 @@ angular.module('aurora.controllers', [])
 		// 56.94,24.10,
 		// -42.88,147.32,
 		// -46.41,168.35
-		//KP = 9
+		//KP = 9 x11
 		 35.68,-100.32,		
 		 35.75,-80.19,
 		 40.41,-3.7,	

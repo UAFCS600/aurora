@@ -32,11 +32,16 @@
 				</div>
 
 				<ion-item id="menuitem" ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
-				<ion-item id="menuitem">Notification Quiet Hours</ion-item>
-				<div style="display : flex; justify-content : center; align-items : center">
+				<ion-item id="menuitem" ng-click="toggleTimes();">Notification Quiet Hours</ion-item>
+				<div id="times_1" style="display : flex; justify-content : center; align-items : center">
 					<ion-item id="menuitem" ng-click="timeWindow(time1);" style="display: inline-block">{{time1.hours}}:{{time1.minutes}} {{time1.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
 					<ion-item id="menuitem" ng-click="timeWindow(time2);" style="display: inline-block">{{time2.hours}}:{{time2.minutes}} {{time2.half}}</ion-item>
+				</div>
+				<div id="times_2" style="display : flex; justify-content : center; align-items : center">
+					<ion-item id="menuitem" ng-click="timeWindow(time3);" style="display: inline-block">{{time3.hours}}:{{time3.minutes}} {{time3.half}}</ion-item>
+					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(time4);" style="display: inline-block">{{time4.hours}}:{{time4.minutes}} {{time4.half}}</ion-item>
 				</div>
 			</ion-list>
 		</ion-content>
