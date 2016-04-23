@@ -34,17 +34,17 @@
 				<ion-item id="menuitem" ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
 				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Quiet Hours</ion-toggle>
 				<div id="times_1" style="display : flex; justify-content : center; align-items : center">
-					<ion-item id="menuitem" ng-click="timeWindow(time1);" style="display: inline-block">{{time1.hours}}:{{time1.minutes}} {{time1.half}}</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
-					<ion-item id="menuitem" ng-click="timeWindow(time2);" style="display: inline-block">{{time2.hours}}:{{time2.minutes}} {{time2.half}}</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_1);" style="display: inline-block">{{quietHoursStopTime_1.hours}}:{{quietHoursStopTime_1.minutes}} {{quietHoursStopTime_1.half}}</ion-item>
 				</div>
 				<div id="plus" style="display : flex; justify-content : center; align-items : center">
 					<button class="button button-icon icon ion-ios-plus-outline" ng-click="secondTimeToggled();"></button>
 				</div>
 				<div id="times_2" style="display : flex; justify-content : center; align-items : center">
-					<ion-item id="menuitem" ng-click="timeWindow(time3);" style="display: inline-block">{{time3.hours}}:{{time3.minutes}} {{time3.half}}</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_2);" style="display: inline-block">{{quietHoursStartTime_2.hours}}:{{quietHoursStartTime_2.minutes}} {{quietHoursStartTime_2.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
-					<ion-item id="menuitem" ng-click="timeWindow(time4);" style="display: inline-block">{{time4.hours}}:{{time4.minutes}} {{time4.half}}</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_2);" style="display: inline-block">{{quietHoursStopTime_2.hours}}:{{quietHoursStopTime_2.minutes}} {{quietHoursStopTime_2.half}}</ion-item>
 				</div>
 				<div id="minus" style="display : flex; justify-content : center; align-items : center">
 					<button class="button button-icon icon ion-ios-minus-outline" ng-click="secondTimeToggled();"></button>

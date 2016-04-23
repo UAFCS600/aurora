@@ -48,35 +48,35 @@ angular.module('aurora.controllers', [])
     };
 	
 	$scope.makeTimes = function() {
-		$scope.time1 =
+		$scope.quietHoursStartTime_1 =
 		{
 			'hours' : "08",
 			'minutes' : "00",
 			'half' : "AM",
 			'epoch' : 28800
 		};
-		$scope.time2 =
+		$scope.quietHoursStopTime_1 =
 		{
 			'hours' : "08",
 			'minutes' : "00",
 			'half' : "PM",
 			'epoch' : 72000
 		};
-		$scope.time3 =
+		$scope.quietHoursStartTime_2 =
 		{
 			'hours' : "08",
 			'minutes' : "00",
 			'half' : "AM",
 			'epoch' : 28800
 		};
-		$scope.time4 =
+		$scope.quietHoursStopTime_2 =
 		{
 			'hours' : "08",
 			'minutes' : "00",
 			'half' : "PM",
 			'epoch' : 72000
 		};       
-		console.log("Value of time3: " + $scope.time3);
+		console.log("Value of quietHoursStartTime_2: " + $scope.quietHoursStartTime_2);
 	};
 	
 	$scope.initTimes = function () {
@@ -107,12 +107,12 @@ angular.module('aurora.controllers', [])
 	$scope.loadTimes = function() {
 		//if($scope.timesactive)	?
 		//if(numtimes>1)			?
-		$scope.time1 	 = $localstorage.getObject('time1');
-		$scope.time2 	 = $localstorage.getObject('time2');
-		$scope.time3 	 = $localstorage.getObject('time3');
-		$scope.time4 	 = $localstorage.getObject('time4');
-		console.log($scope.time3);
-		if (typeof $scope.time3.hours == 'undefined')
+		$scope.quietHoursStartTime_1 	 = $localstorage.getObject('quietHoursStartTime_1');
+		$scope.quietHoursStopTime_1 	 = $localstorage.getObject('quietHoursStopTime_1');
+		$scope.quietHoursStartTime_2 	 = $localstorage.getObject('quietHoursStartTime_2');
+		$scope.quietHoursStopTime_2 	 = $localstorage.getObject('quietHoursStopTime_2');
+		console.log($scope.quietHoursStartTime_2);
+		if (typeof $scope.quietHoursStartTime_2.hours == 'undefined')
 		{
 			$scope.makeTimes();
 			$scope.saveTimes();
@@ -120,10 +120,10 @@ angular.module('aurora.controllers', [])
 	};
 	
 	$scope.saveTimes = function() { 
-		$localstorage.setObject('time1', $scope.time1);
-		$localstorage.setObject('time2', $scope.time2);
-		$localstorage.setObject('time3', $scope.time3);
-		$localstorage.setObject('time4', $scope.time4);
+		$localstorage.setObject('quietHoursStartTime_1', $scope.quietHoursStartTime_1);
+		$localstorage.setObject('quietHoursStopTime_1', $scope.quietHoursStopTime_1);
+		$localstorage.setObject('quietHoursStartTime_2', $scope.quietHoursStartTime_2);
+		$localstorage.setObject('quietHoursStopTime_2', $scope.quietHoursStopTime_2);
 	};
 
     $scope.loadSettings  = function() {
