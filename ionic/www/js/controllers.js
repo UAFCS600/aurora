@@ -5,7 +5,7 @@ angular.module('aurora.controllers', [])
     
     var checkKpNow  = function() {
         if(!$scope.forecast.now)
-            $scope.forecast.now = 0;
+            $scope.forecast.now = 1;
     };
 
     var viewportHeight = window.innerHeight;
@@ -20,19 +20,18 @@ angular.module('aurora.controllers', [])
 
     window.onresize = function() {
         var viewportHeight = window.innerHeight;
-        if(viewportHeight > 300)
-        {
-            var kpnow = document.getElementById("kp-now");
-            kpnow.style.height = viewportHeight/2 + "px";
+        if(viewportHeight > 300) {
+            var kpnow              = document.getElementById("kp-now");
+            kpnow.style.height     = viewportHeight/2 + "px";
             kpnow.style.lineHeight = viewportHeight/2 + "px";
-            kpnow.style.fontSize = viewportHeight/2 + "px";
+            kpnow.style.fontSize   = viewportHeight/2 + "px";
         }
     };
 
     $scope.backgroundurl = $background.getBackground();
 
     $ionicPlatform.on('resume', function() {
-        $scope.forecast = $kpAPI.getForecast();
+        $scope.forecast      = $kpAPI.getForecast();
         $scope.backgroundurl = $background.getBackground();
     });
 })
