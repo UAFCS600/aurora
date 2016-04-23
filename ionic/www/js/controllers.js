@@ -300,8 +300,8 @@ angular.module('aurora.controllers', [])
 	{
 		var output = {
 			latitude : lat,
-			longitude : lon,
-			altitude : 0
+			longitude : lon
+			//altitude : 0
 		};
 		return output;
 	};
