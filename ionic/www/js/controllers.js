@@ -2,8 +2,8 @@ angular.module('aurora.controllers', [])
 
 .controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform, $background) {
     $scope.forecast = $kpAPI.getForecast();
-
-    var checkKpNow = function() {
+    
+    var checkKpNow  = function() {
         if(!$scope.forecast.now)
             $scope.forecast.now = 0;
     };
@@ -11,10 +11,10 @@ angular.module('aurora.controllers', [])
     var viewportHeight = window.innerHeight;
     if(viewportHeight > 300)
     {
-        var kpnow = document.getElementById("kp-now");
-        kpnow.style.height = viewportHeight/2 + "px";
+        var kpnow              = document.getElementById("kp-now");
+        kpnow.style.height     = viewportHeight/2 + "px";
         kpnow.style.lineHeight = viewportHeight/2 + "px";
-        kpnow.style.fontSize = viewportHeight/2 + "px";
+        kpnow.style.fontSize   = viewportHeight/2 + "px";
     }
 
 
@@ -38,7 +38,7 @@ angular.module('aurora.controllers', [])
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background, $ionicPlatform, ionicTimePicker) {
-    $scope.loadDefaults = function() {
+    $scope.loadDefaults  = function() {
         $scope.alerts    = true;
         $scope.kpTrigger = 1;
         $scope.daytime   = false;
@@ -83,7 +83,7 @@ angular.module('aurora.controllers', [])
 		$localstorage.setObject('time2', $scope.time2);
 	};
 
-    $scope.loadSettings = function() {
+    $scope.loadSettings  = function() {
         $scope.alerts    = $localstorage.get('alerts');
         $scope.kpTrigger = $localstorage.get('kpTrigger');
         $scope.daytime   = $localstorage.get('daytime');
@@ -201,16 +201,16 @@ angular.module('aurora.controllers', [])
 					tObj.hours = hour.toString();
 					if(tObj.hours.length < 2)
 					{
-						var temp = tObj.hours;
-						tObj.hours = "0" + temp;
+                        var temp   = tObj.hours;
+                        tObj.hours = "0" + temp;
 					}
 					
 					//Minutes 
-					var min = selectedTime.getUTCMinutes();
-					tObj.minutes = min.toString();
+                    var min      = selectedTime.getUTCMinutes();
+                    tObj.minutes = min.toString();
 					if(tObj.minutes.length < 2) {
-						var tempMin = tObj.minutes;
-						tObj.minutes = "0" + tempMin;
+                        var tempMin  = tObj.minutes;
+                        tObj.minutes = "0" + tempMin;
 					}	
 				}
 				scope.saveTimes();
