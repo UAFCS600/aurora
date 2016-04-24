@@ -83,11 +83,11 @@ angular.module('aurora', ['ionic', 'ionic-timepicker', 'aurora.controllers', 'au
 
 .config(function (ionicTimePickerProvider) {
     var timePickerObj = {
-      inputTime: 28800,
-      format: 12,
-      step: 15,
-      setLabel: 'Set',
-      closeLabel: 'Close'
+      inputTime  : 28800,
+      format     : 12,
+      step       : 15,
+      setLabel   : 'Set',
+      closeLabel : 'Close'
     };
     ionicTimePickerProvider.configTimePicker(timePickerObj);
 });

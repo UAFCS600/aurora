@@ -26,10 +26,10 @@ angular.module('aurora.services', [])
 
 //Push notification services
 .factory('$push', function($http, $location, $localstorage, $kpAPI, $geolocation) {
-	var push = false;
-	var gcmID = '638344930515';
-	var apnsId = ''; //Apple iTunes App ID
-	var windowsId = ''; //Windows Store ID
+    var push      = false;
+    var gcmID     = '638344930515';
+    var apnsId    = ''; //Apple iTunes App ID
+    var windowsId = ''; //Windows Store ID
 
 	var initData = {
 		'android': {
@@ -49,8 +49,8 @@ angular.module('aurora.services', [])
 	};
 
 	var update = function(info) {
-		info.token = $localstorage.get('pushToken');
-		info.mode = 'update';
+        info.token = $localstorage.get('pushToken');
+        info.mode  = 'update';
 
 		postToPushServer(info, function() {
 			console.log("AURORA: Info changed.");
@@ -77,9 +77,9 @@ angular.module('aurora.services', [])
 	};
 
 	var notificationServiceRegistered = function(data) {
-		var postData = {};
-		var kpTrigger = $localstorage.get('kpTrigger', 6);
-		var info = {};
+        var postData  = {};
+        var kpTrigger = $localstorage.get('kpTrigger', 6);
+        var info      = {};
 
 		var getGeolocation = function() {
 			$geolocation.getInfo(info, function() {
@@ -89,15 +89,15 @@ angular.module('aurora.services', [])
 		};
 
 		if (ionic.Platform.isAndroid()) {
-			postData.mode = "register";
-			postData.service = "gcm";
-			postData.token = data.registrationId;
-			postData.kpTrigger = kpTrigger;
+            postData.mode      = "register";
+            postData.service   = "gcm";
+            postData.token     = data.registrationId;
+            postData.kpTrigger = kpTrigger;
 		} else if (ionic.Platform.isIOS()) {
-			postData.mode = "register";
-			postData.service = "apns";
-			postData.token = data.registrationId;
-			postData.kpTrigger = kpTrigger;
+            postData.mode      = "register";
+            postData.service   = "apns";
+            postData.token     = data.registrationId;
+            postData.kpTrigger = kpTrigger;
 		}
 
 		console.log('AURORA: ' + postData);
@@ -120,19 +120,19 @@ angular.module('aurora.services', [])
 		requestTestPushNotification: function() {
 			if (ionic.Platform.isAndroid()) {
 				postData = {
-					"test_push": true,
-					"kpTrigger": "",
-					"service": "gcm",
-					"method": "all",
-					"token": ""
+                    "test_push" : true,
+                    "kpTrigger" : "",
+                    "service"   : "gcm",
+                    "method"    : "all",
+                    "token"     : ""
 				};
 			} else if (ionic.Platform.isIOS()) {
 				postData = {
-					"test_push": true,
-					"kpTrigger": "",
-					"service": "apns",
-					"method": "all",
-					"token": ""
+                    "test_push" : true,
+                    "kpTrigger" : "",
+                    "service"   : "apns",
+                    "method"    : "all",
+                    "token"     : ""
 				};
 			}
 
@@ -211,27 +211,66 @@ angular.module('aurora.services', [])
 
 	//Literally a table index of geomagnetic coordinates
 	var getIdealKP = function(gmagcoords) {
-		var idealKp = 'N/A';
+		var overHead = 'N/A';
+		var horizon = 'N/A';
 		//using chart found here: https://www.spaceweatherlive.com/en/help/the-kp-index
-		idealKp = '9';
+		horizon = '9';
+		if (Math.abs(gmagcoords.latitude) > 46)
+		{
+			horizon = '8';
+		}
+		if (Math.abs(gmagcoords.latitude) > 48.1)
+		{
+			horizon = '7';
+			overHead = '9';
+		}
 		if (Math.abs(gmagcoords.latitude) > 50.1)
-			idealKp = '8';
+		{
+			horizon = '6';
+			overHead = '8';
+		}
 		if (Math.abs(gmagcoords.latitude) > 52.2)
-			idealKp = '7';
+		{
+			horizon = '5';
+			overHead = '7';
+		}
 		if (Math.abs(gmagcoords.latitude) > 54.2)
-			idealKp = '6';
+		{
+			horizon = '4';
+			overHead = '6';
+		}
 		if (Math.abs(gmagcoords.latitude) > 56.3)
-			idealKp = '5';
+		{
+			horizon = '3';
+			overHead = '5';
+		}
 		if (Math.abs(gmagcoords.latitude) > 58.3)
-			idealKp = '4';
+		{
+			horizon = '2';
+			overHead = '4';
+		}
 		if (Math.abs(gmagcoords.latitude) > 60.4)
-			idealKp = '3';
+		{
+			horizon = '1';
+			overHead = '3';
+		}
 		if (Math.abs(gmagcoords.latitude) > 62.4)
-			idealKp = '2';
+		{
+			horizon = '0';
+			overHead = '2';
+		}
 		if (Math.abs(gmagcoords.latitude) > 64.5)
-			idealKp = '1';
+		{
+			overHead = '1';
+		}
+		if (Math.abs(gmagcoords.latitude) > 66.5)
+		{
+			overHead = '0';
+		}
+		
+		var kp = {OverHead: overHead, Horizon: horizon};
 
-		return idealKp;
+		return kp;
 	};
 
 	//This could actually call some API in the future, or a call to this could be replaced with an API call
@@ -247,13 +286,13 @@ angular.module('aurora.services', [])
 	//Contemplated having the pole be passed into the function
 	convertGeographicToGeomagnetic = function(geographicCoord) {
 		//Set the magnetic pole
-		var pole = getMagneticPole();
-		var mslat = pole.latitude;
-		var mslong = pole.longitude;
+        var pole   = getMagneticPole();
+        var mslat  = pole.latitude;
+        var mslong = pole.longitude;
 
 		//geographic coordinates (To radians)
-		var glat = geographicCoord.latitude * Math.PI / 180;
-		var glong = geographicCoord.longitude * Math.PI / 180;
+        var glat  = geographicCoord.latitude * Math.PI / 180;
+        var glong = geographicCoord.longitude * Math.PI / 180;
 
 		//rectangular coordinates
 		var x = Math.cos(glat) * Math.cos(glong);
@@ -261,10 +300,10 @@ angular.module('aurora.services', [])
 		var z = Math.sin(glat);
 
 		var matrix;
-		var rotation;
-		rotation = mslong;
-		var rotation2 = Math.PI / 2 - mslat;
-		matrix = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var rotation;
+        rotation      = mslong;
+        var rotation2 = Math.PI / 2 - mslat;
+        matrix        = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 		matrix[0 * 3 + 0] = Math.cos(rotation) * Math.cos(rotation2);
 		matrix[1 * 3 + 0] = -1 * Math.sin(rotation);
@@ -280,16 +319,16 @@ angular.module('aurora.services', [])
 
 
 		//apply matrix
-		xt = x * matrix[0] + y * matrix[1] + z * matrix[2];
-		yt = x * matrix[3] + y * matrix[4] + z * matrix[5];
-		zt = x * matrix[6] + y * matrix[7] + z * matrix[8];
-		x = xt;
-		y = yt;
-		z = zt;
+        xt = x * matrix[0] + y * matrix[1] + z * matrix[2];
+        yt = x * matrix[3] + y * matrix[4] + z * matrix[5];
+        zt = x * matrix[6] + y * matrix[7] + z * matrix[8];
+        x  = xt;
+        y  = yt;
+        z  = zt;
 
 		//convert back
-		var mlat = Math.atan(z / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 180 / Math.PI;
-		var mlong = Math.atan(y / x) * 180 / Math.PI;
+        var mlat  = Math.atan(z / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 180 / Math.PI;
+        var mlong = Math.atan(y / x) * 180 / Math.PI;
 		//Method is imperfect but close enough
 
 		var magCoords = {
@@ -371,8 +410,8 @@ angular.module('aurora.services', [])
 				};
 
 				navigator.geolocation.getCurrentPosition(function(position) {
-					params.latitude = position.coords.latitude;
-					params.longitude = position.coords.longitude;
+                    params.latitude  = position.coords.latitude;
+                    params.longitude = position.coords.longitude;
 
 					console.log('AURORA: Set lat and long.');
 
@@ -409,14 +448,14 @@ angular.module('aurora.services', [])
 	formatTime = function(timeStr) {
 		// source: http://stackoverflow.com/questions/14638018/current-time-formatting-with-javascript
 
-		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var days   = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 		// timeStr is in format:
 		//      2016-04-17T21:01:00.0+00:00
 		// which is UTC
-		var apiDate = new Date(timeStr);
-		var localDate = new Date();
+        var apiDate   = new Date(timeStr);
+        var localDate = new Date();
 
 		// getTimezoneOffset gives: UTC - timeobject
 		// (480 minutes for Alaska, which is GMT-8)
@@ -427,10 +466,10 @@ angular.module('aurora.services', [])
 		// basically setting the apiDate to actual UTC
 		apiDate.setMinutes(apiDate.getMinutes() + localOffset);
 
-		var theDate = apiDate.getDate();
-		var theMonth = months[apiDate.getMonth()];
-		var theDay = days[apiDate.getDay()];
-		var theHour = apiDate.getHours();
+        var theDate  = apiDate.getDate();
+        var theMonth = months[apiDate.getMonth()];
+        var theDay   = days[apiDate.getDay()];
+        var theHour  = apiDate.getHours();
 
 		var ampm = theHour < 12 ? "am" : "pm";
 		if (theHour > 12) {
@@ -527,8 +566,8 @@ angular.module('aurora.services', [])
 
 	return {
 		getBackground: function() {
-			forecast = $kpAPI.getForecast();
-			var url = null;
+            forecast = $kpAPI.getForecast();
+            var url  = null;
 			switch (forecast.now) {
 				case 1:
 				case 2:
