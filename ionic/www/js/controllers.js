@@ -213,10 +213,17 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.quietTimeToggled = function() {
-        $scope.quietTime = !$localstorage.get('quietTime');
+        $scope.quietTime          = !$localstorage.get('quietTime');
+        var quietHoursStartTime_1 = $scope.formatTimeForPushServer($scope.quietHoursStartTime_1);
+        var quietHoursStopTime_1  = $scope.formatTimeForPushServer($scope.quietHoursStopTime_1);
         $localstorage.set('quietTime', $scope.quietTime);
         $scope.initTimes();
         console.log('AURORA: Quiet Time toggled!');
+
+        if(!$scope.quietTime)
+            $push.updateInfo({'notify_start_time':'00:00:00','notify_stop_time':'23:59:59'});
+        else
+            $push.updateInfo({'notify_start_time':quietHoursStartTime_1, 'notify_stop_time':quietHoursStopTime_1});
     };
 
     $scope.secondTimeToggled = function() {
