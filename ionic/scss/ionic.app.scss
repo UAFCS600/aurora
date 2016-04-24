@@ -80,5 +80,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   }
 }
 
+.aurora-button {
+  border: 1px solid white !important;
+}
+
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
