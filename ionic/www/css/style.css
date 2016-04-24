@@ -46,6 +46,6 @@ ion-popover-view.fit ion-content {
 }
 
 .ionic_timepicker_popup .popup {
-	background: #054F42 !important;
-	background: radial-gradient(#054F42,#392A7B) !important;
+	background: #392A7B !important;
+	/* background: radial-gradient(#054F42,#392A7B) !important; */
 }
