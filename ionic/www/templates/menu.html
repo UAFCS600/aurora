@@ -13,8 +13,7 @@
 		<ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
 	</ion-side-menu-content>
 
-	<ion-side-menu side="left" ng-controller="SettingsCtrl" style="border-right: 2px solid white; background-color: #03373B; background-image: url({{backgroundurl}}); background-repeat: no-repeat;
-		background-position: center center; background-size: cover;">
+	<ion-side-menu  class="background-menu" side="left" ng-controller="SettingsCtrl" style="border-right: 2px solid white; background-image: url({{backgroundurl}})">
 		<header class="bar bar-header bar-clear">
 			<h1 class="title">Settings</h1>
 		</header>
@@ -53,8 +52,7 @@
 		</ion-content>
 	</ion-side-menu>
 
-	<ion-side-menu side="right" ng-controller="SettingsCtrl" style="border-left: 2px solid white; background-color: #03373B; background-image: url({{backgroundurl}}); background-repeat: no-repeat;
-		background-position: center center; background-size: cover;">
+	<ion-side-menu class="background-menu" side="right" ng-controller="SettingsCtrl" style="border-left: 2px solid white; background-image: url({{backgroundurl}})">
 		<ion-list>
 			<ion-item menu-close id="menuitem">
 				<a class="button button-block aurora-button" icon="ion-ios-home" href="#/app/dash" id="menuitem">Home</a>
