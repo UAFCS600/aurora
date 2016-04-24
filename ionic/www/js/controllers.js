@@ -79,12 +79,12 @@ angular.module('aurora.controllers', [])
 		var t2 = document.getElementById("times_2");
 		var p = document.getElementById("plus");
 		var m = document.getElementById("minus");
-		if ($scope.quietTime == false) {
+		if ($scope.quietTime === false) {
 			t1.style.display = 'none';
 			t2.style.display = 'none';
 			p.style.display = 'none';
 			m.style.display = 'none';
-		} else if ($scope.secondTime == false) {
+		} else if ($scope.secondTime === false) {
 			t1.style.display = 'flex';
 			t2.style.display = 'none';
 			p.style.display = 'flex';
@@ -95,7 +95,7 @@ angular.module('aurora.controllers', [])
 			p.style.display = 'none';
 			m.style.display = 'flex';
 		}
-	}
+	};
 
 	$scope.loadTimes = function() {
 		$scope.quietHoursStartTime_1 = $localstorage.getObject('quietHoursStartTime_1');
@@ -217,14 +217,14 @@ angular.module('aurora.controllers', [])
 		$localstorage.set('quietTime', $scope.quietTime);
 		$scope.initTimes();
 		console.log('AURORA: Quiet Time toggled!');
-	}
+	};
 
 	$scope.secondTimeToggled = function() {
 		$scope.secondTime = !$localstorage.get('secondTime');
 		$localstorage.set('secondTime', $scope.secondTime);
 		$scope.initTimes();
 		console.log('AURORA: Second Time toggled!');
-	}
+	};
 
 	$scope.loadSettings();
 	$scope.loadTimes();
