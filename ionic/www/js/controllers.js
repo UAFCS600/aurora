@@ -70,34 +70,34 @@ angular.module('aurora.controllers', [])
             'minutes': "00",
             'half'   : "PM",
             'epoch'  : 72000
-        };
-        console.log("Value of quietHoursStartTime_2: " + $scope.quietHoursStartTime_2);
-    };
+		};
+		console.log("Value of quietHoursStartTime_2: " + $scope.quietHoursStartTime_2);
+	};
 
-    $scope.initTimes = function() {
-        var t1 = document.getElementById("times_1");
-        // var t2 = document.getElementById("times_2");
-        // var p = document.getElementById("plus");
-        // var m = document.getElementById("minus");
-        if ($scope.quietTime === false) {
-            t1.style.display = 'none';
-            // t2.style.display = 'none';
-            // p.style.display = 'none';
-            // m.style.display = 'none';
-        } else //if ($scope.secondTime === false) {
-        {   t1.style.display = 'block';
-            // t2.style.display = 'none';
-            // p.style.display = '';
-            // m.style.display = 'none';
-        } //else {
-            // t1.style.display = 'block';
-            // t2.style.display = 'block';
-            // p.style.display = 'none';
-            // m.style.display = '';
-        // }
-    };
+	$scope.initTimes = function() {
+		var t1 = document.getElementById("times_1");
+		// var t2 = document.getElementById("times_2");
+		// var p = document.getElementById("plus");
+		// var m = document.getElementById("minus");
+		if ($scope.quietTime === false) {
+			t1.style.display = 'none';
+			// t2.style.display = 'none';
+			// p.style.display = 'none';
+			// m.style.display = 'none';
+		} else //if ($scope.secondTime === false) {
+		{	t1.style.display = 'block';
+			// t2.style.display = 'none';
+			// p.style.display = '';
+			// m.style.display = 'none';
+		} //else {
+			// t1.style.display = 'block';
+			// t2.style.display = 'block';
+			// p.style.display = 'none';
+			// m.style.display = '';
+		// }
+	};
 
-    $scope.loadTimes = function() {
+	$scope.loadTimes = function() {
         $scope.quietHoursStartTime_1 = $localstorage.getObject('quietHoursStartTime_1');
         $scope.quietHoursStopTime_1  = $localstorage.getObject('quietHoursStopTime_1');
         $scope.quietHoursStartTime_2 = $localstorage.getObject('quietHoursStartTime_2');
