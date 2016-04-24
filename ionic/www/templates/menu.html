@@ -13,11 +13,12 @@
 		<ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
 	</ion-side-menu-content>
 
-	<ion-side-menu class="background-setup" side="left" ng-controller="SettingsCtrl" style="background-image: url({{backgroundurl}});">
+	<ion-side-menu  class="background-menu" side="left" ng-controller="SettingsCtrl" style="border-right: 2px solid white; background-image: url({{backgroundurl}})">
 		<header class="bar bar-header bar-clear">
 			<h1 class="title">Settings</h1>
 		</header>
-		<ion-content class="has-header">
+		<ion-content class="has-header" style="background-color: #03373B; background-image: url({{backgroundurl}}); background-repeat: no-repeat;
+			background-position: center center; background-size: cover;">
 			<ion-list>
 				<ion-toggle id="menuitem" ng-model="gps" toggle-class="toggle-calm" ng-click="geolocationToggled()">Enable GPS</ion-toggle>
 				<ion-toggle id="menuitem" ng-model="alerts" toggle-class="toggle-calm" ng-click="alertsToggled()">Enable Notifications</ion-toggle>
@@ -52,7 +53,7 @@
 		</ion-content>
 	</ion-side-menu>
 
-	<ion-side-menu class="background-setup" side="right" ng-controller="SettingsCtrl" style="background-image: url({{backgroundurl}})">
+	<ion-side-menu class="background-menu" side="right" ng-controller="SettingsCtrl" style="border-left: 2px solid white; background-image: url({{backgroundurl}})">
 		<ion-list>
 			<ion-item menu-close id="menuitem">
 				<a class="button button-block" icon="ion-ios-home" href="#/app/dash" id="menuitem">Home</a>

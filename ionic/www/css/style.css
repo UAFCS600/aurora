@@ -50,8 +50,16 @@ ion-popover-view.fit ion-content {
 	/* background: radial-gradient(#054F42,#392A7B) !important; */
 }
 
-.background-setup {
+.background-menu {
 		background-repeat: no-repeat;
 		background-position: center center; 
 		background-size: cover;
+		background-color: #03373B;
+}
+
+.background-views {
+		background-repeat: no-repeat;
+		background-position: center center; 
+		background-size: cover;
+		background-color: #004444;
 }

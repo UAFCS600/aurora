@@ -455,16 +455,6 @@ angular.module('aurora.services', [])
 		//      2016-04-17T21:01:00.0+00:00
 		// which is UTC
         var apiDate   = new Date(timeStr);
-        var localDate = new Date();
-
-		// getTimezoneOffset gives: UTC - timeobject
-		// (480 minutes for Alaska, which is GMT-8)
-		// so, adding 480 minutes to the Alaska time gives UTC
-		var localOffset = localDate.getTimezoneOffset();
-
-		// this fixes the Date constructor always using the local device offset
-		// basically setting the apiDate to actual UTC
-		apiDate.setMinutes(apiDate.getMinutes() + localOffset);
 
         var theDate  = apiDate.getDate();
         var theMonth = months[apiDate.getMonth()];
