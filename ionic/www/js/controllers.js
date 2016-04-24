@@ -1,7 +1,11 @@
 angular.module('aurora.controllers', [])
 
 .controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform, $background) {
-    $scope.forecast = $kpAPI.getForecast();
+    var updateForecast = function(latestForecast) {
+        $scope.forecast = latestForecast;
+    };
+
+    $kpAPI.updateForecast(updateForecast);
 
     var checkKpNow = function() {
         if (!$scope.forecast.now)
@@ -27,11 +31,16 @@ angular.module('aurora.controllers', [])
         }
     };
 
-    $scope.backgroundurl = $background.getBackground();
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
 
     $ionicPlatform.on('resume', function() {
-        $scope.forecast      = $kpAPI.getForecast();
-        $scope.backgroundurl = $background.getBackground();
+        $kpAPI.updateForecast(updateForecast);
+
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 })
 
@@ -236,9 +245,11 @@ angular.module('aurora.controllers', [])
     $scope.loadSettings();
     $scope.loadTimes();
     $scope.outputSettings(false);
-    $scope.backgroundurl = $background.getBackground();
     $scope.initTimes();
 
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
 
     $scope.timeWindow = function(timeObj) {
         var time = {
@@ -294,14 +305,21 @@ angular.module('aurora.controllers', [])
     };
 
     $ionicPlatform.on('resume', function() {
-        $scope.backgroundurl = $background.getBackground();
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 })
 
 .controller('AboutCtrl', function($scope, $background, $ionicPlatform, $geolocation) {
-    $scope.backgroundurl = $background.getBackground();
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
+
     $ionicPlatform.on('resume', function() {
-        $scope.backgroundurl = $background.getBackground();
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 
     makeGeoCoord = function(lat, lon) {
@@ -359,15 +377,25 @@ angular.module('aurora.controllers', [])
 })
 
 .controller('FeedbackCtrl', function($scope, $background, $ionicPlatform) {
-    $scope.backgroundurl = $background.getBackground();
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
+
     $ionicPlatform.on('resume', function() {
-        $scope.backgroundurl = $background.getBackground();
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 })
 
 .controller('AllskyCtrl', function($scope, $background, $ionicPlatform) {
-    $scope.backgroundurl = $background.getBackground();
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
+
     $ionicPlatform.on('resume', function() {
-        $scope.backgroundurl = $background.getBackground();
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 });
