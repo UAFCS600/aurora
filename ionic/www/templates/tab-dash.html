@@ -1,5 +1,5 @@
 <ion-view view-title="Dashboard" controller="DashCtrl">
-	<ion-pane style="background-image: url({{backgroundurl}}); backgrno-repeat: no-repeat;
+	<ion-pane style="background-color: #004444; background-image: url({{backgroundurl}}); background-repeat: no-repeat;
 		background-position: center center; background-size: cover;">
 		<ion-content>
 			<div class="row">
@@ -8,6 +8,8 @@
 				</div>
 			</div>
 			<div class="row" id="kp-forecast">
+				<div style="position:fixed; left: 0.5rem; bottom: 3rem; font-size: 200%;"><</div>
+				<div style="position:fixed; right: 0.5rem; bottom: 3rem; font-size: 200%;">></div>
 				<ion-scroll direction="x" class="col wide-as-needed has-bouncing">
 					<div ng-repeat="kp in forecast" style="width:25%; min-width: 75px !important; display:inline-block">
 						<div class="forecast" id="kp-time">

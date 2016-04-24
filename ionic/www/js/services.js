@@ -30,7 +30,7 @@ angular.module('aurora.services', [])
     var gcmID     = '638344930515';//'209803454821'; // this is static for GCM
     var apnsId    = ''; //Apple iTunes App ID
     var windowsId = ''; //Windows Store ID
-    
+
     var initData  = {
         'android' : {
             'senderID' : gcmID
@@ -213,15 +213,15 @@ angular.module('aurora.services', [])
         if(Math.abs(gmagcoords.latitude)>62.4)
             idealKp = '2';
         if(Math.abs(gmagcoords.latitude)>64.5)
-            idealKp = '1';                
-        
+            idealKp = '1';
+
         return idealKp;
     };
 
     //This could actually call some API in the future, or a call to this could be replaced with an API call
     var getMagneticPole = function() {
         //geographic location geomagnetic pole as of 2015
-        var pole = { 
+        var pole = {
             latitude : 80.375*Math.PI/180,
             longitude : -72.625*Math.PI/180
         };
@@ -234,25 +234,25 @@ angular.module('aurora.services', [])
         var pole   = getMagneticPole();
         var mslat  = pole.latitude;
         var mslong = pole.longitude;
-        
+
         //geographic coordinates (To radians)
         var glat   = geographicCoord.latitude*Math.PI/180;
         var glong  = geographicCoord.longitude*Math.PI/180;
         var galt   = geographicCoord.altitude;
-        
+
         //set alt to radius of earth if no good data
         if(galt<1000)
             galt = 6371000;
-        
+
         //rectangular coordinates
         var x    = galt*Math.cos(glat)*Math.cos(glong);
         var y    = galt*Math.cos(glat)*Math.sin(glong);
         var z    = galt*Math.sin(glat);
-        
+
         var matrix;
         var rotation;
         var rotV = [0, 1, 0];
-        
+
         //Rotate by longitude
         matrix        = [0,0,0, 0,0,0, 0,0,0];
         rotation      = mslong;
@@ -261,55 +261,55 @@ angular.module('aurora.services', [])
         matrix[1*3+0] = Math.sin(rotation);
         matrix[1*3+1] = Math.cos(rotation);
         matrix[2*3+2] = 1;
-        
+
         //apply matrix
         x       = x*matrix[0]+y*matrix[1]+z*matrix[2];
         y       = x*matrix[3]+y*matrix[4]+z*matrix[5];
         z       = x*matrix[6]+y*matrix[7]+z*matrix[8];
-        
+
         //Establish the rotation vector for the latitude shift
         rotV[0] = rotV[0]*matrix[0]+rotV[1]*matrix[1]+rotV[2]*matrix[2];
         rotV[1] = rotV[0]*matrix[3]+rotV[1]*matrix[4]+rotV[2]*matrix[5];
         rotV[2] = rotV[0]*matrix[6]+rotV[1]*matrix[7]+rotV[2]*matrix[8];
-        
+
         var mag = Math.sqrt(rotV[0]*rotV[0]+rotV[1]*rotV[1]+rotV[2]*rotV[2]);
-        
+
         rotV[0] = rotV[0]/mag;
         rotV[1] = rotV[1]/mag;
         rotV[2] = rotV[2]/mag;
-        
+
         //Rotate by latitude
         matrix        = [0,0,0, 0,0,0, 0,0,0];
         rotation      = Math.PI/2-mslat;
         matrix[0*3+0] = Math.cos(rotation)+rotV[0]*rotV[0]*(1-Math.cos(rotation));
         matrix[0*3+1] = rotV[0]*rotV[1]*(1-Math.cos(rotation))-1*rotV[2]*Math.sin(rotation);
         matrix[0*3+2] = rotV[0]*rotV[2]*(1-Math.cos(rotation))+rotV[1]*Math.sin(rotation);
-        
+
         matrix[1*3+0] = rotV[0]*rotV[1]*(1-Math.cos(rotation))+rotV[2]*Math.sin(rotation);
         matrix[1*3+1] = Math.cos(rotation)+rotV[1]*rotV[1]*(1-Math.cos(rotation));
         matrix[1*3+2] = rotV[1]*rotV[2]*(1-Math.cos(rotation))-1*rotV[0]*Math.sin(rotation);
-        
+
         matrix[2*3+0] = rotV[0]*rotV[2]*(1-Math.cos(rotation))-1*rotV[1]*Math.sin(rotation);
         matrix[2*3+2] = rotV[1]*rotV[2]*(1-Math.cos(rotation))+rotV[0]*Math.sin(rotation);
         matrix[2*3+2] = Math.cos(rotation)+rotV[2]*rotV[2]*(1-Math.cos(rotation));
-        
+
         //apply matrix
         x = x*matrix[0]+y*matrix[1]+z*matrix[2];
         y = x*matrix[3]+y*matrix[4]+z*matrix[5];
         z = x*matrix[6]+y*matrix[7]+z*matrix[8];
-        
+
         //convert back
         var mlat  = Math.atan(z/Math.sqrt(Math.pow(x,2)+Math.pow(y,2)))*180/Math.PI;
         var mlong = Math.atan(y/x)*180/Math.PI;
         var malt  = Math.sqrt(Math.pow(x,2)+Math.pow(y,2)+Math.pow(z,2)); //not needed
         //Method is imperfect but close enough
-        
+
         var magCoords = {
             latitude : mlat,
             longitude : mlong,
             altitude : malt
         };
-        
+
         return magCoords;
     };
 
@@ -332,7 +332,7 @@ angular.module('aurora.services', [])
                         'Heading: ' + position.coords.heading + '\n' +
                         'Speed: ' + position.coords.speed + '\n' +
                         'Timestamp: ' + position.timestamp + '\n');
-                    
+
                 }, function(error) {
                     alert('Code: ' + error.code + '\n' +
                         'Message: ' + error.message + '\n');
@@ -349,18 +349,18 @@ angular.module('aurora.services', [])
                 };
 
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    var geoCoords = { 
+                    var geoCoords = {
                         latitude : position.coords.latitude,
                         longitude : position.coords.longitude,
                         altitude : position.coords.altitude
-                    };  
-                    
+                    };
+
                     var magCoords = convertGeographicToGeomagnetic(geoCoords);
-                    
+
                     alert('Geomagnetic Latitude: ' + magCoords.latitude + '\n' +
                         'Geomagnetic Longitude: ' + magCoords.longitude + '\n' +
                         'Altitude: ' + magCoords.altitude);
-                    
+
                 }, function(error) {
                     alert('Code: ' + error.code + '\n' +
                         'Message: ' + error.message + '\n');
@@ -377,7 +377,7 @@ angular.module('aurora.services', [])
         },
         getInfo: function(params, callback) {
             var gps = $localstorage.get('gps', false);
-            
+
             if(gps) {
                 var options = {
                     enableHighAccuracy: true,
@@ -431,16 +431,6 @@ angular.module('aurora.services', [])
         //      2016-04-17T21:01:00.0+00:00
         // which is UTC
         var apiDate   = new Date(timeStr);
-        var localDate = new Date();
-
-        // getTimezoneOffset gives: UTC - timeobject
-        // (480 minutes for Alaska, which is GMT-8)
-        // so, adding 480 minutes to the Alaska time gives UTC
-        var localOffset = localDate.getTimezoneOffset();
-
-        // this fixes the Date constructor always using the local device offset
-        // basically setting the apiDate to actual UTC
-        apiDate.setMinutes(apiDate.getMinutes() + localOffset);
 
         var theDate  = apiDate.getDate();
         var theMonth = months[apiDate.getMonth()];
@@ -493,7 +483,7 @@ angular.module('aurora.services', [])
             //Finish writing
             console.log(error);
         });
-        
+
         console.log('Updated KP data.');
     };
 
