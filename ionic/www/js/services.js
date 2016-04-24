@@ -211,27 +211,66 @@ angular.module('aurora.services', [])
 
 	//Literally a table index of geomagnetic coordinates
 	var getIdealKP = function(gmagcoords) {
-		var idealKp = 'N/A';
+		var overHead = 'N/A';
+		var horizon = 'N/A';
 		//using chart found here: https://www.spaceweatherlive.com/en/help/the-kp-index
-		idealKp = '9';
+		horizon = '9';
+		if (Math.abs(gmagcoords.latitude) > 46)
+		{
+			horizon = '8';
+		}
+		if (Math.abs(gmagcoords.latitude) > 48.1)
+		{
+			horizon = '7';
+			overHead = '9';
+		}
 		if (Math.abs(gmagcoords.latitude) > 50.1)
-			idealKp = '8';
+		{
+			horizon = '6';
+			overHead = '8';
+		}
 		if (Math.abs(gmagcoords.latitude) > 52.2)
-			idealKp = '7';
+		{
+			horizon = '5';
+			overHead = '7';
+		}
 		if (Math.abs(gmagcoords.latitude) > 54.2)
-			idealKp = '6';
+		{
+			horizon = '4';
+			overHead = '6';
+		}
 		if (Math.abs(gmagcoords.latitude) > 56.3)
-			idealKp = '5';
+		{
+			horizon = '3';
+			overHead = '5';
+		}
 		if (Math.abs(gmagcoords.latitude) > 58.3)
-			idealKp = '4';
+		{
+			horizon = '2';
+			overHead = '4';
+		}
 		if (Math.abs(gmagcoords.latitude) > 60.4)
-			idealKp = '3';
+		{
+			horizon = '1';
+			overHead = '3';
+		}
 		if (Math.abs(gmagcoords.latitude) > 62.4)
-			idealKp = '2';
+		{
+			horizon = '0';
+			overHead = '2';
+		}
 		if (Math.abs(gmagcoords.latitude) > 64.5)
-			idealKp = '1';
+		{
+			overHead = '1';
+		}
+		if (Math.abs(gmagcoords.latitude) > 66.5)
+		{
+			overHead = '0';
+		}
+		
+		var kp = {OverHead: overHead, Horizon: horizon};
 
-		return idealKp;
+		return kp;
 	};
 
 	//This could actually call some API in the future, or a call to this could be replaced with an API call
