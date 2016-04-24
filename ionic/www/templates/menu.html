@@ -13,8 +13,7 @@
 		<ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
 	</ion-side-menu-content>
 
-	<ion-side-menu side="left" ng-controller="SettingsCtrl" style="border-right: 2px solid white; background-color: #03373B; background-image: url({{backgroundurl}}); background-repeat: no-repeat;
-		background-position: center center; background-size: cover;">
+	<ion-side-menu  class="background-menu" side="left" ng-controller="SettingsCtrl" style="border-right: 2px solid white; background-image: url({{backgroundurl}})">
 		<header class="bar bar-header bar-clear">
 			<h1 class="title">Settings</h1>
 		</header>
@@ -29,7 +28,6 @@
 					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)"> {{kpTrigger}}
 				</div>
 
-				<ion-item id="menuitem" ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
 				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Quiet Hours</ion-toggle>
 				<div id="times_1" style="display : block; text-align : center; align-items : center">
 					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
@@ -54,23 +52,22 @@
 		</ion-content>
 	</ion-side-menu>
 
-	<ion-side-menu side="right" ng-controller="SettingsCtrl" style="border-left: 2px solid white; background-color: #03373B; background-image: url({{backgroundurl}}); background-repeat: no-repeat;
-		background-position: center center; background-size: cover;">
+	<ion-side-menu class="background-menu" side="right" ng-controller="SettingsCtrl" style="border-left: 2px solid white; background-image: url({{backgroundurl}})">
 		<ion-list>
 			<ion-item menu-close id="menuitem">
-				<a class="button button-block" icon="ion-ios-home" href="#/app/dash" id="menuitem">Home</a>
+				<a class="button button-block aurora-button" icon="ion-ios-home" href="#/app/dash" id="menuitem">Home</a>
 			</ion-item>
 
 			<ion-item menu-close id="menuitem">
-				<a class="button button-block" icon="ion-ios-flower" href="#/app/allsky" id="menuitem">Allsky</a>
+				<a class="button button-block aurora-button" icon="ion-ios-flower" href="#/app/allsky" id="menuitem">Allsky</a>
 			</ion-item>
 
 			<ion-item menu-close id="menuitem">
-				<a class="button button-block" icon="ion-ios-information" href="#/app/about" id="menuitem">About</a>
+				<a class="button button-block aurora-button" icon="ion-ios-information" href="#/app/about" id="menuitem">About</a>
 			</ion-item>
 
 			<ion-item menu-close id="menuitem">
-				<a class="button button-block" icon="ion-ios-information" href="#/app/feedback" id="menuitem">Feedback</a>
+				<a class="button button-block aurora-button" icon="ion-ios-information" href="#/app/feedback" id="menuitem">Feedback</a>
 			</ion-item>
 		</ion-list>
 	</ion-side-menu>
