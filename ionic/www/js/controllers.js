@@ -10,98 +10,98 @@ angular.module('aurora.controllers', [])
 
 	var viewportHeight = window.innerHeight;
 	if (viewportHeight > 300) {
-		var kpnow = document.getElementById("kp-now");
-		kpnow.style.height = viewportHeight / 2 + "px";
-		kpnow.style.lineHeight = viewportHeight / 2 + "px";
-		kpnow.style.fontSize = viewportHeight / 2 + "px";
+        var kpnow              = document.getElementById("kp-now");
+        kpnow.style.height     = viewportHeight / 2 + "px";
+        kpnow.style.lineHeight = viewportHeight / 2 + "px";
+        kpnow.style.fontSize   = viewportHeight / 2 + "px";
 	}
 
 
 	window.onresize = function() {
 		var viewportHeight = window.innerHeight;
 		if (viewportHeight > 300) {
-			var kpnow = document.getElementById("kp-now");
-			kpnow.style.height = viewportHeight / 2 + "px";
-			kpnow.style.lineHeight = viewportHeight / 2 + "px";
-			kpnow.style.fontSize = viewportHeight / 2 + "px";
+            var kpnow              = document.getElementById("kp-now");
+            kpnow.style.height     = viewportHeight / 2 + "px";
+            kpnow.style.lineHeight = viewportHeight / 2 + "px";
+            kpnow.style.fontSize   = viewportHeight / 2 + "px";
 		}
 	};
 
 	$scope.backgroundurl = $background.getBackground();
 
 	$ionicPlatform.on('resume', function() {
-		$scope.forecast = $kpAPI.getForecast();
-		$scope.backgroundurl = $background.getBackground();
+        $scope.forecast      = $kpAPI.getForecast();
+        $scope.backgroundurl = $background.getBackground();
 	});
 })
 
 .controller('SettingsCtrl', function($scope, $localstorage, $ionicPopover, $push, $geolocation, $background, $ionicPlatform, ionicTimePicker) {
 	$scope.loadDefaults = function() {
-		$scope.alerts = true;
-		$scope.kpTrigger = 1;
-		$scope.daytime = false;
-		$scope.gps = true;
-		$scope.zip = 90210;
-		$scope.quietTime = false;
-		$scope.secondTime = false;
+        $scope.alerts     = true;
+        $scope.kpTrigger  = 1;
+        $scope.daytime    = false;
+        $scope.gps        = true;
+        $scope.zip        = 90210;
+        $scope.quietTime  = false;
+        $scope.secondTime = false;
 	};
 
 	$scope.makeTimes = function() {
 		$scope.quietHoursStartTime_1 = {
-			'hours': "08",
-			'minutes': "00",
-			'half': "AM",
-			'epoch': 28800
-		};
+            'hours'  : "08",
+            'minutes': "00",
+            'half'   : "AM",
+            'epoch'  : 28800
+        };
 		$scope.quietHoursStopTime_1 = {
-			'hours': "08",
-			'minutes': "00",
-			'half': "PM",
-			'epoch': 72000
+            'hours'  : "08",
+            'minutes': "00",
+            'half'   : "PM",
+            'epoch'  : 72000
 		};
 		$scope.quietHoursStartTime_2 = {
-			'hours': "08",
-			'minutes': "00",
-			'half': "AM",
-			'epoch': 28800
+            'hours'  : "08",
+            'minutes': "00",
+            'half'   : "AM",
+            'epoch'  : 28800
 		};
 		$scope.quietHoursStopTime_2 = {
-			'hours': "08",
-			'minutes': "00",
-			'half': "PM",
-			'epoch': 72000
+            'hours'  : "08",
+            'minutes': "00",
+            'half'   : "PM",
+            'epoch'  : 72000
 		};
 		console.log("Value of quietHoursStartTime_2: " + $scope.quietHoursStartTime_2);
 	};
 
 	$scope.initTimes = function() {
-		var t1 = document.getElementById("times_1");
-		var t2 = document.getElementById("times_2");
-		var p = document.getElementById("plus");
-		var m = document.getElementById("minus");
+        var t1 = document.getElementById("times_1");
+        var t2 = document.getElementById("times_2");
+        var p  = document.getElementById("plus");
+        var m  = document.getElementById("minus");
 		if ($scope.quietTime === false) {
-			t1.style.display = 'none';
-			t2.style.display = 'none';
-			p.style.display = 'none';
-			m.style.display = 'none';
+            t1.style.display = 'none';
+            t2.style.display = 'none';
+            p.style.display  = 'none';
+            m.style.display  = 'none';
 		} else if ($scope.secondTime === false) {
-			t1.style.display = 'flex';
-			t2.style.display = 'none';
-			p.style.display = 'flex';
-			m.style.display = 'none';
+            t1.style.display = 'flex';
+            t2.style.display = 'none';
+            p.style.display  = 'flex';
+            m.style.display  = 'none';
 		} else {
-			t1.style.display = 'flex';
-			t2.style.display = 'flex';
-			p.style.display = 'none';
-			m.style.display = 'flex';
+            t1.style.display = 'flex';
+            t2.style.display = 'flex';
+            p.style.display  = 'none';
+            m.style.display  = 'flex';
 		}
 	};
 
 	$scope.loadTimes = function() {
-		$scope.quietHoursStartTime_1 = $localstorage.getObject('quietHoursStartTime_1');
-		$scope.quietHoursStopTime_1 = $localstorage.getObject('quietHoursStopTime_1');
-		$scope.quietHoursStartTime_2 = $localstorage.getObject('quietHoursStartTime_2');
-		$scope.quietHoursStopTime_2 = $localstorage.getObject('quietHoursStopTime_2');
+        $scope.quietHoursStartTime_1 = $localstorage.getObject('quietHoursStartTime_1');
+        $scope.quietHoursStopTime_1  = $localstorage.getObject('quietHoursStopTime_1');
+        $scope.quietHoursStartTime_2 = $localstorage.getObject('quietHoursStartTime_2');
+        $scope.quietHoursStopTime_2  = $localstorage.getObject('quietHoursStopTime_2');
 		console.log($scope.quietHoursStartTime_2);
 		if (typeof $scope.quietHoursStartTime_2.hours == 'undefined') {
 			$scope.makeTimes();
@@ -131,13 +131,13 @@ angular.module('aurora.controllers', [])
 	};
 
 	$scope.loadSettings = function() {
-		$scope.alerts = $localstorage.get('alerts');
-		$scope.kpTrigger = $localstorage.get('kpTrigger');
-		$scope.daytime = $localstorage.get('daytime');
-		$scope.gps = $localstorage.get('gps');
-		$scope.zip = $localstorage.get('zip');
-		$scope.quietTime = $localstorage.get('quietTime');
-		$scope.secondTime = $localstorage.get('secondTime');
+        $scope.alerts     = $localstorage.get('alerts');
+        $scope.kpTrigger  = $localstorage.get('kpTrigger');
+        $scope.daytime    = $localstorage.get('daytime');
+        $scope.gps        = $localstorage.get('gps');
+        $scope.zip        = $localstorage.get('zip');
+        $scope.quietTime  = $localstorage.get('quietTime');
+        $scope.secondTime = $localstorage.get('secondTime');
 
 		if (typeof $scope.alerts == 'undefined') {
 			$scope.loadDefaults();
@@ -255,27 +255,27 @@ angular.module('aurora.controllers', [])
 					//Hours
 					var hour = (selectedTime.getUTCHours() % 12);
 					if (selectedTime.getUTCHours() === 0) {
-						hour = 12;
-						tObj.half = "PM";
+                        hour      = 12;
+                        tObj.half = "PM";
 					}
 
 					if (selectedTime.getUTCHours() == 12) {
-						hour = 12;
-						tObj.half = "AM";
+                        hour      = 12;
+                        tObj.half = "AM";
 					}
 
 					tObj.hours = hour.toString();
 					if (tObj.hours.length < 2) {
-						var temp = tObj.hours;
-						tObj.hours = "0" + temp;
+                        var temp   = tObj.hours;
+                        tObj.hours = "0" + temp;
 					}
 
 					//Minutes 
-					var min = selectedTime.getUTCMinutes();
-					tObj.minutes = min.toString();
+                    var min      = selectedTime.getUTCMinutes();
+                    tObj.minutes = min.toString();
 					if (tObj.minutes.length < 2) {
-						var tempMin = tObj.minutes;
-						tObj.minutes = "0" + tempMin;
+                        var tempMin  = tObj.minutes;
+                        tObj.minutes = "0" + tempMin;
 					}
 				}
 				$scope.saveTimes();
