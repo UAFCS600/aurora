@@ -1,8 +1,6 @@
 <ion-side-menus>
 	<ion-side-menu-content drag-content="false">
 		<ion-nav-bar class="bar-clear">
-			<!-- <ion-nav-back-button>
-		</ion-nav-back-button> -->
 			<ion-nav-buttons side="left">
 				<!-- Toggle left side menu -->
 				<button menu-toggle="left" class="button button-icon icon ion-ios-gear-outline" ng-click="toggleLeft();"></button>
@@ -26,17 +24,27 @@
 				<ion-toggle id="menuitem" ng-model="alerts" toggle-class="toggle-calm" ng-click="alertsToggled()">Enable Notifications</ion-toggle>
 
 				<div class="item range" id="menuitem">
-					KP Trigger
-					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)">
-					{{kpTrigger}}
+					Aurora Intensity
+					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)"> {{kpTrigger}}
 				</div>
 
 				<ion-item id="menuitem" ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
-				<ion-item id="menuitem">Notification Quiet Hours</ion-item>
-				<div style="display : flex; justify-content : center; align-items : center">
-					<ion-item id="menuitem" ng-click="timeWindow(time1);" style="display: inline-block">{{time1.hours}}:{{time1.minutes}} {{time1.half}}</ion-item>
+				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Quiet Hours</ion-toggle>
+				<div id="times_1" style="display : flex; justify-content : center; align-items : center">
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
-					<ion-item id="menuitem" ng-click="timeWindow(time2);" style="display: inline-block">{{time2.hours}}:{{time2.minutes}} {{time2.half}}</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_1);" style="display: inline-block">{{quietHoursStopTime_1.hours}}:{{quietHoursStopTime_1.minutes}} {{quietHoursStopTime_1.half}}</ion-item>
+				</div>
+				<div id="plus" style="display : flex; justify-content : center; align-items : center">
+					<button class="button button-icon icon ion-ios-plus-outline" ng-click="secondTimeToggled();"></button>
+				</div>
+				<div id="times_2" style="display : flex; justify-content : center; align-items : center">
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_2);" style="display: inline-block">{{quietHoursStartTime_2.hours}}:{{quietHoursStartTime_2.minutes}} {{quietHoursStartTime_2.half}}</ion-item>
+					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_2);" style="display: inline-block">{{quietHoursStopTime_2.hours}}:{{quietHoursStopTime_2.minutes}} {{quietHoursStopTime_2.half}}</ion-item>
+				</div>
+				<div id="minus" style="display : flex; justify-content : center; align-items : center">
+					<button class="button button-icon icon ion-ios-minus-outline" ng-click="secondTimeToggled();"></button>
 				</div>
 			</ion-list>
 		</ion-content>
