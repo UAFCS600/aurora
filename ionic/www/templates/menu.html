@@ -28,11 +28,11 @@
 					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)"> {{kpTrigger}}
 				</div>
 
-				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Quiet Hours</ion-toggle>
+				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Only Notify Between:</ion-toggle>
 				<div id="times_1" style="display : block; text-align : center; align-items : center">
-					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
-					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
-					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_1);" style="display: inline-block">{{quietHoursStopTime_1.hours}}:{{quietHoursStopTime_1.minutes}} {{quietHoursStopTime_1.half}}</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block; padding-left: 0px !important; padding-right: 0px !important;">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
+					<ion-item id="menuitem" style="display: inline-block;">and</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_1);" style="display: inline-block; padding-left: 0px !important; padding-right: 0px !important;">{{quietHoursStopTime_1.hours}}:{{quietHoursStopTime_1.minutes}} {{quietHoursStopTime_1.half}}</ion-item>
 					<!-- <div id="plus" style="display : inline-block; text-align : center">
 						<button class="button button-icon icon ion-ios-plus-outline" style = "display : inline-block" ng-click="secondTimeToggled();"></button>
 					</div> -->
