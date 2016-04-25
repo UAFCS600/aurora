@@ -25,19 +25,31 @@ dbUtil.prototype.insertClient = function(clientInfo, onSuccess, onFailure) {
 			onFailure(err);
 		}
 		else {
-			connection.query('INSERT INTO clients SET ?', clientInfo, function(err, res) {
-				if(err) {
-					console.log('Could not insert into database: ' + err);
-					success = false;
-					onFailure(err);
+			var checkQuery = 'SELECT id FROM clients WHERE token=\'' + clientInfo.token +'\'';
+			connection.query(checkQuery, function(err, rows, fields) {
+				if (err) {
+					console.log('Could not get tokens: ' + err);
+					onFailure('Could not check for duplicates.');
+				}
+				else if(rows.length > 0) {
+					onFailure('Key already exists.');
 				}
 				else {
-					console.log('Last inserted ID: ' + res.insertId);
-					success = true;
-					onSuccess('Registration successful.');
-				}
+					connection.query('INSERT INTO clients SET ?', clientInfo, function(err, res) {
+						if(err) {
+							console.log('Could not insert into database: ' + err);
+							success = false;
+							onFailure(err);
+						}
+						else {
+							console.log('Last inserted ID: ' + res.insertId);
+							success = true;
+							onSuccess('Registration successful.');
+						}
 
-				connection.release();
+						connection.release();
+					});
+				}
 			});
 		}
 	});
@@ -110,7 +122,7 @@ dbUtil.prototype.updateClient = function(clientInfo, onSuccess, onFailure) {
 						success = true;
 						onSuccess('Updated registration.');
 					}
-					else onFailure('No matching token.');
+					else onFailure('No updates made');
 				}
 
 				connection.release();
@@ -189,8 +201,7 @@ dbUtil.prototype.getTokens = function(kpTrigger, service, onSuccess, onFailure) 
 						"AND service = '" + service + "'";
 		    console.log('Query: ' + query);
 
-			connection.query(query,
-				function(err, rows, fields) {
+			connection.query(query, function(err, rows, fields) {
 				if (err) {
 					console.log('Could not get tokens: ' + err);
 					onFailure(err);
