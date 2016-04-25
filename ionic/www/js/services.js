@@ -36,10 +36,10 @@ angular.module('aurora.services', [])
 			'senderID': gcmID
 		},
 		'ios': {
-			'ios.alert': true,
-			'ios.badge': true,
-			'ios.sound': true,
-			'ios.clearBage': true
+			'alert': true,
+			'badge': true,
+			'sound': true,
+			'clearBage': true
 		},
 		'windows': {
 
