@@ -36,10 +36,13 @@ angular.module('aurora.services', [])
 			'senderID': gcmID
 		},
 		'ios': {
-			'senderID': apnsId
+			ios.alert: true,
+			ios.badge: true,
+			ios.sound: true,
+			ios.clearBage: true
 		},
 		'windows': {
-			'senderID': windowsId
+
 		}
 	};
 
@@ -267,7 +270,7 @@ angular.module('aurora.services', [])
 		{
 			overHead = '0';
 		}
-		
+
 		var kp = {OverHead: overHead, Horizon: horizon};
 
 		return kp;
@@ -587,7 +590,7 @@ angular.module('aurora.services', [])
 						url = backgroundlist[0].url;
 						break;
 				}
-				
+
 				callback(url);
 	    	});
 		}
