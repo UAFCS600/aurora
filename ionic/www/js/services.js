@@ -26,11 +26,9 @@ angular.module('aurora.services', [])
 
 //Push notification services
 .factory('$push', function($http, $location, $localstorage, $kpAPI, $geolocation) {
-    var push      = false;
-    var gcmID     = '638344930515';
-    var apnsId    = ''; //Apple iTunes App ID
-    var windowsId = ''; //Windows Store ID
-
+	var push     = false;
+	var gcmID    = '638344930515';
+	
 	var initData = {
 		'android': {
 			'senderID': gcmID
@@ -63,7 +61,7 @@ angular.module('aurora.services', [])
 	};
 
 	var receivedNotification = function(data) {
-		var message = JSON.parse(data.message);
+		var message   = JSON.parse(data.message);
 		var kpTrigger = message.kpTrigger;
 		$kpAPI.setNow(kpTrigger);
 
@@ -181,9 +179,9 @@ angular.module('aurora.services', [])
 			});
 		},
 		unregister: function() {
-			var info = {};
+			var info   = {};
 			info.token = $localstorage.get('pushToken');
-			info.mode = 'remove';
+			info.mode  = 'remove';
 
 			postToPushServer(info, function() {
 				console.log("AURORA: Push notifications disabled.");
@@ -214,60 +212,49 @@ angular.module('aurora.services', [])
 
 	//Literally a table index of geomagnetic coordinates
 	var getIdealKP = function(gmagcoords) {
-		var overHead = 'N/A';
-		var horizon = 'N/A';
+		var overHead            = 'N/A';
+		var horizon             = 'N/A';
 		//using chart found here: https://www.spaceweatherlive.com/en/help/the-kp-index
-		horizon = '9';
-		if (Math.abs(gmagcoords.latitude) > 46)
-		{
-			horizon = '8';
+		horizon                 = '9';
+		if (Math.abs(gmagcoords.latitude) > 46) {
+			horizon  = '8';
 		}
-		if (Math.abs(gmagcoords.latitude) > 48.1)
-		{
-			horizon = '7';
+		if (Math.abs(gmagcoords.latitude) > 48.1) {
+			horizon  = '7';
 			overHead = '9';
 		}
-		if (Math.abs(gmagcoords.latitude) > 50.1)
-		{
-			horizon = '6';
+		if (Math.abs(gmagcoords.latitude) > 50.1) {
+			horizon  = '6';
 			overHead = '8';
 		}
-		if (Math.abs(gmagcoords.latitude) > 52.2)
-		{
-			horizon = '5';
+		if (Math.abs(gmagcoords.latitude) > 52.2) {
+			horizon  = '5';
 			overHead = '7';
 		}
-		if (Math.abs(gmagcoords.latitude) > 54.2)
-		{
-			horizon = '4';
+		if (Math.abs(gmagcoords.latitude) > 54.2) {
+			horizon  = '4';
 			overHead = '6';
 		}
-		if (Math.abs(gmagcoords.latitude) > 56.3)
-		{
-			horizon = '3';
+		if (Math.abs(gmagcoords.latitude) > 56.3) {
+			horizon  = '3';
 			overHead = '5';
 		}
-		if (Math.abs(gmagcoords.latitude) > 58.3)
-		{
-			horizon = '2';
+		if (Math.abs(gmagcoords.latitude) > 58.3) {
+			horizon  = '2';
 			overHead = '4';
 		}
-		if (Math.abs(gmagcoords.latitude) > 60.4)
-		{
-			horizon = '1';
+		if (Math.abs(gmagcoords.latitude) > 60.4) {
+			horizon  = '1';
 			overHead = '3';
 		}
-		if (Math.abs(gmagcoords.latitude) > 62.4)
-		{
-			horizon = '0';
+		if (Math.abs(gmagcoords.latitude) > 62.4) {
+			horizon  = '0';
 			overHead = '2';
 		}
-		if (Math.abs(gmagcoords.latitude) > 64.5)
-		{
+		if (Math.abs(gmagcoords.latitude) > 64.5) {
 			overHead = '1';
 		}
-		if (Math.abs(gmagcoords.latitude) > 66.5)
-		{
+		if (Math.abs(gmagcoords.latitude) > 66.5) {
 			overHead = '0';
 		}
 
@@ -434,7 +421,7 @@ angular.module('aurora.services', [])
 //GI API service
 .factory('$kpAPI', function($http, $localstorage) {
 	var latestForecast = {};
-	var apiURL = 'http://cs472.gi.alaska.edu/kp.php?';
+	var apiURL         = 'http://cs472.gi.alaska.edu/kp.php?';
 
 	var loadForecastFromStorage = function() {
 		latestForecast = $localstorage.getObject('forecast');
@@ -457,12 +444,12 @@ angular.module('aurora.services', [])
 		// timeStr is in format:
 		//      2016-04-17T21:01:00.0+00:00
 		// which is UTC
-        var apiDate   = new Date(timeStr);
-
-        var theDate  = apiDate.getDate();
-        var theMonth = months[apiDate.getMonth()];
-        var theDay   = days[apiDate.getDay()];
-        var theHour  = apiDate.getHours();
+		var apiDate  = new Date(timeStr);
+		
+		var theDate  = apiDate.getDate();
+		var theMonth = months[apiDate.getMonth()];
+		var theDay   = days[apiDate.getDay()];
+		var theHour  = apiDate.getHours();
 
 		var ampm = theHour < 12 ? "am" : "pm";
 		if (theHour > 12) {
