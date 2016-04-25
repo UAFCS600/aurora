@@ -110,6 +110,8 @@ var notificationInterval = setInterval(function() {
     notifier.notifyClients();
 }, 1000*60*15);
 
+notifier.notifyClients();
+
 var server = http.createServer(handleRequest);
 
 server.listen(PORT, function(){
