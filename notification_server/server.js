@@ -1,8 +1,10 @@
 require('./db_util.js');
+require('./notification_sender.js');
 var http       = require('http');
 var dispatcher = require('httpdispatcher');
 var PORT       = 80;
 var db_util    = new dbUtil();
+var notifier   = new Notifier();
 
 var handleRegisterRequest = function(data, onSuccess, onFailure) {
     var clientInfo = {
@@ -104,6 +106,9 @@ var handleRequest = function(request, response){
     }
 };
 
+var notificationInterval = setInterval(function() {
+    notifier.notifyClients();
+}, 1000*60*15);
 
 var server = http.createServer(handleRequest);
 
