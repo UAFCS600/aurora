@@ -4,8 +4,11 @@
   "description": "Server for sending push notifications for UAF Geophysical Institute",
   "main": "server.js",
   "dependencies": {
+    "http": "^0.0.0",
     "httpdispatcher": "^1.0.0",
-    "mysql": "^2.10.2"
+    "mysql": "^2.10.2",
+    "node-gcm": "^0.14.0",
+    "apn": "^1.7.5"
   },
   "devDependencies": {},
   "scripts": {
