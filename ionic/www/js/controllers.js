@@ -187,10 +187,6 @@ angular.module('aurora.controllers', [])
         $push.initPushNotifications();
     };
 
-    $scope.unregisterPush      = function() {
-        $push.unregister();
-    };
-
     $scope.changeKpTrigger     = function(kpTrigger) {
         var info = {'kpTrigger':kpTrigger};
 
@@ -214,10 +210,10 @@ angular.module('aurora.controllers', [])
         console.log('AURORA: Alerts toggled!');
 
         if($scope.alerts) {
-            $scope.initPush();
+            $push.register();
         }
         else {
-            $scope.unregisterPush();
+            $push.unregister();
         }
     };
 
