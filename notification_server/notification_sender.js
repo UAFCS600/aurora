@@ -1,6 +1,7 @@
 require('./db_util.js');
 var http    = require('http');
 var gcm     = require('node-gcm');
+var apn     = require('apn');
 var config  = require('./config.json');
 var db_util = new dbUtil();
 
@@ -67,6 +68,42 @@ Notifier.prototype.sendGCMMessages = function(self, kp, clients) {
 
 Notifier.prototype.sendAPNSMessages = function(self, kp, clients) {
     console.log('Sending message to APNS clients: ' + clients);
+
+	var options = {
+		"cert": "./dev_cert.pem",
+		"key": "./dev_key.pem",
+        "production": false,
+        "batchFeedback": true
+    };
+
+    var badClients = [];
+    var feedback   = new apn.Feedback(options);
+	feedback.on("feedback", function(devices) {
+		devices.forEach(function(item) {
+			console.log("BAD APNS: " + item.device);
+			badClients.push(item.device);
+		});
+		self.removeBadClients(badClients,
+						function() {console.log('Removed all bad clients');},
+						function() {console.log('Could not remove all bad clients');});
+	});
+
+	var apnConnection = new apn.Connection(options);
+
+	apnConnection.on("completed",         function()    { console.log("APNS: Completed!")});
+	apnConnection.on("connected",         function()    { console.log("APNS: Connected"); });
+	apnConnection.on('disconnected',      function()    { console.log("APNS: Disconnected", arguments); });
+	apnConnection.on('error',             function(err) { console.log("APNS: Standard error", err); });
+	apnConnection.on('socketError',       function(err) { console.log("APNS: Socket error", err.message); });
+	apnConnection.on('timeout',           function()    { console.log("APNS: Timeout"); });
+	apnConnection.on('transmissionError', function(err) { console.log("APNS: Transmission Error", err); });
+
+    var message     = new apn.Notification();
+    message.badge   = 3;
+    message.alert   = "Aurora activity detected!";
+    message.payload = {kptrigger:kp};
+
+	apnConnection.pushNotification(message, clients);
 };
 
 Notifier.prototype.sendKpToClients = function(self, kp) {
