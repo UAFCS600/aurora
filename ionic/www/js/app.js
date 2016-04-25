@@ -65,16 +65,6 @@ angular.module('aurora', ['ionic', 'ionic-timepicker', 'aurora.controllers', 'au
                 controller: 'AllskyCtrl'
             }
         }
-    })
-	
-    .state('app.settings', {
-        url: '/settings',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/tab-settings.html',
-                controller: 'SettingsCtrl'
-            }
-        }
     });
 
     // if none of the above states are matched, use this as the fallback
