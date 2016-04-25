@@ -4,11 +4,13 @@ var gcm     = require('node-gcm');
 var config  = require('./config.json');
 var db_util = new dbUtil();
 
-var getClientTokens = function(kpTrigger, service, onSuccess, onFailure) {
+Notifier    = function() {};
+
+Notifier.prototype.getClientTokens = function(kpTrigger, service, onSuccess, onFailure) {
     db_util.getTokens(kpTrigger, service, onSuccess, onFailure);
 };
 
-var removeBadClients = function(clients, onSuccess, onFailure) {
+Notifier.prototype.removeBadClients = function(clients, onSuccess, onFailure) {
     var success = false;
 
     clients.forEach(function(client, index, array) {
@@ -20,9 +22,9 @@ var removeBadClients = function(clients, onSuccess, onFailure) {
                                 console.log('Could not remove ' + client + ': ' + err);
                              });
     });
-}
+};
 
-var getClientChunks = function(clientArr, chunkSize) {
+Notifier.prototype.getClientChunks = function(clientArr, chunkSize) {
     var retArr = [];
 
     var i, j, tempArray;
@@ -35,15 +37,15 @@ var getClientChunks = function(clientArr, chunkSize) {
     return retArr;
 };
 
-var sendGCMMessages = function(kp, clients) {
+Notifier.prototype.sendGCMMessages = function(self, kp, clients) {
     console.log('Sending message to GCM clients: ' + clients);
 
     var message = new gcm.Message();
+    var sender  = new gcm.Sender(config.gcmApiKey);
      
     message.addData('message', JSON.stringify({kptrigger:kp}));
     
     console.log('Using GCM Sender ID: ' + config.gcmApiKey);
-    var sender = new gcm.Sender(config.gcmApiKey);
      
     sender.send(message, { registrationTokens: clients }, function (err, response) {
         if(err) console.log('Error: ' + err + '\nResponse: ' + response);
@@ -56,43 +58,38 @@ var sendGCMMessages = function(kp, clients) {
                 }
             }
 
-            removeBadClients(badClients,
+            self.removeBadClients(badClients,
                              function() {console.log('Removed all bad clients');},
                              function() {console.log('Could not remove all bad clients');});
         }
     });
 };
 
-var sendAPNSMessages = function(kp, clients) {
+Notifier.prototype.sendAPNSMessages = function(self, kp, clients) {
     console.log('Sending message to APNS clients: ' + clients);
 };
 
-var sendKpToClients = function(kp) {
+Notifier.prototype.sendKpToClients = function(self, kp) {
     //Send GCM messages
-    getClientTokens(kp, 'gcm', function(tokens) {
-        var clientChunks = getClientChunks(tokens, 1000);
-        for(var i in clientChunks) sendGCMMessages(kp, clientChunks[i]);
+    this.getClientTokens(kp, 'gcm', function(tokens) {
+        var clientChunks = self.getClientChunks(tokens, 1000);
+        for(var i in clientChunks) self.sendGCMMessages(self, kp, clientChunks[i]);
     }, function(err) {
         console.log('Could not send GCM message: ' + err);
     });
 
     //Send APNS messages
-    getClientTokens(kp, 'apns', function(tokens) {
-        var clientChunks = getClientChunks(tokens, 1000);
-        for(var i in clientChunks) sendAPNSMessages(kp, clientChunks[i]);
+    this.getClientTokens(kp, 'apns', function(tokens) {
+        var clientChunks = self.getClientChunks(tokens, 1000);
+        for(var i in clientChunks) self.sendAPNSMessages(self, kp, clientChunks[i]);
     }, function(err) {
         console.log('Could not send APNS message: ' + err);
     });
 };
 
-var requestOptions = {
-	host: 'cs472.gi.alaska.edu',
-    path: '/kp.php?d=n'
-};
-
-var receivedResponse = function(response) {
-	// Continuously update stream with data
+Notifier.prototype.receivedResponse = function(self, response) {
     var body = '';
+
     response.on('data', function(d) {
         body += d;
     });
@@ -100,8 +97,19 @@ var receivedResponse = function(response) {
         var data      = JSON.parse(body);
         var currentKp = Math.ceil(data.data[0].kp);
         
-        sendKpToClients(currentKp);
+        self.sendKpToClients(self, currentKp);
     });
 };
 
-http.get(requestOptions, receivedResponse);
+Notifier.prototype.notifyClients = function() {
+    var requestOptions = {
+        host: 'cs472.gi.alaska.edu',
+        path: '/kp.php?d=n'
+    };
+
+    var self = this;
+
+    http.get(requestOptions, function(response) {
+        self.receivedResponse(self, response);
+    });
+};
