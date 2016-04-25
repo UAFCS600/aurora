@@ -1,15 +1,14 @@
-var http   = require('http');
-var gcm    = require('node-gcm');
-var config = require('./config.json');
 require('./db_util.js');
+var http    = require('http');
+var gcm     = require('node-gcm');
+var config  = require('./config.json');
+var db_util = new dbUtil();
 
 var getClientTokens = function(kpTrigger, service, onSuccess, onFailure) {
-    var db_util = new dbUtil();
     db_util.getTokens(kpTrigger, service, onSuccess, onFailure);
 };
 
 var removeBadClients = function(clients, onSuccess, onFailure) {
-    var db_util = new dbUtil();
     var success = false;
 
     clients.forEach(function(client, index, array) {
