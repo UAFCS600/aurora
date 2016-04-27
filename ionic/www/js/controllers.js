@@ -123,7 +123,6 @@ angular.module('aurora.controllers', [])
         $localstorage.setObject('quietHoursStopTime_1', $scope.quietHoursStopTime_1);
         $localstorage.setObject('quietHoursStartTime_2', $scope.quietHoursStartTime_2);
         $localstorage.setObject('quietHoursStopTime_2', $scope.quietHoursStopTime_2);
-
         var quietHoursStartTime_1 = $scope.formatTimeForPushServer($scope.quietHoursStartTime_1);
         var quietHoursStopTime_1  = $scope.formatTimeForPushServer($scope.quietHoursStopTime_1);
 
@@ -219,20 +218,44 @@ angular.module('aurora.controllers', [])
         console.log('AURORA: Quiet Time toggled!');
     };
 
-    $scope.secondTimeToggled = function() {
-        $scope.secondTime = !$localstorage.get('secondTime');
-        $localstorage.set('secondTime', $scope.secondTime);
-        $scope.initTimes();
-        console.log('AURORA: Second Time toggled!');
-    };
+    // $scope.secondTimeToggled = function() {
+        // $scope.secondTime = !$localstorage.get('secondTime');
+        // $localstorage.set('secondTime', $scope.secondTime);
+        // $scope.initTimes();
+        // console.log('AURORA: Second Time toggled!');
+    // };
 
+	$scope.getMagCoords = function() { 
+		
+	};
+	
+	$scope.getLocalKP = function()
+	{
+		callback = function () 
+		{
+			$scope.magCoords = JSON.parse(document.getElementById("test").innerHTML);
+			console.log($scope.magCoords);
+			$scope.localKP = $geolocation.showIdealKP($scope.magCoords);
+			console.log($scope.localKP);
+		}
+		$geolocation.getGeoMagLocation(callback);	
+	};
+	
     $scope.loadSettings();
     $scope.loadTimes();
     $scope.outputSettings(false);
     $scope.backgroundurl = $background.getBackground();
     $scope.initTimes();
-
-
+	$scope.localKP = {
+		overhead : "N/A",
+		horizon  : "N/A"
+	};
+	$scope.magCoords = {
+		latitude : 'undefined',
+		longitude : 'undefined'
+	};
+	$scope.getLocalKP();
+	
     $scope.timeWindow = function(timeObj) {
         var time = {
             callback: function (val, tObj, scope) {      //Mandatory
@@ -288,6 +311,7 @@ angular.module('aurora.controllers', [])
 
     $ionicPlatform.on('resume', function() {
         $scope.backgroundurl = $background.getBackground();
+		$scope.getLocalKP();
     });
 })
 

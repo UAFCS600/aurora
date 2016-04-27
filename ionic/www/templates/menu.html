@@ -27,6 +27,19 @@
 					Aurora Intensity
 					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)"> {{kpTrigger}}
 				</div>
+				
+				<div id="menuitem" style="text-align: center">
+					Aurora Visible At:
+				</div>
+				<div id="menuitem" style="text-align: center">
+					{{localKP.overhead}}	(Overhead)
+				</div>
+				<div id="menuitem" style="text-align: center">
+					{{localKP.horizon}}	(Horizon)
+				</div>
+				<div id="menuitem" style="text-align: center">
+					Aurora <4 is typically uninteresting
+				</div>
 
 				<ion-item id="menuitem" ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
 				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Quiet Hours</ion-toggle>
@@ -49,6 +62,9 @@
 					</div>
 				</div> -->
 				
+<div id="test" style="display : none">
+{"latitude":65.59483009058268,"longitude":83.83685222447906}
+</div> 
 			</ion-list>
 		</ion-content>
 	</ion-side-menu>

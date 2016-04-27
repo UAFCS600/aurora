@@ -211,66 +211,77 @@ angular.module('aurora.services', [])
 
 	//Literally a table index of geomagnetic coordinates
 	var getIdealKP = function(gmagcoords) {
-		var overHead = 'N/A';
-		var horizon = 'N/A';
+		var kp = {
+			overhead : "N/A",
+			horizon  : "N/A"
+			};
 		//using chart found here: https://www.spaceweatherlive.com/en/help/the-kp-index
-		horizon = '9';
-		if (Math.abs(gmagcoords.latitude) > 46)
-		{
-			horizon = '8';
+		if (gmagcoords == 'undefined') {
+			return kp;
 		}
-		if (Math.abs(gmagcoords.latitude) > 48.1)
-		{
-			horizon = '7';
-			overHead = '9';
+		else {
+			console.log(gmagcoords);
+			if (gmagcoords.latitude == 'undefined')
+			{
+				return kp;
+			}
+			else {
+				kp.horizon = '9';
+				if (Math.abs(gmagcoords.latitude) > 46)
+				{
+					kp.horizon = '8';
+				}
+				if (Math.abs(gmagcoords.latitude) > 48.1)
+				{
+					kp.horizon = '7';
+					kp.overhead = '9';
+				}
+				if (Math.abs(gmagcoords.latitude) > 50.1)
+				{
+					kp.horizon = '6';
+					kp.overhead = '8';
+				}
+				if (Math.abs(gmagcoords.latitude) > 52.2)
+				{
+					kp.horizon = '5';
+					kp.overhead = '7';
+				}
+				if (Math.abs(gmagcoords.latitude) > 54.2)
+				{
+					kp.horizon = '4';
+					kp.overhead = '6';
+				}
+				if (Math.abs(gmagcoords.latitude) > 56.3)
+				{
+					kp.horizon = '3';
+					kp.overhead = '5';
+				}
+				if (Math.abs(gmagcoords.latitude) > 58.3)
+				{
+					kp.horizon = '2';
+					kp.overhead = '4';
+				}
+				if (Math.abs(gmagcoords.latitude) > 60.4)
+				{
+					kp.horizon = '1';
+					kp.overhead = '3';
+				}
+				if (Math.abs(gmagcoords.latitude) > 62.4)
+				{
+					kp.horizon = '0';
+					kp.overhead = '2';
+				}
+				if (Math.abs(gmagcoords.latitude) > 64.5)
+				{
+					kp.overhead = '1';
+				}
+				if (Math.abs(gmagcoords.latitude) > 66.5)
+				{
+					kp.overhead = '0';
+				}
+				return kp;
+			}
 		}
-		if (Math.abs(gmagcoords.latitude) > 50.1)
-		{
-			horizon = '6';
-			overHead = '8';
-		}
-		if (Math.abs(gmagcoords.latitude) > 52.2)
-		{
-			horizon = '5';
-			overHead = '7';
-		}
-		if (Math.abs(gmagcoords.latitude) > 54.2)
-		{
-			horizon = '4';
-			overHead = '6';
-		}
-		if (Math.abs(gmagcoords.latitude) > 56.3)
-		{
-			horizon = '3';
-			overHead = '5';
-		}
-		if (Math.abs(gmagcoords.latitude) > 58.3)
-		{
-			horizon = '2';
-			overHead = '4';
-		}
-		if (Math.abs(gmagcoords.latitude) > 60.4)
-		{
-			horizon = '1';
-			overHead = '3';
-		}
-		if (Math.abs(gmagcoords.latitude) > 62.4)
-		{
-			horizon = '0';
-			overHead = '2';
-		}
-		if (Math.abs(gmagcoords.latitude) > 64.5)
-		{
-			overHead = '1';
-		}
-		if (Math.abs(gmagcoords.latitude) > 66.5)
-		{
-			overHead = '0';
-		}
-		
-		var kp = {OverHead: overHead, Horizon: horizon};
-
-		return kp;
 	};
 
 	//This could actually call some API in the future, or a call to this could be replaced with an API call
@@ -365,7 +376,7 @@ angular.module('aurora.services', [])
 				}, options);
 			}
 		},
-		showGeoMagLocation: function() {
+		getGeoMagLocation: function(callback) {
 			var gps = $localstorage.get('gps', false);
 			if (gps) {
 				var options = {
@@ -379,12 +390,15 @@ angular.module('aurora.services', [])
 						latitude: position.coords.latitude,
 						longitude: position.coords.longitude
 					};
-
 					var magCoords = convertGeographicToGeomagnetic(geoCoords);
-
-					alert('Geomagnetic Latitude: ' + magCoords.latitude + '\n' +
-						'Geomagnetic Longitude: ' + magCoords.longitude + '\n');
-
+					var temp = JSON.stringify(magCoords);
+					document.getElementById("test").innerHTML = temp;
+					var testing = document.getElementById("test").innerHTML;
+					console.log(testing);
+					if (callback) {
+						console.log('Calling callback.');
+						callback();
+					}
 				}, function(error) {
 					alert('Code: ' + error.code + '\n' +
 						'Message: ' + error.message + '\n');

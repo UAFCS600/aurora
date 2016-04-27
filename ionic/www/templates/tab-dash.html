@@ -6,9 +6,12 @@
 					{{forecast.now}}
 				</div>
 			</div>
+			<div style="text-align: center; text-size: 200%">
+				{{forecast.now.date}}
+			</div>
 			<div class="row" id="kp-forecast">
-				<div style="position:fixed; left: 0.5rem; bottom: 4rem; font-size: 200%;"><</div>
-				<div style="position:fixed; right: 0.5rem; bottom: 4rem; font-size: 200%;">></div>
+				<div style="position:fixed; left: 0.5rem; bottom: 2em; font-size: 200%;"><</div>
+				<div style="position:fixed; right: 0.5rem; bottom: 2em; font-size: 200%;">></div>
 				<ion-scroll direction="x" class="col wide-as-needed has-bouncing">
 					<div ng-repeat="kp in forecast" style="width:25%; min-width: 75px !important; display:inline-block">
 						<div class="forecast" id="kp-time">
