@@ -173,9 +173,14 @@ angular.module('aurora.services', [])
 				callback();
 		},
 		register: function() {
-			var token = $localstorage.get('pushToken');
+			var token           = $localstorage.get('pushToken');
+			var notifyStartTime = $localstorage.get('quietHoursStartTime_1');
+			var notifyStopTime  = $localstorage.get('quietHoursStopTime_1');
+			
 			notificationServiceRegistered({
-				registrationId: token
+				registrationId      : token,
+				'notify_start_time' : notifyStartTime,
+				'notify_stop_time'  : notifyStopTime
 			});
 		},
 		unregister: function() {
