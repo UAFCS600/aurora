@@ -26,20 +26,21 @@ angular.module('aurora.services', [])
 
 //Push notification services
 .factory('$push', function($http, $location, $localstorage, $kpAPI, $geolocation) {
-    var push      = false;
-    var gcmID     = '638344930515';
-    var apnsId    = ''; //Apple iTunes App ID
-    var windowsId = ''; //Windows Store ID
-
+	var push     = false;
+	var gcmID    = '638344930515';
+	
 	var initData = {
 		'android': {
 			'senderID': gcmID
 		},
 		'ios': {
-			'senderID': apnsId
+			'alert': true,
+			'badge': true,
+			'sound': true,
+			'clearBage': true
 		},
 		'windows': {
-			'senderID': windowsId
+
 		}
 	};
 
@@ -60,7 +61,7 @@ angular.module('aurora.services', [])
 	};
 
 	var receivedNotification = function(data) {
-		var message = JSON.parse(data.message);
+		var message   = JSON.parse(data.message);
 		var kpTrigger = message.kpTrigger;
 		$kpAPI.setNow(kpTrigger);
 
@@ -172,15 +173,20 @@ angular.module('aurora.services', [])
 				callback();
 		},
 		register: function() {
-			var token = $localstorage.get('pushToken');
+			var token           = $localstorage.get('pushToken');
+			var notifyStartTime = $localstorage.get('quietHoursStartTime_1');
+			var notifyStopTime  = $localstorage.get('quietHoursStopTime_1');
+			
 			notificationServiceRegistered({
-				registrationId: token
+				registrationId      : token,
+				'notify_start_time' : notifyStartTime,
+				'notify_stop_time'  : notifyStopTime
 			});
 		},
 		unregister: function() {
-			var info = {};
+			var info   = {};
 			info.token = $localstorage.get('pushToken');
-			info.mode = 'remove';
+			info.mode  = 'remove';
 
 			postToPushServer(info, function() {
 				console.log("AURORA: Push notifications disabled.");
@@ -444,22 +450,22 @@ angular.module('aurora.services', [])
 
 //GI API service
 .factory('$kpAPI', function($http, $localstorage) {
-	var latestForecast;
-	var apiURL = 'http://cs472.gi.alaska.edu/kp.php?';
+	var latestForecast = {};
+	var apiURL         = 'http://cs472.gi.alaska.edu/kp.php?';
 
-	loadForecastFromStorage = function() {
+	var loadForecastFromStorage = function() {
 		latestForecast = $localstorage.getObject('forecast');
 
 		if (typeof latestForecast == 'undefined' || Object.keys(latestForecast).length === 0)
 			updateForecast();
 	};
 
-	saveForecast = function(forecast) {
+	var saveForecast = function(forecast) {
 		$localstorage.remove('forecast');
 		$localstorage.setObject('forecast', forecast);
 	};
 
-	formatTime = function(timeStr) {
+	var formatTime = function(timeStr) {
 		// source: http://stackoverflow.com/questions/14638018/current-time-formatting-with-javascript
 
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -468,12 +474,12 @@ angular.module('aurora.services', [])
 		// timeStr is in format:
 		//      2016-04-17T21:01:00.0+00:00
 		// which is UTC
-        var apiDate   = new Date(timeStr);
-
-        var theDate  = apiDate.getDate();
-        var theMonth = months[apiDate.getMonth()];
-        var theDay   = days[apiDate.getDay()];
-        var theHour  = apiDate.getHours();
+		var apiDate  = new Date(timeStr);
+		
+		var theDate  = apiDate.getDate();
+		var theMonth = months[apiDate.getMonth()];
+		var theDay   = days[apiDate.getDay()];
+		var theHour  = apiDate.getHours();
 
 		var ampm = theHour < 12 ? "am" : "pm";
 		if (theHour > 12) {
@@ -500,13 +506,13 @@ angular.module('aurora.services', [])
 		};
 	};
 
-	updateForecast = function() {
+	var getForecastData = function(callback) {
 		$http.get(apiURL + 'd=d&f=t').success(function(data) {
 			if (data.data[0] != 'undefined') {
 				var jsonData = {};
 
 				for (var i = 0; i < data.data.length; i++) {
-					jsonData['kp' + i] = {};
+					jsonData['kp' + i]    = {};
 					jsonData['kp' + i].kp = data.data[i].kp;
 
 					var time = formatTime(data.data[i].predicted_time);
@@ -516,32 +522,39 @@ angular.module('aurora.services', [])
 				}
 
 				latestForecast = jsonData;
+
+				saveForecast(latestForecast);
+
+				if(callback)
+					callback();
 			}
 		}).error(function(error) {
-			//Finish writing
-			console.log(error);
+			console.log('AURORA: Error: ' + error);
 		});
+	};
 
+	var getNowData = function(callback) {
 		$http.get(apiURL + 'd=n&f=t').success(function(data) {
 			if (data.data[0] != 'undefined') {
 				latestForecast.now = Math.ceil(data.data[0].kp);
 				saveForecast(latestForecast);
+
+				if(callback != 'undefined') {
+					callback();
+				}
 			}
 		}).error(function(error) {
-			//Finish writing
-			console.log(error);
+			console.log('AURORA: Error: ' + error);
 		});
-
-		console.log('Updated KP data.');
 	};
 
 	return {
-		getForecast: function() {
-			updateForecast();
-			if (typeof latestForecast == 'undefined')
-				loadForecastFromStorage();
-
-			return latestForecast;
+		updateForecast : function(callback) {
+			getForecastData(function() {
+				getNowData(function() {
+					callback(latestForecast);
+				});
+			});
 		},
 		setNow: function(kpNow) {
 			if (typeof latestForecast == 'undefined')
@@ -554,7 +567,7 @@ angular.module('aurora.services', [])
 })
 
 .factory('$background', function($kpAPI) {
-	backgroundlist = [{
+	var backgroundlist = [{
 		id: 1,
 		url: "img/background-none.jpg"
 	}, {
@@ -569,32 +582,34 @@ angular.module('aurora.services', [])
 	}];
 
 	return {
-		getBackground: function() {
-            forecast = $kpAPI.getForecast();
-            var url  = null;
-			switch (forecast.now) {
-				case 1:
-				case 2:
-				case 3:
-					url = backgroundlist[0].url;
-					break;
-				case 4:
-				case 5:
-					url = backgroundlist[1].url;
-					break;
-				case 6:
-				case 7:
-					url = backgroundlist[2].url;
-					break;
-				case 8:
-				case 9:
-					url = backgroundlist[3].url;
-					break;
-				default:
-					url = backgroundlist[0].url;
-					break;
-			}
-			return url;
+		getBackgroundUrl: function(callback) {
+	    	$kpAPI.updateForecast(function(forecast) {
+	    		var url  = null;
+				switch (forecast.now) {
+					case 1:
+					case 2:
+					case 3:
+						url = backgroundlist[0].url;
+						break;
+					case 4:
+					case 5:
+						url = backgroundlist[1].url;
+						break;
+					case 6:
+					case 7:
+						url = backgroundlist[2].url;
+						break;
+					case 8:
+					case 9:
+						url = backgroundlist[3].url;
+						break;
+					default:
+						url = backgroundlist[0].url;
+						break;
+				}
+
+				callback(url);
+	    	});
 		}
 	};
 });

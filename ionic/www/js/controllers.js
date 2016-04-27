@@ -1,7 +1,11 @@
 angular.module('aurora.controllers', [])
 
 .controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform, $background) {
-    $scope.forecast = $kpAPI.getForecast();
+    var updateForecast = function(latestForecast) {
+        $scope.forecast = latestForecast;
+    };
+
+    $kpAPI.updateForecast(updateForecast);
 
     var checkKpNow = function() {
         if (!$scope.forecast.now)
@@ -27,11 +31,16 @@ angular.module('aurora.controllers', [])
         }
     };
 
-    $scope.backgroundurl = $background.getBackground();
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
 
     $ionicPlatform.on('resume', function() {
-        $scope.forecast      = $kpAPI.getForecast();
-        $scope.backgroundurl = $background.getBackground();
+        $kpAPI.updateForecast(updateForecast);
+
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 })
 
@@ -177,10 +186,6 @@ angular.module('aurora.controllers', [])
         $push.initPushNotifications();
     };
 
-    $scope.unregisterPush      = function() {
-        $push.unregister();
-    };
-
     $scope.changeKpTrigger     = function(kpTrigger) {
         var info = {'kpTrigger':kpTrigger};
 
@@ -204,18 +209,25 @@ angular.module('aurora.controllers', [])
         console.log('AURORA: Alerts toggled!');
 
         if($scope.alerts) {
-            $scope.initPush();
+            $push.register();
         }
         else {
-            $scope.unregisterPush();
+            $push.unregister();
         }
     };
 
     $scope.quietTimeToggled = function() {
-        $scope.quietTime = !$localstorage.get('quietTime');
+        $scope.quietTime          = !$localstorage.get('quietTime');
+        var quietHoursStartTime_1 = $scope.formatTimeForPushServer($scope.quietHoursStartTime_1);
+        var quietHoursStopTime_1  = $scope.formatTimeForPushServer($scope.quietHoursStopTime_1);
         $localstorage.set('quietTime', $scope.quietTime);
         $scope.initTimes();
         console.log('AURORA: Quiet Time toggled!');
+
+        if(!$scope.quietTime)
+            $push.updateInfo({'notify_start_time':'00:00:00','notify_stop_time':'23:59:59'});
+        else
+            $push.updateInfo({'notify_start_time':quietHoursStartTime_1, 'notify_stop_time':quietHoursStopTime_1});
     };
 
     // $scope.secondTimeToggled = function() {
@@ -244,7 +256,6 @@ angular.module('aurora.controllers', [])
     $scope.loadSettings();
     $scope.loadTimes();
     $scope.outputSettings(false);
-    $scope.backgroundurl = $background.getBackground();
     $scope.initTimes();
 	$scope.localKP = {
 		overhead : "N/A",
@@ -255,7 +266,10 @@ angular.module('aurora.controllers', [])
 		longitude : 'undefined'
 	};
 	$scope.getLocalKP();
-	
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
+
     $scope.timeWindow = function(timeObj) {
         var time = {
             callback: function (val, tObj, scope) {      //Mandatory
@@ -310,15 +324,22 @@ angular.module('aurora.controllers', [])
     };
 
     $ionicPlatform.on('resume', function() {
-        $scope.backgroundurl = $background.getBackground();
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
 		$scope.getLocalKP();
     });
 })
 
 .controller('AboutCtrl', function($scope, $background, $ionicPlatform, $geolocation) {
-    $scope.backgroundurl = $background.getBackground();
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
+
     $ionicPlatform.on('resume', function() {
-        $scope.backgroundurl = $background.getBackground();
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 
     makeGeoCoord = function(lat, lon) {
@@ -376,15 +397,25 @@ angular.module('aurora.controllers', [])
 })
 
 .controller('FeedbackCtrl', function($scope, $background, $ionicPlatform) {
-    $scope.backgroundurl = $background.getBackground();
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
+
     $ionicPlatform.on('resume', function() {
-        $scope.backgroundurl = $background.getBackground();
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 })
 
 .controller('AllskyCtrl', function($scope, $background, $ionicPlatform) {
-    $scope.backgroundurl = $background.getBackground();
+    $background.getBackgroundUrl(function(url) {
+        $scope.backgroundurl = url;
+    });
+
     $ionicPlatform.on('resume', function() {
-        $scope.backgroundurl = $background.getBackground();
+        $background.getBackgroundUrl(function(url) {
+            $scope.backgroundurl = url;
+        });
     });
 });

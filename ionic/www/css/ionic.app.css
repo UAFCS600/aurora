@@ -38,8 +38,8 @@ $dark:                            #444 !default;
   text-align: center; }
 
 #kp-kp {
-  margin-top: 4%;
-  margin-bottom: 4%;
+  margin-top: 5px;
+  margin-bottom: 5px;
   font-weight: bold;
   font-size: 200%; }
 
@@ -53,6 +53,9 @@ $dark:                            #444 !default;
     height: 30px !important;
     line-height: 30px !important;
     font-size: 30px !important; } }
+
+.aurora-button {
+  border: 1px solid white !important; }
 
 /*!
   Ionicons, v2.0.1

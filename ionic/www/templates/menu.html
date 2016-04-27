@@ -41,12 +41,11 @@
 					Aurora <4 is typically uninteresting
 				</div>
 
-				<ion-item id="menuitem" ng-click="showGeoLocationInfo();">Show Geolocation Information</ion-item>
-				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Quiet Hours</ion-toggle>
+				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Only Notify Between:</ion-toggle>
 				<div id="times_1" style="display : block; text-align : center; align-items : center">
-					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
-					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
-					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_1);" style="display: inline-block">{{quietHoursStopTime_1.hours}}:{{quietHoursStopTime_1.minutes}} {{quietHoursStopTime_1.half}}</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block; padding-left: 0px !important; padding-right: 0px !important;">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
+					<ion-item id="menuitem" style="display: inline-block;">and</ion-item>
+					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_1);" style="display: inline-block; padding-left: 0px !important; padding-right: 0px !important;">{{quietHoursStopTime_1.hours}}:{{quietHoursStopTime_1.minutes}} {{quietHoursStopTime_1.half}}</ion-item>
 					<!-- <div id="plus" style="display : inline-block; text-align : center">
 						<button class="button button-icon icon ion-ios-plus-outline" style = "display : inline-block" ng-click="secondTimeToggled();"></button>
 					</div> -->
@@ -72,19 +71,19 @@
 	<ion-side-menu class="background-menu" side="right" ng-controller="SettingsCtrl" style="border-left: 2px solid white; background-image: url({{backgroundurl}})">
 		<ion-list>
 			<ion-item menu-close id="menuitem">
-				<a class="button button-block" icon="ion-ios-home" href="#/app/dash" id="menuitem">Home</a>
+				<a class="button button-block aurora-button" icon="ion-ios-home" href="#/app/dash" id="menuitem">Home</a>
 			</ion-item>
 
 			<ion-item menu-close id="menuitem">
-				<a class="button button-block" icon="ion-ios-flower" href="#/app/allsky" id="menuitem">Allsky</a>
+				<a class="button button-block aurora-button" icon="ion-ios-flower" href="#/app/allsky" id="menuitem">Allsky</a>
 			</ion-item>
 
 			<ion-item menu-close id="menuitem">
-				<a class="button button-block" icon="ion-ios-information" href="#/app/about" id="menuitem">About</a>
+				<a class="button button-block aurora-button" icon="ion-ios-information" href="#/app/about" id="menuitem">About</a>
 			</ion-item>
 
 			<ion-item menu-close id="menuitem">
-				<a class="button button-block" icon="ion-ios-information" href="#/app/feedback" id="menuitem">Feedback</a>
+				<a class="button button-block aurora-button" icon="ion-ios-information" href="#/app/feedback" id="menuitem">Feedback</a>
 			</ion-item>
 		</ion-list>
 	</ion-side-menu>
