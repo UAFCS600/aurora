@@ -83,7 +83,7 @@ angular.module('aurora.services', [])
         var info      = {};
 
 		var getGeolocation = function() {
-			$geolocation.getInfo(info, function() {
+			$geolocation.getInfo(info, function(lat, lon) {
 				console.log('AURORA: Setting geolocation information.');
 				update(info);
 			});
@@ -94,7 +94,8 @@ angular.module('aurora.services', [])
             postData.service   = "gcm";
             postData.token     = data.registrationId;
             postData.kpTrigger = kpTrigger;
-		} else if (ionic.Platform.isIOS()) {
+		}
+		else if (ionic.Platform.isIOS()) {
             postData.mode      = "register";
             postData.service   = "apns";
             postData.token     = data.registrationId;
@@ -200,7 +201,7 @@ angular.module('aurora.services', [])
 
 //Geolocation services
 .factory('$geolocation', function($localstorage, $http) {
-	var getCountry = function(info) {
+	var getInfoFromCoordinates = function(info) {
 		var apiURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
 		apiURL += info.latitude + ',' + info.longitude + '&sensor=false';
 
@@ -211,149 +212,8 @@ angular.module('aurora.services', [])
 				console.log('AURORA: Country: ' + data.results[0].address_components[5].short_name);
 			}).error(function(error) {
 				//Finish writing
-				console.log('Error: ' + error);
+				console.log('AURORA: Error: ' + error);
 			});
-	};
-
-	//Literally a table index of geomagnetic coordinates
-	var getIdealKP = function(gmagcoords) {
-		var kp = {
-			overhead : "N/A",
-			horizon  : "N/A"
-			};
-		//using chart found here: https://www.spaceweatherlive.com/en/help/the-kp-index
-		if (gmagcoords == 'undefined') {
-			return kp;
-		}
-		else {
-			console.log(gmagcoords);
-			if (gmagcoords.latitude == 'undefined')
-			{
-				return kp;
-			}
-			else {
-				kp.horizon = '9';
-				if (Math.abs(gmagcoords.latitude) > 46)
-				{
-					kp.horizon = '8';
-				}
-				if (Math.abs(gmagcoords.latitude) > 48.1)
-				{
-					kp.horizon = '7';
-					kp.overhead = '9';
-				}
-				if (Math.abs(gmagcoords.latitude) > 50.1)
-				{
-					kp.horizon = '6';
-					kp.overhead = '8';
-				}
-				if (Math.abs(gmagcoords.latitude) > 52.2)
-				{
-					kp.horizon = '5';
-					kp.overhead = '7';
-				}
-				if (Math.abs(gmagcoords.latitude) > 54.2)
-				{
-					kp.horizon = '4';
-					kp.overhead = '6';
-				}
-				if (Math.abs(gmagcoords.latitude) > 56.3)
-				{
-					kp.horizon = '3';
-					kp.overhead = '5';
-				}
-				if (Math.abs(gmagcoords.latitude) > 58.3)
-				{
-					kp.horizon = '2';
-					kp.overhead = '4';
-				}
-				if (Math.abs(gmagcoords.latitude) > 60.4)
-				{
-					kp.horizon = '1';
-					kp.overhead = '3';
-				}
-				if (Math.abs(gmagcoords.latitude) > 62.4)
-				{
-					kp.horizon = '0';
-					kp.overhead = '2';
-				}
-				if (Math.abs(gmagcoords.latitude) > 64.5)
-				{
-					kp.overhead = '1';
-				}
-				if (Math.abs(gmagcoords.latitude) > 66.5)
-				{
-					kp.overhead = '0';
-				}
-				return kp;
-			}
-		}
-	};
-
-	//This could actually call some API in the future, or a call to this could be replaced with an API call
-	var getMagneticPole = function() {
-		//geographic location geomagnetic pole as of 2015 coords are east positive
-		var pole = {
-			latitude: 80.375 * Math.PI / 180,
-			longitude: -72.625 * Math.PI / 180
-		};
-		return pole;
-	};
-
-	//Contemplated having the pole be passed into the function
-	convertGeographicToGeomagnetic = function(geographicCoord) {
-		//Set the magnetic pole
-        var pole   = getMagneticPole();
-        var mslat  = pole.latitude;
-        var mslong = pole.longitude;
-
-		//geographic coordinates (To radians)
-        var glat  = geographicCoord.latitude * Math.PI / 180;
-        var glong = geographicCoord.longitude * Math.PI / 180;
-
-		//rectangular coordinates
-		var x = Math.cos(glat) * Math.cos(glong);
-		var y = Math.cos(glat) * Math.sin(glong);
-		var z = Math.sin(glat);
-
-		var matrix;
-        var rotation;
-        rotation      = mslong;
-        var rotation2 = Math.PI / 2 - mslat;
-        matrix        = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-		matrix[0 * 3 + 0] = Math.cos(rotation) * Math.cos(rotation2);
-		matrix[1 * 3 + 0] = -1 * Math.sin(rotation);
-		matrix[2 * 3 + 0] = Math.cos(rotation) * Math.sin(rotation2);
-
-		matrix[0 * 3 + 1] = Math.sin(rotation) * Math.cos(rotation2);
-		matrix[1 * 3 + 1] = Math.cos(rotation);
-		matrix[2 * 3 + 1] = Math.sin(rotation) * Math.sin(rotation2);
-
-		matrix[0 * 3 + 2] = -1 * Math.sin(rotation2);
-		matrix[1 * 3 + 2] = 0;
-		matrix[2 * 3 + 2] = Math.cos(rotation2);
-
-
-		//apply matrix
-        xt = x * matrix[0] + y * matrix[1] + z * matrix[2];
-        yt = x * matrix[3] + y * matrix[4] + z * matrix[5];
-        zt = x * matrix[6] + y * matrix[7] + z * matrix[8];
-        x  = xt;
-        y  = yt;
-        z  = zt;
-
-		//convert back
-        var mlat  = Math.atan(z / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 180 / Math.PI;
-        var mlong = Math.atan(y / x) * 180 / Math.PI;
-		//Method is imperfect but close enough
-
-		var magCoords = {
-			latitude: mlat,
-			longitude: mlong
-		};
-
-		return magCoords;
 	};
 
 	return {
@@ -382,45 +242,9 @@ angular.module('aurora.services', [])
 				}, options);
 			}
 		},
-		getGeoMagLocation: function(callback) {
-			var gps = $localstorage.get('gps', false);
-			if (gps) {
-				var options = {
-					enableHighAccuracy: true,
-					timeout: 15000,
-					maximumAge: 1000 * 60 * 5 //Five minutes
-				};
-
-				navigator.geolocation.getCurrentPosition(function(position) {
-					var geoCoords = {
-						latitude: position.coords.latitude,
-						longitude: position.coords.longitude
-					};
-					var magCoords = convertGeographicToGeomagnetic(geoCoords);
-					var temp = JSON.stringify(magCoords);
-					document.getElementById("test").innerHTML = temp;
-					var testing = document.getElementById("test").innerHTML;
-					console.log(testing);
-					if (callback) {
-						console.log('Calling callback.');
-						callback();
-					}
-				}, function(error) {
-					alert('Code: ' + error.code + '\n' +
-						'Message: ' + error.message + '\n');
-				}, options);
-			}
-		},
-		getMagCoord: function(geoCoords) {
-			var output = convertGeographicToGeomagnetic(geoCoords);
-			return output;
-		},
-		showIdealKP: function(magCoord) {
-			var output = getIdealKP(magCoord);
-			return output;
-		},
 		getInfo: function(params, callback) {
 			var gps = $localstorage.get('gps', false);
+			console.log(callback);
 
 			if (gps) {
 				var options = {
@@ -436,12 +260,11 @@ angular.module('aurora.services', [])
 					console.log('AURORA: Set lat and long.');
 
 					if (callback) {
-						console.log('Calling callback.');
-						callback();
+						callback(position.coords.latitude, position.coords.longitude);
 					}
 
-					getCountry(params);
-					console.log('AURORA: Called getCountry.');
+					getInfoFromCoordinates(params);
+					console.log('AURORA: Called getInfoFromCoordinates.');
 				});
 			}
 		}
@@ -539,7 +362,7 @@ angular.module('aurora.services', [])
 				latestForecast.now = Math.ceil(data.data[0].kp);
 				saveForecast(latestForecast);
 
-				if(callback != 'undefined') {
+				if(callback) {
 					callback();
 				}
 			}
