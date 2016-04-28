@@ -34,7 +34,7 @@ Notifier.prototype.getClientChunks = function(clientArr, chunkSize) {
         tempArray = clientArr.slice(i,i+chunkSize);
         retArr.push(tempArray);
     }
-    
+
     return retArr;
 };
 
@@ -43,11 +43,11 @@ Notifier.prototype.sendGCMMessages = function(self, kp, clients) {
 
     var message = new gcm.Message();
     var sender  = new gcm.Sender(config.gcmApiKey);
-     
+
     message.addData('message', JSON.stringify({kptrigger:kp}));
-    
+
     console.log('Using GCM Sender ID: ' + config.gcmApiKey);
-     
+
     sender.send(message, { registrationTokens: clients }, function (err, response) {
         if(err) console.log('Error: ' + err + '\nResponse: ' + response);
         else {
@@ -70,14 +70,14 @@ Notifier.prototype.sendAPNSMessages = function(self, kp, clients) {
     console.log('Sending message to APNS clients: ' + clients);
 
 	var options = {
-		"cert": "./dev_cert.pem",
-		"key": "./dev_key.pem",
+		"cert": config.apnsDevCertPath,
+		"key": config.apnsDevKeyPath,
         "production": false,
         "batchFeedback": true
     };
 
-    var badClients = [];
-    var feedback   = new apn.Feedback(options);
+	var badClients = [];
+	var feedback = new apn.Feedback(options);
 	feedback.on("feedback", function(devices) {
 		devices.forEach(function(item) {
 			console.log("BAD APNS: " + item.device);
@@ -90,18 +90,18 @@ Notifier.prototype.sendAPNSMessages = function(self, kp, clients) {
 
 	var apnConnection = new apn.Connection(options);
 
-	apnConnection.on("completed",         function()    { console.log("APNS: Completed!")});
-	apnConnection.on("connected",         function()    { console.log("APNS: Connected"); });
-	apnConnection.on('disconnected',      function()    { console.log("APNS: Disconnected", arguments); });
-	apnConnection.on('error',             function(err) { console.log("APNS: Standard error", err); });
-	apnConnection.on('socketError',       function(err) { console.log("APNS: Socket error", err.message); });
-	apnConnection.on('timeout',           function()    { console.log("APNS: Timeout"); });
-	apnConnection.on('transmissionError', function(err) { console.log("APNS: Transmission Error", err); });
+	apnConnection.on("completed",         function()    { console.log("Completed!")});
+	apnConnection.on("connected",         function()    { console.log("Connected"); });
+	apnConnection.on('disconnected',      function()    { console.log("Disconnected", arguments); });
+	apnConnection.on('error',             function(err) { console.log("Standard error", err); });
+	apnConnection.on('socketError',       function(err) { console.log("Socket error", err.message); });
+	apnConnection.on('timeout',           function()    { console.log("Timeout"); });
+	apnConnection.on('transmissionError', function(err) { console.log("Transmission Error", err); });
 
-    var message     = new apn.Notification();
-    message.badge   = 3;
-    message.alert   = "Aurora activity detected!";
-    message.payload = {kptrigger:kp};
+	var message = new apn.Notification();
+	message.badge = 3;
+	message.alert = "Aurora activity detected!";
+	message.payload = {kptrigger:kp};
 
 	apnConnection.pushNotification(message, clients);
 };
@@ -133,7 +133,7 @@ Notifier.prototype.receivedResponse = function(self, response) {
     response.on('end', function() {
         var data      = JSON.parse(body);
         var currentKp = Math.ceil(data.data[0].kp);
-        
+
         self.sendKpToClients(self, currentKp);
     });
 };
@@ -150,3 +150,4 @@ Notifier.prototype.notifyClients = function() {
         self.receivedResponse(self, response);
     });
 };
+

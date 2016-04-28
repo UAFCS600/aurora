@@ -32,7 +32,17 @@ dbUtil.prototype.insertClient = function(clientInfo, onSuccess, onFailure) {
 					onFailure('Could not check for duplicates.');
 				}
 				else if(rows.length > 0) {
-					onFailure('Key already exists.');
+					connection.query('DELETE FROM clients WHERE token = ?', clientInfo.token,
+					function(err, result) {
+						console.log(result);
+						if (err || result.affectedRows < 1) {
+							onFailure((err ? err:'token does not exist.'));
+						}
+						else {
+							onSuccess('Removed duplicate and readded new token.');
+						}
+					});
+					onFailure('Key already exists. Deleting and readding');
 				}
 				else {
 					connection.query('INSERT INTO clients SET ?', clientInfo, function(err, res) {
@@ -193,7 +203,7 @@ dbUtil.prototype.getTokens = function(kpTrigger, service, onSuccess, onFailure) 
 						"FROM clients " +
 						"WHERE " +
 						"CASE " +
-							"WHEN notify_start_time > notify_stop_time " + 
+							"WHEN notify_start_time > notify_stop_time " +
 							"THEN ('" + timeRightNow + "' < notify_stop_time OR '" + timeRightNow + "' > notify_start_time" + ") " +
 							"ELSE ('" + timeRightNow + "' < notify_stop_time AND '" + timeRightNow + "' > notify_start_time" + ") " +
 						"END " +
@@ -227,3 +237,4 @@ dbUtil.prototype.close = function() {
 	  else console.log('Database closed.');
 	});
 };
+
