@@ -1,6 +1,18 @@
 angular.module('aurora.controllers', [])
 
-.controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform, $background) {
+.controller('DashCtrl', function($scope, $kpAPI, $ionicPlatform, $background, $geolocation) {
+    var updateLocation = function() {
+        $scope.locationInfo = {};
+        var locInfo = $scope.locationInfo;
+        $geolocation.getInfo(locInfo, function(info) {
+            $scope.locationInfo = info;
+            $scope.title = info.city + ', ' + info.state;
+            console.log('AURORA: Location info: ' + JSON.stringify($scope.locationInfo));
+        });
+    };
+
+    updateLocation();
+
     var updateForecast = function(latestForecast) {
         $scope.forecast = latestForecast;
     };
@@ -389,9 +401,10 @@ angular.module('aurora.controllers', [])
     };
 
     var getGeoMagLocation = function(callback) {
-        $geolocation.getInfo({}, function(lat, lon) {
-            console.log("Got lat and lon: " + lat + ", " + lon);
-            var magCoords = convertGeographicToGeomagnetic({'latitude':lat, 'longitude':lon});
+        var info = {};
+        $geolocation.getInfo(info, function(position) {
+            console.log("Got lat and lon: " + position.latitude + ", " + position.longitude);
+            var magCoords = convertGeographicToGeomagnetic({'latitude':position.latitude, 'longitude':position.longitude});
             if (callback) {
                 callback(magCoords);
             }

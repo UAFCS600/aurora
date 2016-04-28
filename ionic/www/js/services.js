@@ -201,19 +201,26 @@ angular.module('aurora.services', [])
 
 //Geolocation services
 .factory('$geolocation', function($localstorage, $http) {
-	var getInfoFromCoordinates = function(info) {
+	var getInfoFromCoordinates = function(info, callback) {
 		var apiURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
 		apiURL += info.latitude + ',' + info.longitude + '&sensor=false';
 
 		console.log('AURORA: Getting country from: ' + apiURL);
 
-		$http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=64.84883,-147.6782167&sensor=false')
-			.success(function(data) {
-				console.log('AURORA: Country: ' + data.results[0].address_components[5].short_name);
-			}).error(function(error) {
-				//Finish writing
-				console.log('AURORA: Error: ' + error);
-			});
+		$http.get(apiURL + info.latitude + ',' + info.longitude + '&sensor=false')
+		.success(function(data) {
+			info.city    = data.results[0].address_components[2].short_name;
+			info.state   = data.results[0].address_components[4].short_name;
+			info.country = data.results[0].address_components[5].short_name;
+
+			$localstorage.set('geoInfo', JSON.stringify(info));
+
+			if(callback)
+				callback(info);
+		}).error(function(error) {
+			//Finish writing
+			console.log('AURORA: Error: ' + error);
+		});
 	};
 
 	return {
@@ -244,7 +251,6 @@ angular.module('aurora.services', [])
 		},
 		getInfo: function(params, callback) {
 			var gps = $localstorage.get('gps', false);
-			console.log(callback);
 
 			if (gps) {
 				var options = {
@@ -259,12 +265,7 @@ angular.module('aurora.services', [])
 
 					console.log('AURORA: Set lat and long.');
 
-					if (callback) {
-						callback(position.coords.latitude, position.coords.longitude);
-					}
-
-					getInfoFromCoordinates(params);
-					console.log('AURORA: Called getInfoFromCoordinates.');
+					getInfoFromCoordinates(params, callback);
 				});
 			}
 		}
