@@ -7,7 +7,6 @@ angular.module('aurora.controllers', [])
         $geolocation.getInfo(locInfo, function(info) {
             $scope.locationInfo = info;
             $scope.title = info.city + ', ' + info.state;
-            console.log('AURORA: Location info: ' + JSON.stringify($scope.locationInfo));
         });
     };
 
@@ -123,7 +122,7 @@ angular.module('aurora.controllers', [])
         $scope.quietHoursStopTime_1  = $localstorage.getObject('quietHoursStopTime_1');
         $scope.quietHoursStartTime_2 = $localstorage.getObject('quietHoursStartTime_2');
         $scope.quietHoursStopTime_2  = $localstorage.getObject('quietHoursStopTime_2');
-        console.log($scope.quietHoursStartTime_2);
+        
         if (typeof $scope.quietHoursStartTime_2.hours == 'undefined') {
             $scope.makeTimes();
             $scope.saveTimes();
@@ -260,7 +259,6 @@ angular.module('aurora.controllers', [])
             return kp;
         }
         else {
-            console.log(gmagcoords);
             if (gmagcoords.latitude == 'undefined')
             {
                 return kp;
@@ -401,9 +399,7 @@ angular.module('aurora.controllers', [])
     };
 
     var getGeoMagLocation = function(callback) {
-        var info = {};
-        $geolocation.getInfo(info, function(position) {
-            console.log("Got lat and lon: " + position.latitude + ", " + position.longitude);
+        $geolocation.getInfo({}, function(position) {
             var magCoords = convertGeographicToGeomagnetic({'latitude':position.latitude, 'longitude':position.longitude});
             if (callback) {
                 callback(magCoords);
@@ -414,13 +410,11 @@ angular.module('aurora.controllers', [])
 	$scope.getLocalKP = function() {
 		getGeoMagLocation(function(magCoords) {
             $scope.localKP = showIdealKP(magCoords);
-            console.log($scope.localKP);
         });	
 	};
 	
     $scope.loadSettings();
     $scope.loadTimes();
-    $scope.outputSettings(false);
     $scope.initTimes();
 	$scope.localKP = {
 		overhead : "N/A",
