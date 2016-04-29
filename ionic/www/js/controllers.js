@@ -6,7 +6,12 @@ angular.module('aurora.controllers', [])
         var locInfo = $scope.locationInfo;
         $geolocation.getInfo(locInfo, function(info) {
             $scope.locationInfo = info;
-            $scope.title = info.city + ', ' + info.state;
+
+            if(info.city)
+                $scope.title = info.city;
+
+            if(info.state)
+                $scope.title += ', ' + info.state;
         });
     };
 
