@@ -80,12 +80,11 @@ angular.module('aurora.services', [])
 	var notificationServiceRegistered = function(data) {
         var postData  = {};
         var kpTrigger = $localstorage.get('kpTrigger', 6);
-        var info      = {};
 
 		var getGeolocation = function() {
-			$geolocation.getInfo(info, function(lat, lon) {
+			$geolocation.getInfo({}, function(position) {
 				console.log('AURORA: Setting geolocation information.');
-				update(info);
+				update(position);
 			});
 		};
 
@@ -205,8 +204,6 @@ angular.module('aurora.services', [])
 		var apiURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
 		apiURL += info.latitude + ',' + info.longitude + '&sensor=false';
 
-		console.log('AURORA: Getting country from: ' + apiURL);
-
 		$http.get(apiURL + info.latitude + ',' + info.longitude + '&sensor=false')
 		.success(function(data) {
 			info.city    = data.results[0].address_components[2].short_name;
@@ -262,8 +259,6 @@ angular.module('aurora.services', [])
 				navigator.geolocation.getCurrentPosition(function(position) {
                     params.latitude  = position.coords.latitude;
                     params.longitude = position.coords.longitude;
-
-					console.log('AURORA: Set lat and long.');
 
 					getInfoFromCoordinates(params, callback);
 				});
@@ -360,12 +355,18 @@ angular.module('aurora.services', [])
 	var getNowData = function(callback) {
 		$http.get(apiURL + 'd=n&f=t').success(function(data) {
 			if (data.data[0] != 'undefined') {
-				latestForecast.now = Math.ceil(data.data[0].kp);
-				saveForecast(latestForecast);
+				latestForecast.now       = Math.ceil(data.data[0].kp);
+				
+				var today                = new Date();
+				today                    = formatTime(today.getTime()).date;
+				latestForecast.dateToday = today;
+			}
+			else latestForecast.error = "There has been an error getting the 'now' KP value. Please try again later.";
 
-				if(callback) {
-					callback();
-				}
+			saveForecast(latestForecast);
+
+			if(callback) {
+				callback();
 			}
 		}).error(function(error) {
 			console.log('AURORA: Error: ' + error);
