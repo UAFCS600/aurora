@@ -203,12 +203,22 @@ angular.module('aurora.services', [])
 	var getInfoFromCoordinates = function(info, callback) {
 		var apiURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
 		apiURL += info.latitude + ',' + info.longitude + '&sensor=false';
-
+		console.log(apiURL + info.latitude + ',' + info.longitude + '&sensor=false');
 		$http.get(apiURL + info.latitude + ',' + info.longitude + '&sensor=false')
 		.success(function(data) {
-			info.city    = data.results[0].address_components[2].short_name;
-			info.state   = data.results[0].address_components[4].short_name;
-			info.country = data.results[0].address_components[5].short_name;
+			var locationComponents = data.results[0].address_components;
+			for(var i in locationComponents) {
+				var types = locationComponents[i].types;
+				if(types.includes('political')) {
+					console.log(types);
+					if(types.includes('locality'))
+						info.city = locationComponents[i].short_name;
+					else if(types.includes('administrative_area_level_1'))
+						info.state = locationComponents[i].short_name;
+					else if(types.includes('country'))
+						info.country = locationComponents[i].short_name;
+				}
+			}
 
 			$localstorage.set('geoInfo', JSON.stringify(info));
 
