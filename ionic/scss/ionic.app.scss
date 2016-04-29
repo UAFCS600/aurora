@@ -46,10 +46,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   url('../fonts/JosefinSans.woff2') format('woff2');
 }
 
-.bar-clear {
-	border-color:red;
-}
-
 * {
   font-family: "JosefinSans" !important;
   color: white !important;
@@ -97,6 +93,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .aurora-button {
   border: 1px solid white !important;
+  border-radius: 15px !important;
 }
 
 // Include all of Ionic
