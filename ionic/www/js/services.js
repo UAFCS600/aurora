@@ -209,22 +209,18 @@ angular.module('aurora.services', [])
 	var getInfoFromCoordinates = function(info, callback) {
 		var apiURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
 		apiURL += info.latitude + ',' + info.longitude + '&sensor=false';
-		console.log(apiURL + info.latitude + ',' + info.longitude + '&sensor=false');
 		$http.get(apiURL + info.latitude + ',' + info.longitude + '&sensor=false')
 		.success(function(data) {
 			var locationComponents = data.results[0].address_components;
 			for(var i in locationComponents) {
 				var types = locationComponents[i].types;
 				if(types.includes('political')) {
-					console.log(types);
 					if(types.includes('locality'))
 						info.city = locationComponents[i].short_name;
 					else if(types.includes('administrative_area_level_1'))
 						info.state = locationComponents[i].short_name;
 					else if(types.includes('country'))
 						info.country = locationComponents[i].short_name;
-					var out = JSON.stringify(info)
-					console.log("AURORA:" + out + "Services 228");
 				}
 			}
 
@@ -317,14 +313,12 @@ angular.module('aurora.services', [])
 		var apiDate  = new Date(timeStr);
 		
 		var theDate  = apiDate.getDate();
-		if(!fullLength)
-		{
+		if(!fullLength) {
 			var theMonth = months[apiDate.getMonth()];
 			var theDay   = days[apiDate.getDay()];
 			var theHour  = apiDate.getHours();
 		}
-		else
-		{
+		else {
 			var theMonth = fullMonths[apiDate.getMonth()];
 			var theDay   = fullDays[apiDate.getDay()];
 			var theHour  = apiDate.getHours();
@@ -333,7 +327,8 @@ angular.module('aurora.services', [])
 		var ampm = theHour < 12 ? "am" : "pm";
 		if (theHour > 12) {
 			theHour -= 12;
-		} else if (theHour < 12) {
+		} 
+		else if (theHour < 12) {
 			theHour[0] = "";
 		}
 
