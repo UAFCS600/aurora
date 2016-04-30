@@ -224,8 +224,8 @@ angular.module('aurora.services', [])
 						info.state = locationComponents[i].short_name;
 					else if(types.includes('country'))
 						info.country = locationComponents[i].short_name;
-
-					console.log(JSON.stringify(info));
+					var out = JSON.stringify(info)
+					console.log("AURORA:" + out + "Services 228");
 				}
 			}
 
@@ -303,11 +303,14 @@ angular.module('aurora.services', [])
 		$localstorage.setObject('forecast', forecast);
 	};
 
-	var formatTime = function(timeStr) {
+	var formatTime = function(timeStr, fullLength) {
 		// source: http://stackoverflow.com/questions/14638018/current-time-formatting-with-javascript
 
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         var days   = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+		var fullMonths = [	"January", "February", "March", "April", "May", "June", 
+							"July", "August", "September", "October", "November", "December"];
+		var fullDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 		// timeStr is in format:
 		//      2016-04-17T21:01:00.0+00:00
@@ -315,9 +318,18 @@ angular.module('aurora.services', [])
 		var apiDate  = new Date(timeStr);
 		
 		var theDate  = apiDate.getDate();
-		var theMonth = months[apiDate.getMonth()];
-		var theDay   = days[apiDate.getDay()];
-		var theHour  = apiDate.getHours();
+		if(!fullLength)
+		{
+			var theMonth = months[apiDate.getMonth()];
+			var theDay   = days[apiDate.getDay()];
+			var theHour  = apiDate.getHours();
+		}
+		else
+		{
+			var theMonth = fullMonths[apiDate.getMonth()];
+			var theDay   = fullDays[apiDate.getDay()];
+			var theHour  = apiDate.getHours();
+		}
 
 		var ampm = theHour < 12 ? "am" : "pm";
 		if (theHour > 12) {
@@ -336,7 +348,7 @@ angular.module('aurora.services', [])
 		}
 
 		var time = theHour + ":" + theMin + ampm;
-		var date = theDay + "," + theMonth + " " + theDate;
+		var date = theDay + ", " + theMonth + " " + theDate;
 
 		return {
 			'time': time,
@@ -353,7 +365,7 @@ angular.module('aurora.services', [])
 					jsonData['kp' + i]    = {};
 					jsonData['kp' + i].kp = data.data[i].kp;
 
-					var time = formatTime(data.data[i].predicted_time);
+					var time = formatTime(data.data[i].predicted_time,false);
 
 					jsonData['kp' + i].time = time.time;
 					jsonData['kp' + i].date = time.date;
@@ -377,7 +389,7 @@ angular.module('aurora.services', [])
 				latestForecast.now       = Math.ceil(data.data[0].kp);
 				
 				var today                = new Date();
-				today                    = formatTime(today.getTime()).date;
+				today                    = formatTime(today.getTime(),true).date;
 				latestForecast.dateToday = today;
 			}
 			else latestForecast.error = "There has been an error getting the 'now' KP value. Please try again later.";

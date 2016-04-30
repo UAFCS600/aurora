@@ -57,7 +57,9 @@ angular.module('aurora.controllers', [])
 
     $ionicPlatform.on('resume', function() {
         $kpAPI.updateForecast(updateForecast);
-
+		
+		updateLocation();
+		
         $background.getBackgroundUrl(function(url) {
             $scope.backgroundurl = url;
         });
