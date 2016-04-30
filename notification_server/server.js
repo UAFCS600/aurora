@@ -6,61 +6,20 @@ var PORT       = 80;
 var db_util    = new dbUtil();
 var notifier   = new Notifier();
 
-var handleRegisterRequest = function(data, onSuccess, onFailure) {
-    var clientInfo = {
-        service:data.service,
-        token:data.token,
-        kpTrigger:data.kpTrigger,
-        latitude:data.latitude,
-        longitude:data.longitude,
-        notify_start_time:data.notify_start_time,
-        notify_stop_time:data.notify_stop_time
-    };
-
-    db_util.insertClient(clientInfo, onSuccess, onFailure);
-};
-
-var handleUpdateRequest = function(data, onSuccess, onFailure) {
-    var clientInfo = {
-        service:data.service,
-        token:data.token,
-        kpTrigger:data.kpTrigger,
-        latitude:data.latitude,
-        longitude:data.longitude,
-        notify_start_time:data.notify_start_time,
-        notify_stop_time:data.notify_stop_time
-    };
-
-    db_util.updateClient(clientInfo, onSuccess, onFailure);
-};
-
-var handleRemoveRequest = function(data, onSuccess, onFailure) {
-    var clientInfo = {
-        service:data.service,
-        token:data.token,
-        kpTrigger:data.kpTrigger,
-        latitude:data.latitude,
-        longitude:data.longitude,
-        notify_start_time:data.notify_start_time,
-        notify_stop_time:data.notify_stop_time
-    };
-
-    db_util.removeClient(clientInfo, onSuccess, onFailure);
-};
-
 var handlePostData = function(postData, onSuccess, onFailure) {
     var mode = postData.mode;
+    delete postData.mode;
     console.log('Handling post with mode: ' + mode);
 
     switch(mode) {
         case 'register':
-            handleRegisterRequest(postData, onSuccess, onFailure);
+            db_util.insertClient(postData, onSuccess, onFailure);
             break;
         case 'update':
-            handleUpdateRequest(postData, onSuccess, onFailure);
+            db_util.updateClient(postData, onSuccess, onFailure);
             break;
         case 'remove':
-            handleRemoveRequest(postData, onSuccess, onFailure);
+            db_util.removeClient(postData, onSuccess, onFailure);
             break;
         default:
             onFailure('No mode set.');

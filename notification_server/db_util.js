@@ -94,6 +94,12 @@ dbUtil.prototype.getQueryInfoFromClientInfo = function(clientInfo) {
 		params.push(clientInfo.longitude);
 	}
 
+	if(clientInfo.is_active !== undefined) {
+		if(query.length > 0) query += ', ';
+		query += 'is_active = ?';
+		params.push(clientInfo.is_active);
+	}
+
 	if(clientInfo.token)
 		params.push(clientInfo.token);
 
@@ -127,7 +133,10 @@ dbUtil.prototype.updateClient = function(clientInfo, onSuccess, onFailure) {
 						success = true;
 						onSuccess('Updated registration.');
 					}
-					else onFailure('No updates made');
+					else {
+						success = false;
+						onFailure('No updates made');
+					}
 				}
 
 				connection.release();
