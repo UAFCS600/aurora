@@ -34,9 +34,9 @@ angular.module('aurora.services', [])
 			'senderID': gcmID
 		},
 		'ios': {
-			'alert': true,
-			'badge': true,
-			'sound': true,
+			'alert'    : true,
+			'badge'    : true,
+			'sound'    : true,
 			'clearBage': true
 		},
 		'windows': {
@@ -61,12 +61,11 @@ angular.module('aurora.services', [])
 	};
 
 	var receivedNotification = function(data) {
-		var message   = JSON.parse(data.message);
-		var kpTrigger = message.kpTrigger;
-		$kpAPI.setNow(kpTrigger);
+		$kpAPI.setNow(data.kpTrigger);
 
-		console.log("AURORA: " + kpTrigger);
 		console.log("AURORA: " + data.title);
+		console.log("AURORA: " + data.message);
+		console.log("AURORA: " + data.kpTrigger);
 		console.log("AURORA: " + data.count);
 		console.log("AURORA: " + data.sound);
 		console.log("AURORA: " + data.image);
@@ -430,7 +429,7 @@ angular.module('aurora.services', [])
 		"Low Activity",
 		"Moderate Activity",
 		"High Activity"
-	]
+	];
 
 	return {
 		getBackgroundUrl: function(callback) {
