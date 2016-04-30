@@ -50,6 +50,10 @@ angular.module('aurora.controllers', [])
     $background.getBackgroundUrl(function(url) {
         $scope.backgroundurl = url;
     });
+	
+	$background.getIntensityText(function(intensityText) { 
+			$scope.intensityText = intensityText;
+	});
 
     $ionicPlatform.on('resume', function() {
         $kpAPI.updateForecast(updateForecast);
@@ -57,6 +61,10 @@ angular.module('aurora.controllers', [])
         $background.getBackgroundUrl(function(url) {
             $scope.backgroundurl = url;
         });
+		
+		$background.getIntensityText(function(intensityText) { 
+			$scope.intensityText = intensityText;
+		});
     });
 })
 
@@ -433,6 +441,7 @@ angular.module('aurora.controllers', [])
     $background.getBackgroundUrl(function(url) {
         $scope.backgroundurl = url;
     });
+	
 
     $scope.timeWindow = function(timeObj) {
         var time = {

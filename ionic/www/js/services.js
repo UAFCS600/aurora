@@ -424,6 +424,13 @@ angular.module('aurora.services', [])
 		id: 4,
 		url: "img/background-high.jpg"
 	}];
+	
+	var intensityTextList = [
+		"Minimal Activity",
+		"Low Activity",
+		"Moderate Activity",
+		"High Activity"
+	]
 
 	return {
 		getBackgroundUrl: function(callback) {
@@ -453,6 +460,34 @@ angular.module('aurora.services', [])
 				}
 
 				callback(url);
+	    	});
+		},
+		getIntensityText: function(callback) {
+	    	$kpAPI.updateForecast(function(forecast) {
+	    		var output  = null;
+				switch (forecast.now) {
+					case 1:
+					case 2:
+					case 3:
+						output = intensityTextList[0];
+						break;
+					case 4:
+					case 5:
+						output = intensityTextList[1];
+						break;
+					case 6:
+					case 7:
+						output = intensityTextList[2];
+						break;
+					case 8:
+					case 9:
+						output = intensityTextList[3];
+						break;
+					default:
+						output = intensityTextList[0];
+						break;
+				}
+				callback(output);
 	    	});
 		}
 	};

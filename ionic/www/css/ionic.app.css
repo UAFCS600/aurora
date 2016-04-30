@@ -19,10 +19,15 @@ $dark:                            #444 !default;
   font-family: "Quicksand";
   src: url("../fonts/QuicksandRegular.eot"), local("QuicksandRegular"), url("../fonts/QuicksandRegular.svg") format("svg"), url("../fonts/QuicksandRegular.ttf") format("truetype"), url("../fonts/QuicksandRegular.woff") format("woff"), url("../fonts/QuicksandRegular.woff2") format("woff2"); }
 
-.bar-clear {
-  border-color: red; }
+@font-face {
+  font-family: "JosefinSans";
+  src: url("../fonts/JosefinSans.eot"), local("JosefinSans"), url("../fonts/JosefinSans.svg") format("svg"), url("../fonts/JosefinSans.ttf") format("truetype"), url("../fonts/JosefinSans.woff") format("woff"), url("../fonts/JosefinSans.woff2") format("woff2"); }
 
 * {
+  font-family: "JosefinSans" !important;
+  color: white !important; }
+
+.forecast-number {
   font-family: "Quicksand" !important;
   color: white !important; }
 
@@ -55,7 +60,8 @@ $dark:                            #444 !default;
     font-size: 30px !important; } }
 
 .aurora-button {
-  border: 1px solid white !important; }
+  border: 1px solid white !important;
+  border-radius: 15px !important; }
 
 /*!
   Ionicons, v2.0.1
