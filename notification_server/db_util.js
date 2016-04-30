@@ -15,6 +15,7 @@ dbUtil.prototype.pool = mysql.createPool({
 
 dbUtil.prototype.insertClient = function(clientInfo, onSuccess, onFailure) {
 	var success = this.success;
+	var self    = this;
 
 	console.log('Attemping to insert client into database: ' + JSON.stringify(clientInfo));
 
@@ -32,17 +33,11 @@ dbUtil.prototype.insertClient = function(clientInfo, onSuccess, onFailure) {
 					onFailure('Could not check for duplicates.');
 				}
 				else if(rows.length > 0) {
-					connection.query('DELETE FROM clients WHERE token = ?', clientInfo.token,
-					function(err, result) {
-						console.log(result);
-						if (err || result.affectedRows < 1) {
-							onFailure((err ? err:'token does not exist.'));
-						}
-						else {
-							onSuccess('Removed duplicate and readded new token.');
-						}
+					self.removeClient(clientInfo, function(msg){
+						self.insertClient(clientInfo, onSuccess, onFailure);
+					}, function(err) {
+						onFailure('Could not remove duplicate token.');
 					});
-					onFailure('Key already exists. Deleting and readding');
 				}
 				else {
 					connection.query('INSERT INTO clients SET ?', clientInfo, function(err, res) {
