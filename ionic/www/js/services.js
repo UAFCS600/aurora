@@ -46,12 +46,12 @@ angular.module('aurora.services', [])
 
 	var postToPushServer = function(params, onSuccess, onFailure) {
 		$http.post("http://aurora.cs.uaf.edu/notification_service", params)
-			.then(onSuccess, onFailure);
+			.then(onSuccess || function(){}, onFailure || function(){});
 	};
 
 	var update = function(info) {
         info.token = $localstorage.get('pushToken');
-        info.mode  = 'update';
+		info.mode  = 'update';
 
 		postToPushServer(info, function() {
 			console.log("AURORA: Info changed.");
@@ -108,6 +108,7 @@ angular.module('aurora.services', [])
 			if (response.status == 200) {
 				console.log("AURORA: " + "Key has been added to push server!");
 				$localstorage.set('pushToken', data.registrationId);
+				$localstorage.set('service', data.service);
 				console.log("AURORA: Your token: " + data.registrationId);
 				getGeolocation();
 			}
@@ -116,6 +117,15 @@ angular.module('aurora.services', [])
 			console.log("AURORA: Failure status: " + response.status);
 		});
 	};
+
+	var formatTimeForPushServer = function(time) {
+        var hours   = time.hours;
+        var minutes = time.minutes;
+        if(time.half == 'PM' && hours != 12) hours = parseInt(hours) + 12;
+        if(time.half == 'AM' && hours == 12) hours = '00';
+
+        return (hours + ':' + minutes + ':00');
+    };
 
 	return {
 		requestTestPushNotification: function() {
@@ -173,26 +183,23 @@ angular.module('aurora.services', [])
 				callback();
 		},
 		register: function() {
-			var token           = $localstorage.get('pushToken');
-			var notifyStartTime = $localstorage.get('quietHoursStartTime_1');
-			var notifyStopTime  = $localstorage.get('quietHoursStopTime_1');
+			var notifyStartTime = formatTimeForPushServer($localstorage.get('quietHoursStartTime_1'));
+			var notifyStopTime  = formatTimeForPushServer($localstorage.get('quietHoursStopTime_1'));
+
+			var options = {
+				'notify_start_time': notifyStartTime,
+				'notify_stop_time' : notifyStopTime,
+				'is_active'        : 1
+			};
 			
-			notificationServiceRegistered({
-				registrationId      : token,
-				'notify_start_time' : notifyStartTime,
-				'notify_stop_time'  : notifyStopTime
-			});
+			update(options);
 		},
 		unregister: function() {
-			var info   = {};
-			info.token = $localstorage.get('pushToken');
-			info.mode  = 'remove';
+			var options = {
+				'is_active': 0
+			};
 
-			postToPushServer(info, function() {
-				console.log("AURORA: Push notifications disabled.");
-			}, function() {
-				console.log("AURORA: Could not disable push notifications.");
-			});
+			update(options);
 		},
 		updateInfo: update
 	};
@@ -217,6 +224,8 @@ angular.module('aurora.services', [])
 						info.state = locationComponents[i].short_name;
 					else if(types.includes('country'))
 						info.country = locationComponents[i].short_name;
+
+					console.log(JSON.stringify(info));
 				}
 			}
 
