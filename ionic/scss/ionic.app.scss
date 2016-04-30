@@ -81,13 +81,13 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     height: 100%;
 }
 
-@media (max-height: 300px) {
+@media (max-height: 430px) {
   #kp-now {
     vertical-align: middle;
     text-align: center;
-    height: 30px !important;
-    line-height: 30px !important;
-    font-size: 30px !important;
+    height: 100px !important;
+    line-height: 100px !important;
+    font-size: 100px !important;
   }
 }
 
