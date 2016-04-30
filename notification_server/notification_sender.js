@@ -44,7 +44,9 @@ Notifier.prototype.sendGCMMessages = function(self, kp, clients) {
     var message = new gcm.Message();
     var sender  = new gcm.Sender(config.gcmApiKey);
 
-    message.addData('message', JSON.stringify({kptrigger:kp}));
+    message.addData('message', 'Aurora intensity is at or above your specified level: ' + kp);
+    message.addData('title', 'New Aurora Intensity!');
+    message.addData('kpTrigger', kp);
 
     console.log('Using GCM Sender ID: ' + config.gcmApiKey);
 
