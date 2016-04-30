@@ -211,8 +211,9 @@ dbUtil.prototype.getTokens = function(kpTrigger, service, onSuccess, onFailure) 
 							"THEN ('" + timeRightNow + "' < notify_stop_time OR '" + timeRightNow + "' > notify_start_time" + ") " +
 							"ELSE ('" + timeRightNow + "' < notify_stop_time AND '" + timeRightNow + "' > notify_start_time" + ") " +
 						"END " +
-						"AND kpTrigger <= '" + kpTrigger + "'" +
-						"AND service = '" + service + "'";
+						"AND kpTrigger <= '" + kpTrigger + "' " +
+						"AND service = '" + service + "' " +
+						"AND is_active = 1";
 		    console.log('Query: ' + query);
 
 			connection.query(query, function(err, rows, fields) {
