@@ -20,8 +20,8 @@
 		<ion-content class="has-header" style="background-color: #03373B; background-image: url({{backgroundurl}}); background-repeat: no-repeat;
 			background-position: center center; background-size: cover;">
 			<ion-list>
-				<ion-toggle id="menuitem" ng-model="gps" toggle-class="toggle-calm" ng-click="geolocationToggled()">Enable GPS</ion-toggle>
-				<ion-toggle id="menuitem" ng-model="alerts" toggle-class="toggle-calm" ng-click="alertsToggled()">Enable Notifications</ion-toggle>
+				<ion-toggle id="menuitem" ng-model="gps" toggle-class="toggle-calm" ng-change="geolocationToggled()">Enable GPS</ion-toggle>
+				<ion-toggle id="menuitem" ng-model="alerts" toggle-class="toggle-calm" ng-change="alertsToggled()">Enable Notifications</ion-toggle>
 
 				<div class="item range" id="menuitem">
 					Aurora Intensity
@@ -45,7 +45,7 @@
 							Maybe needs to do both?-->
 				</div>
 
-				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-click="quietTimeToggled()">Only Notify Between:</ion-toggle>
+				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-change="quietTimeToggled()">Only Notify Between:</ion-toggle>
 				<div id="times_1" style="display : block; text-align : center; align-items : center">
 					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block;">and</ion-item>
