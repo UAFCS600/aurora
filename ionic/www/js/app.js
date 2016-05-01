@@ -15,6 +15,11 @@ angular.module('aurora', ['ionic', 'ionic-timepicker', 'aurora.controllers', 'au
     });
 })
 
+// .config(function() {
+  // //Set platform UI to android
+  // ionic.Platform.setPlatform('ios');
+// })
+
 .config(function($stateProvider, $urlRouterProvider) {
     // Ionic uses AngularUI Router which uses the concept of states
     $stateProvider

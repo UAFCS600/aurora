@@ -206,6 +206,15 @@ angular.module('aurora.services', [])
 
 //Geolocation services
 .factory('$geolocation', function($localstorage, $http) {
+	var includes = function(array, item) {
+		for(var i=0; i<array.length; i++)
+		{
+			if(array[i] == item)
+				return true;
+		}
+		return false;
+	};
+	
 	var getInfoFromCoordinates = function(info, callback) {
 		var apiURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
 		apiURL += info.latitude + ',' + info.longitude + '&sensor=false';
@@ -215,13 +224,13 @@ angular.module('aurora.services', [])
 			var locationComponents = data.results[0].address_components;
 			for(var i in locationComponents) {
 				var types = locationComponents[i].types;
-				if(types.includes('political')) {
+				if(includes(types,'political')) {
 					console.log(types);
-					if(types.includes('locality'))
+					if(includes(types,'locality'))
 						info.city = locationComponents[i].short_name;
-					else if(types.includes('administrative_area_level_1'))
+					else if(includes(types,'administrative_area_level_1'))
 						info.state = locationComponents[i].short_name;
-					else if(types.includes('country'))
+					else if(includes(types,'country'))
 						info.country = locationComponents[i].short_name;
 					var out = JSON.stringify(info)
 					console.log("AURORA:" + out + "Services 228");
