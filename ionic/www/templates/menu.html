@@ -40,9 +40,9 @@
 
 				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-change="quietTimeToggled()">Only Notify Between:</ion-toggle>
 				<div id="times_1" style="display : block; text-align : center; align-items : center">
-					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
+					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(notifyStartTime);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{notifyStartTime.hours}}:{{notifyStartTime.minutes}} {{notifyStartTime.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block;">and</ion-item>
-					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(quietHoursStopTime_1);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{quietHoursStopTime_1.hours}}:{{quietHoursStopTime_1.minutes}} {{quietHoursStopTime_1.half}}</ion-item>
+					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(notifyStopTime);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{notifyStopTime.hours}}:{{notifyStopTime.minutes}} {{notifyStopTime.half}}</ion-item>
 				</div>
 			</ion-list>
 		</ion-content>
