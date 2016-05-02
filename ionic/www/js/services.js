@@ -311,33 +311,22 @@ angular.module('aurora.services', [])
 	var formatTime = function(timeStr, fullLength) {
 		// source: http://stackoverflow.com/questions/14638018/current-time-formatting-with-javascript
 
-        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        var days   = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-		var fullMonths = [	"January", "February", "March", "April", "May", "June", 
+        var shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var shortDays   = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+		var fullMonths  = [	"January", "February", "March", "April", "May", "June", 
 							"July", "August", "September", "October", "November", "December"];
-		var fullDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+		var fullDays    = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 		// timeStr is in format:
 		//      2016-04-17T21:01:00.0+00:00
 		// which is UTC
 		var apiDate  = new Date(timeStr);
-		var theMonth;
-		var theDay;
-		var theHour;
-		
 		var theDate  = apiDate.getDate();
-		if(!fullLength) {
-			theMonth = months[apiDate.getMonth()];
-			theDay   = days[apiDate.getDay()];
-			theHour  = apiDate.getHours();
-		}
-		else {
-			theMonth = fullMonths[apiDate.getMonth()];
-			theDay   = fullDays[apiDate.getDay()];
-			theHour  = apiDate.getHours();
-		}
-
-		var ampm = theHour < 12 ? "am" : "pm";
+		var theMonth = (fullLength) ? fullMonths[apiDate.getMonth()] : shortMonths[apiDate.getMonth()];
+		var theDay   = (fullLength) ? fullDays[apiDate.getDay()] : shortDays[apiDate.getDay()];
+		var theHour  = (fullLength) ? apiDate.getHours() : apiDate.getHours();
+		var ampm     = theHour < 12 ? "am" : "pm";
+		
 		if (theHour > 12) {
 			theHour -= 12;
 		} 
