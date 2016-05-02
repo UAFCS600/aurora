@@ -23,7 +23,8 @@
     "ionic-plugin-keyboard",
     "org.apache.cordova.splashscreen",
     "cordova-plugin-geolocation",
-    "phonegap-plugin-push"
+    "phonegap-plugin-push",
+    "cordova-plugin-inappbrowser"
   ],
   "cordovaPlatforms": [
     "ios",
