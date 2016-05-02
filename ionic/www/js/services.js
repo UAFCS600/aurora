@@ -321,17 +321,20 @@ angular.module('aurora.services', [])
 		//      2016-04-17T21:01:00.0+00:00
 		// which is UTC
 		var apiDate  = new Date(timeStr);
+		var theMonth;
+		var theDay;
+		var theHour;
 		
 		var theDate  = apiDate.getDate();
 		if(!fullLength) {
-			var theMonth = months[apiDate.getMonth()];
-			var theDay   = days[apiDate.getDay()];
-			var theHour  = apiDate.getHours();
+			theMonth = months[apiDate.getMonth()];
+			theDay   = days[apiDate.getDay()];
+			theHour  = apiDate.getHours();
 		}
 		else {
-			var theMonth = fullMonths[apiDate.getMonth()];
-			var theDay   = fullDays[apiDate.getDay()];
-			var theHour  = apiDate.getHours();
+			theMonth = fullMonths[apiDate.getMonth()];
+			theDay   = fullDays[apiDate.getDay()];
+			theHour  = apiDate.getHours();
 		}
 
 		var ampm = theHour < 12 ? "am" : "pm";
