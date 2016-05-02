@@ -25,7 +25,7 @@ angular.module('aurora.services', [])
 }])
 
 //Push notification services
-.factory('$push', function($http, $location, $localstorage, $kpAPI, $geolocation) {
+.factory('$push', function($http, $location, $localstorage, $kpAPI, $geolocation, $state) {
 	var push     = false;
 	var gcmID    = '638344930515';
 	
@@ -62,6 +62,7 @@ angular.module('aurora.services', [])
 
 	var receivedNotification = function(data) {
 		$kpAPI.setNow(data.kpTrigger);
+		$state.go('app.dash');
 
 		console.log("AURORA: " + data.title);
 		console.log("AURORA: " + data.message);
