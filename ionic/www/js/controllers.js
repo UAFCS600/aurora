@@ -82,31 +82,18 @@ angular.module('aurora.controllers', [])
     };
 
     $scope.makeTimes = function() {
-        $scope.quietHoursStartTime_1 = {
+        $scope.notifyStartTime = {
             'hours'  : "08",
             'minutes': "00",
             'half'   : "AM",
             'epoch'  : 28800
         };
-        $scope.quietHoursStopTime_1 = {
+        $scope.notifyStopTime = {
             'hours'  : "08",
             'minutes': "00",
             'half'   : "PM",
             'epoch'  : 72000
         };
-        $scope.quietHoursStartTime_2 = {
-            'hours'  : "08",
-            'minutes': "00",
-            'half'   : "AM",
-            'epoch'  : 28800
-        };
-        $scope.quietHoursStopTime_2 = {
-            'hours'  : "08",
-            'minutes': "00",
-            'half'   : "PM",
-            'epoch'  : 72000
-		};
-		console.log("Value of quietHoursStartTime_2: " + $scope.quietHoursStartTime_2);
 	};
 
 	$scope.initTimes = function() {
@@ -121,12 +108,10 @@ angular.module('aurora.controllers', [])
 	};
 
 	$scope.loadTimes = function() {
-        $scope.quietHoursStartTime_1 = $localstorage.getObject('quietHoursStartTime_1');
-        $scope.quietHoursStopTime_1  = $localstorage.getObject('quietHoursStopTime_1');
-        $scope.quietHoursStartTime_2 = $localstorage.getObject('quietHoursStartTime_2');
-        $scope.quietHoursStopTime_2  = $localstorage.getObject('quietHoursStopTime_2');
+        $scope.notifyStartTime = $localstorage.getObject('notifyStartTime');
+        $scope.notifyStopTime  = $localstorage.getObject('notifyStopTime');
         
-        if (typeof $scope.quietHoursStartTime_2.hours == 'undefined') {
+        if ($scope.notifyStartTime.hours === undefined) {
             $scope.makeTimes();
             $scope.saveTimes();
         }
@@ -142,14 +127,13 @@ angular.module('aurora.controllers', [])
     };
     
     $scope.saveTimes = function() {
-        $localstorage.setObject('quietHoursStartTime_1', $scope.quietHoursStartTime_1);
-        $localstorage.setObject('quietHoursStopTime_1', $scope.quietHoursStopTime_1);
-        $localstorage.setObject('quietHoursStartTime_2', $scope.quietHoursStartTime_2);
-        $localstorage.setObject('quietHoursStopTime_2', $scope.quietHoursStopTime_2);
-        var quietHoursStartTime_1 = $scope.formatTimeForPushServer($scope.quietHoursStartTime_1);
-        var quietHoursStopTime_1  = $scope.formatTimeForPushServer($scope.quietHoursStopTime_1);
+        $localstorage.setObject('notifyStartTime', $scope.notifyStartTime);
+        $localstorage.setObject('notifyStopTime', $scope.notifyStopTime);
 
-        $push.updateInfo({'notify_start_time':quietHoursStartTime_1, 'notify_stop_time':quietHoursStopTime_1});
+        var notifyStartTime = $scope.formatTimeForPushServer($scope.notifyStartTime);
+        var notifyStopTime  = $scope.formatTimeForPushServer($scope.notifyStopTime);
+
+        $push.updateInfo({'notify_start_time':notifyStartTime, 'notify_stop_time':notifyStopTime});
     };
 
     $scope.loadSettings = function() {
@@ -232,8 +216,8 @@ angular.module('aurora.controllers', [])
 
     $scope.quietTimeToggled = function() {
         $scope.quietTime          = !$localstorage.get('quietTime');
-        var quietHoursStartTime_1 = $scope.formatTimeForPushServer($scope.quietHoursStartTime_1);
-        var quietHoursStopTime_1  = $scope.formatTimeForPushServer($scope.quietHoursStopTime_1);
+        var notifyStartTime = $scope.formatTimeForPushServer($scope.notifyStartTime);
+        var notifyStopTime  = $scope.formatTimeForPushServer($scope.notifyStopTime);
         $localstorage.set('quietTime', $scope.quietTime);
         $scope.initTimes();
         console.log('AURORA: Quiet Time toggled!');
@@ -241,7 +225,7 @@ angular.module('aurora.controllers', [])
         if(!$scope.quietTime)
             $push.updateInfo({'notify_start_time':'00:00:00','notify_stop_time':'23:59:59'});
         else
-            $push.updateInfo({'notify_start_time':quietHoursStartTime_1, 'notify_stop_time':quietHoursStopTime_1});
+            $push.updateInfo({'notify_start_time':notifyStartTime, 'notify_stop_time':notifyStopTime});
     };
 
     //Literally a table index of geomagnetic coordinates
