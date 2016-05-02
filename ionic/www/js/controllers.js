@@ -111,25 +111,13 @@ angular.module('aurora.controllers', [])
 
 	$scope.initTimes = function() {
 		var t1 = document.getElementById("times_1");
-		// var t2 = document.getElementById("times_2");
-		// var p = document.getElementById("plus");
-		// var m = document.getElementById("minus");
+
 		if ($scope.quietTime === false) {
 			t1.style.display = 'none';
-			// t2.style.display = 'none';
-			// p.style.display = 'none';
-			// m.style.display = 'none';
-		} else //if ($scope.secondTime === false) {
-		{	t1.style.display = 'block';
-			// t2.style.display = 'none';
-			// p.style.display = '';
-			// m.style.display = 'none';
-		} //else {
-			// t1.style.display = 'block';
-			// t2.style.display = 'block';
-			// p.style.display = 'none';
-			// m.style.display = '';
-		// }
+		} 
+        else {	
+            t1.style.display = 'block';
+		}
 	};
 
 	$scope.loadTimes = function() {
@@ -255,13 +243,6 @@ angular.module('aurora.controllers', [])
         else
             $push.updateInfo({'notify_start_time':quietHoursStartTime_1, 'notify_stop_time':quietHoursStopTime_1});
     };
-
-    // $scope.secondTimeToggled = function() {
-        // $scope.secondTime = !$localstorage.get('secondTime');
-        // $localstorage.set('secondTime', $scope.secondTime);
-        // $scope.initTimes();
-        // console.log('AURORA: Second Time toggled!');
-    // };
 
     //Literally a table index of geomagnetic coordinates
     var getIdealKP = function(gmagcoords) {

@@ -37,33 +37,13 @@
 				<div id="menuitem" style="text-align: center">
 					Intensity: {{localKP.horizon}} (Horizon)
 				</div>
-				<p></p>
-				<div id="menuitem" style="text-align: center">
-					More Info	
-					<!-- 	This might be a link to a help popup or to a page by the GI on KP values and relevance to a user.
-							Key part of this is that it needs to give the user relevant and informative informatiion in a concise format.
-							Maybe needs to do both?-->
-				</div>
 
 				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-change="quietTimeToggled()">Only Notify Between:</ion-toggle>
 				<div id="times_1" style="display : block; text-align : center; align-items : center">
 					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(quietHoursStartTime_1);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{quietHoursStartTime_1.hours}}:{{quietHoursStartTime_1.minutes}} {{quietHoursStartTime_1.half}}</ion-item>
 					<ion-item id="menuitem" style="display: inline-block;">and</ion-item>
 					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(quietHoursStopTime_1);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{quietHoursStopTime_1.hours}}:{{quietHoursStopTime_1.minutes}} {{quietHoursStopTime_1.half}}</ion-item>
-					<!-- <div id="plus" style="display : inline-block; text-align : center">
-						<button class="button button-icon icon ion-ios-plus-outline" style = "display : inline-block" ng-click="secondTimeToggled();"></button>
-					</div> -->
 				</div>
-				
-				<!-- The code to add additional quiet hours slots -->
-				<!-- <div id="times_2" style="display : block; text-align : center;">
-					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStartTime_2);" style="display: inline-block">{{quietHoursStartTime_2.hours}}:{{quietHoursStartTime_2.minutes}} {{quietHoursStartTime_2.half}}</ion-item>
-					<ion-item id="menuitem" style="display: inline-block">-</ion-item>
-					<ion-item id="menuitem" ng-click="timeWindow(quietHoursStopTime_2);" style="display: inline-block">{{quietHoursStopTime_2.hours}}:{{quietHoursStopTime_2.minutes}} {{quietHoursStopTime_2.half}}</ion-item>
-					<div id="minus" style="display : inline-block; text-align : center">
-						<button class="button button-icon icon ion-ios-minus-outline" style = "display : inline-block" ng-click="secondTimeToggled();"></button>
-					</div>
-				</div> -->
 			</ion-list>
 		</ion-content>
 	</ion-side-menu>
