@@ -1,0 +1,38 @@
+<ion-view view-title="{{title || 'Aurora Home'}}" controller="DashCtrl" style="text-align: center !important">
+	<ion-pane class="background-views" style="background-image: url({{backgroundurl}})">
+		<ion-content>
+			<div class="row">
+				<div class="col forecast-number" id="kp-now">
+					{{forecast.now}}
+				</div>
+			</div>
+			<div style="text-align: center; text-size: 200%">
+				{{intensityText}}
+			</div>
+			<p></p>
+			<div style="text-align: center; text-size: 200%">
+				{{forecast.dateToday}}
+			</div>
+			<div style="text-align: center;">{{forecast.error}}</div>
+			<div class="row" id="kp-forecast">
+				<div style="position:fixed; left: 0.5rem; bottom: 2em; font-size: 200%;"><</div>
+				<div style="position:fixed; right: 0.5rem; bottom: 2em; font-size: 200%;">></div>
+				<ion-scroll direction="x" class="col wide-as-needed has-bouncing">
+					<div ng-repeat="kp in forecast" style="width:25%; min-width: 75px !important; display:inline-block">
+						<div class="forecast" id="kp-time">
+							{{kp.time}}
+						</div>
+						<div class="forecast forecast-number" id="kp-kp">
+							{{kp.kp}}
+						</div>
+						<div class="forecast" id="kp-date">
+							<div style="display: inline-block;">{{kp.date.split(",")[0]}}</div>
+							<br>
+							<div style="display: inline-block;">{{kp.date.split(",")[1]}}</div>
+						</div>
+					</div>
+				</ion-scroll>
+			</div>
+		</ion-content>
+	</ion-pane>
+</ion-view>

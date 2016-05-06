@@ -1,0 +1,98 @@
+0	
+North America:
+Barrow (AK, USA) Yellowknife (NT, Canada) Gillam (MB, Canada) Nuuk (Greenland)
+
+Europe:
+Reykjavik (Iceland) Tromsø (Norway) Inari (Finland) Kirkenes (Norway) Murmansk (Russia)
+
+1	
+North America:
+Fairbanks (AK, USA) Whitehorse (YT, Canada)
+
+Europe:
+Mo I Rana (Norway) Jokkmokk (Sweden) Rovaniemi (Finland)
+
+2	
+North America:
+Anchorage (AK, USA) Edmonton (AB, Canada) Saskatoon (SK, Canada) Winnipeg (MB, Canada)
+
+Europe:
+Tórshavn (Faeroe Islands) Trondheim (Norway) Umeå (Sweden) Kokkola (Finland) Arkhangelsk (Russia)
+
+3	
+North America:
+Calgary (AB, Canada) Thunder Bay (ON, Canada)
+
+Europe:
+Ålesund (Norway) Sundsvall (Sweden) Jyväskylä (Finland)
+
+4	
+North America:
+Vancouver (BC, Canada) St. John's (NL, Canada) Billings (MT, USA) Bismarck (ND, USA) Minneapolis (MN, USA)
+
+Europe:
+Oslo (Norway) Stockholm (Sweden) Helsinki (Finland) Saint Petersburg (Russia)
+59.911244, 10.754904
+
+5	
+North America:
+Seattle (WA, USA) Chicago (IL, USA) Toronto (ON, Canada) Halifax (NS, Canada)
+47.6,-122.34	41.88,-87.63	43.65,-79.39	44.67,-63.59
+
+Europe:
+Edinburgh (Scotland) Gothenburg (Sweden) Riga (Latvia)
+55.96,-3.18		57.72,11.97		56.94,24.10
+
+Southern Hemisphere:
+Hobart (Australia) Invercargill (New Zealand)
+-42.88,147.32	-46.41,168.35
+
+6	
+North America:
+Portland (OR, USA) Boise (ID, USA) Casper (WY, USA) Lincoln (NE, USA) Indianapolis (IN, USA) Columbus (OH, USA) New York City (NY, USA)
+
+Europe:
+Dublin (Ireland) Manchester (England) Hamburg (Germany) Gdańsk (Poland) Vilnius (Lithuania) Moscow (Russia)
+
+Southern Hemisphere:
+Devonport (Australia) Christchurch (New Zealand)
+
+7	
+North America:
+Salt Lake City (UT, USA) Denver (CO, USA) Nashville (TN, USA) Richmond (VA, USA)
+
+Europe:
+London (England) Brussels (Belgium) Cologne (Germany) Dresden (Germany) Warsaw (Poland)
+
+Southern Hemisphere:
+Melbourne (Australia) Wellington (New Zealand)
+
+8	
+North America:
+San Francisco (CA, USA) Las Vegas (NV, USA) Albuquerque (NM, USA) Dallas (TX, USA) Jackson (MS, USA) Atlanta (GA, USA)
+
+Europe:
+Paris (France) Munich (Germany) Vienna (Austria) Bratislava (Slovakia) Kiev (Ukraine)
+
+Asia:
+Astana (Kazakhstan) Novosibirsk (Russia)
+
+Southern Hemisphere:
+Perth (Australia) Sydney (Australia) Auckland (New Zealand)
+
+9	
+North America:
+Monterrey (Mexico) Miami (FL, USA)
+35.68,-100.32		35.75,-80.19
+
+Europe:
+Madrid (Spain) Marseille (France) Rome (Italy) Bucharest (Romania)
+40.41,-3.7		43.29,5.36		41.90,12.49		44.42,26.09
+
+Asia:
+Ulan Bator (Mongolia)
+47.88,106.89
+
+Southern Hemisphere:
+Alice Springs (Australia) Brisbane (Australia) Ushuaia (Argentina) Cape Town (South Africa)
+-23.70,133.88	-27.47,153.06	-54.80,-68.30	-33.92,18.45

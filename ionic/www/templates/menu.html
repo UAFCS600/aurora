@@ -1,0 +1,70 @@
+<ion-side-menus enable-menu-with-back-views="true">
+	<ion-side-menu-content drag-content="false">
+		<ion-nav-bar class="bar-clear" align-title="center">
+			<ion-nav-buttons side="left">
+				<!-- Toggle left side menu -->
+				<button menu-toggle="left" class="button button-icon icon ion-ios-gear-outline" ng-click="toggleLeft();"></button>
+			</ion-nav-buttons>
+			<ion-nav-buttons side="right">
+				<!-- Toggle right side menu -->
+				<button menu-toggle="right" class="button button-icon icon ion-navicon" ng-click="toggleRight();"></button>
+			</ion-nav-buttons>
+		</ion-nav-bar>
+		<ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+	</ion-side-menu-content>
+
+	<ion-side-menu  class="background-menu" side="left" ng-controller="SettingsCtrl" style="border-right: 2px solid white; background-image: url({{backgroundurl}})">
+		<header class="bar bar-header bar-clear">
+			<h1 class="title">Settings</h1>
+		</header>
+		<ion-content class="has-header" style="background-color: #03373B; background-image: url({{backgroundurl}}); background-repeat: no-repeat;
+			background-position: center center; background-size: cover;">
+			<ion-list>
+				<ion-toggle id="menuitem" ng-model="gps" toggle-class="toggle-calm" ng-change="geolocationToggled()">Enable GPS</ion-toggle>
+				<ion-toggle id="menuitem" ng-model="alerts" toggle-class="toggle-calm" ng-change="alertsToggled()">Enable Notifications</ion-toggle>
+
+				<div class="item range" id="menuitem">
+					Aurora Intensity
+					<input id="kpTrigger" ng-model="kpTrigger" type="range" name="kpTrigger" min="1" max="9" on-release="changeKpTrigger(kpTrigger)"> {{kpTrigger}}
+				</div>
+				
+				<div id="menuitem" style="text-align: center">
+					Aurora Locally Visible:
+				</div>
+				<div id="menuitem" style="text-align: center">
+					Intensity: {{localKP.overhead}} (Overhead)
+				</div>
+				<div id="menuitem" style="text-align: center">
+					Intensity: {{localKP.horizon}} (Horizon)
+				</div>
+
+				<ion-toggle id="menuitem" ng-model="quietTime" toggle-class="toggle-calm" ng-change="quietTimeToggled()">Only Notify Between:</ion-toggle>
+				<div id="times_1" style="display : block; text-align : center; align-items : center">
+					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(notifyStartTime);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{notifyStartTime.hours}}:{{notifyStartTime.minutes}} {{notifyStartTime.half}}</ion-item>
+					<ion-item id="menuitem" style="display: inline-block;">and</ion-item>
+					<ion-item class="aurora-button" id="menuitem" ng-click="timeWindow(notifyStopTime);" style="display: inline-block; padding-left: 2px !important; padding-right: 2px !important;">{{notifyStopTime.hours}}:{{notifyStopTime.minutes}} {{notifyStopTime.half}}</ion-item>
+				</div>
+			</ion-list>
+		</ion-content>
+	</ion-side-menu>
+
+	<ion-side-menu class="background-menu" side="right" ng-controller="SettingsCtrl" style="border-left: 2px solid white; background-image: url({{backgroundurl}})">
+		<ion-list>
+			<ion-item menu-close id="menuitem">
+				<a class="button button-block aurora-button" icon="ion-ios-home" href="#/app/dash" id="menuitem">Home</a>
+			</ion-item>
+
+			<ion-item menu-close id="menuitem">
+				<a class="button button-block aurora-button" icon="ion-ios-flower" href="#/app/allsky" id="menuitem">Allsky</a>
+			</ion-item>
+
+			<ion-item menu-close id="menuitem">
+				<a class="button button-block aurora-button" icon="ion-ios-information" href="#/app/about" id="menuitem">About</a>
+			</ion-item>
+
+			<ion-item menu-close id="menuitem">
+				<a class="button button-block aurora-button" icon="ion-ios-information" href="#/app/feedback" id="menuitem">Feedback</a>
+			</ion-item>
+		</ion-list>
+	</ion-side-menu>
+</ion-side-menus>
